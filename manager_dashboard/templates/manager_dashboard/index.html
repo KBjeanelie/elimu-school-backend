@@ -1,0 +1,148 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+
+    <!-- =============== MAIN PAGE =============================-->
+    <div class="main_content_iner overly_inner ">
+        <div class="container-fluid p-0 ">
+            <!-- ================= Entête ====================-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                        <div class="page_title_left d-flex align-items-center">
+                            <h3 class="f_s_25 f_w_700 dark_text mr_30">Tableau de bord</h3>
+                            <ol class="breadcrumb page_bradcam mb-0">
+                                <li class="breadcrumb-item"><a href="javascript:void(0);">Accueil</a></li>
+                            </ol>
+                        </div>
+                        <div class="page_title_right">
+                            <div class="page_date_button d-flex align-items-center">
+                                <img src="img/icon/calender_icon.svg" alt>
+                                {% now "l, j F Y" %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-xl-12 ">
+                    <div class="white_card card_height_100 mb_30 user_crm_wrapper">
+                        <div class="row">
+                            
+                            <div class="col-lg-3">
+                                <div class="single_crm">
+                                    <div class="crm_head d-flex align-items-center justify-content-between">
+                                        <div class="thumb">
+                                            <img src="img/crm/businessman.svg" alt>
+                                        </div>
+                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
+                                    </div>
+                                    <div class="crm_body">
+                                        <h4> {{count_teacher}} </h4>
+                                        <p>Enseignants</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="single_crm ">
+                                    <div class="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
+                                        <div class="thumb">
+                                            <img src="img/crm/businessman.svg" alt>
+                                        </div>
+                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
+                                    </div>
+                                    <div class="crm_body">
+                                        <h4> {{total_student}} </h4>
+                                        <p>Étudiants</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="single_crm">
+                                    <div class="crm_head crm_bg_2 d-flex align-items-center justify-content-between">
+                                        <div class="thumb">
+                                            <img src="img/crm/infographic.svg" alt>
+                                        </div>
+                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
+                                    </div>
+                                    <div class="crm_body">
+                                        <h4>{{total_engagements}}F CFA</h4>
+                                        <p>Recètte académique</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-3">
+                                <div class="single_crm">
+                                    <div class="crm_head d-flex align-items-center justify-content-between">
+                                        <div class="thumb">
+                                            <img src="img/crm/businessman.svg" alt>
+                                        </div>
+                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
+                                    </div>
+                                    <div class="crm_body">
+                                        <h4>{{count_user}}</h4>
+                                        <p>Utilisateurs</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="crm_reports_bnner">
+                            <div class="row justify-content-end ">
+                                <div class="col-lg-6">
+                                    <h4>ELIMU Universite</h4>
+                                    <p>Administrer votre établissement universitaire en toute simplicité et sécurité</p>
+                                    <a href="#">savoir plus <i class="fas fa-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="white_card card_height_100 mb_30">
+                        <div class="white_card_header">
+                            <div class="box_header m-0">
+                                <div class="main-title">
+                                    <h3 class="m-0">Activité recente</h3>
+                                </div>
+                                <div class="header_more_tool">
+                                    <div class="dropdown">
+                                        <span class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                            <i class="ti-more-alt"></i>
+                                        </span>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#"> <i class="ti-eye"></i> Vois tous</a>
+                                            <a class="dropdown-item" href="#"> <i class="ti-trash"></i> Supprimer</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="white_card_body">
+                            <div class="Activity_timeline">
+                                <ul>
+                                    <li>
+                                        <div class="activity_bell"></div>
+                                        <div class="timeLine_inner d-flex align-items-center">
+                                            <div class="activity_wrap">
+                                                <h6>Il y a 5 minutes</h6>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock content %}

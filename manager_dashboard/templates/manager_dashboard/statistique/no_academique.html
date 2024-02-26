@@ -1,0 +1,37 @@
+{% extends '../base.html' %}
+{% load static %}
+
+
+{% block content %}
+    
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <h4> Veillez activé une année académique </h4>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="closeYearModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="closeYearModal">?</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h4 class='text-center'>Êtes-vous sûr de vouloir clôturer l'année académique {{academic_year.label}} ?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="ti-close"></i> Non</button>
+                    <a href='{% url "manager_dashboard:close_year" %}' class="btn btn-success"><i class="ti-check"></i> Oui</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+    

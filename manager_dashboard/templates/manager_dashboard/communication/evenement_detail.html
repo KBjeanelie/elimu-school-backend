@@ -1,0 +1,58 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner ">
+    <div class="container-fluid p-0 sm_padding_15px">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="dashboard_header mb_50">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="dashboard_header_title">
+                                <h3> Évenements</h3>
+                                <ol class="breadcrumb page_bradcam mb-0">
+                                    <li class="breadcrumb-item"><a href='{% url "manager_dashboard:events" %}'>< Retour</a></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <div class="card_box box_shadow position-relative mb_30     ">
+                    <div class="white_box_tittle     ">
+                        <div class="main-title2 ">
+                            <h3 class="mb-2 nowrap "> {{ event.title}} </h3>
+                        </div>
+                    </div>
+                    <div class="box_body">
+                        <div>
+                            <img src="{{event.photo.url}}" height="" width="" class="img-fluid"/>
+                            <p class="text-center"><i>Date de l'événement : {{event.start_date }} </i></p>
+                        </div>
+                        </br></br>
+                        {% autoescape off %}
+                            {{ event.content | safe }}
+                            {{ event.media }}
+                        {% endautoescape %}
+                        </br></br></br></br>
+                        
+                        
+                        {% if event.file_exists %}
+                            <p>Cliquez pour télécharger le fichier correspondant <a href="" class="text-primary"><strong>ici</strong></a></p>
+                        {% else %}
+                            
+                        {% endif %}
+                            
+                    </div>
+                    <div class="card_footer">
+                        <h6><i>Fait le {{event.created_at}} </i></h6>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

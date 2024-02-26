@@ -1,0 +1,137 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Compte enseignant</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a >Comptes Enseignants</a></li>
+                        </ol>
+                    </div>
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <a href="{% url 'manager_dashboard:add_teacher_account' %}" class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter un compte Enseignant</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30 pt-4">
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="white_box_tittle list_header">
+                                <h4>Comptes Enseignants</h4>
+                                <div class="box_right d-flex lms_block">
+                                    <div class="serach_field_2">
+                                        <div class="search_inner">
+                                            <form Active="#">
+                                                <div class="search_field">
+                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
+                                                </div>
+                                                <button type="submit"> <i class="ti-search"></i> </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="add_button ms-2">
+                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="QA_table mb_30">
+                                <table id="dataTable" class="table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nom Utilisateur</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Mot de passe</th>
+                                            <th scope="col">Rôle</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Dernière connexion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="elementList">
+                                        {% for teacher_account in teachers_account %}
+                                            <tr data-id="{{ teacher_account.id }}">
+                                                <td> <h6>{{ teacher_account.username }}</h6> </td>
+                                                <td><h6>{{ teacher_account.teacher.email }}</h6></td>
+                                                <td><h6>**********</h6></td>
+                                                <td><h6><span class="badge rounded-pill bg-primary">Enseignant</span></h6></td>
+                                                <td><h6><a class="status_btn">Active</a></h6></td>
+                                                <td>le 25 decembre 2023 à 20h50:30</td>
+                                                <td>
+                                                    <div class="action_btns d-flex">
+                                                        <a href='{% url "manager_dashboard:edit_teacher_account" teacher_account.id %}' class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
+                                                        <a href="#" onclick="deleteTeacherAccount({{teacher_account.id}})" class="action_btn"> <i class="fas fa-trash"></i> </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                            
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+// Supprimer un élément
+function deleteTeacherAccount(account_id) {
+    var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+    $.ajax({
+        url: `/comptes/compte_enseignants/${account_id}/delete/`,
+        type: 'DELETE',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+        },
+        success: function(response) {
+            $('#elementList').find(`tr[data-id="${account_id}"]`).remove();
+            console.log('Élément supprimé avec succès');
+        },
+        error: function(error) {
+            console.error('Erreur lors de la suppression de l\'élément', error);
+        }
+    });
+}
+
+// Fonction pour récupérer le jeton CSRF depuis le cookie
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+</script>
+{% endblock content %}

@@ -1,0 +1,91 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Matières</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:subjects" %}'>Matières</a></li>
+                            <li class="breadcrumb-item"><a>Ajouter</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-8">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Ajouter une Matière </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Libelle</label>
+                                {{form.label }}
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="level">Filière</label>
+                                    {{ form.sector }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="level">Responsable</label>
+                                    {{ form.teacher_in_charge}}
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="level">Niveau</label>
+                                    {{ form.level }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="level">Type de matière</label>
+                                    {{ form.type }}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="level">Groupe de Matière</label>
+                                {{ form.subject_group}}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="level">Coefficient</label>
+                                {{ form.coefficient}}
+                            </div>
+                            <div>
+                                <div class="form-check">
+                                    {{ form.possible_evaluation }}
+                                    <label class="form-label form-check-label" for="gridCheck">Évaluation possible ?</label>
+                                </div>
+                            </div>
+                            <a href='{% url "manager_dashboard:subjects" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
+                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

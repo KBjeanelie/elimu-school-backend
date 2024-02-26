@@ -1,0 +1,107 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<!-- =============== MAIN PAGE =============================-->
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Factures Etudiants</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:index" %}'> Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:invoices" %}'> Factures</a></li>
+                            <li class="breadcrumb-item"><a>N°{{ invoice.invoice_number}}</a></li>
+                        </ol>
+                    </div>
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <button id="generate-pdf-button" class='btn btn-primary'><i class="fas fa-download"></i> Générer la facture</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-12 QA_section" id="releve-pdf">
+                <div class="card QA_table">
+                    <div class="card-header">Facture : <strong> {{invoice.invoice_date}} </strong>
+                        <span class="float-end"> <strong>Status:</strong> authentique</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <div>
+                                    <strong>CENTRE DE FORMATION EN INFORMATIQUE </strong>
+                                </div>
+                                <div>République du Congo</div>
+                                <div>50 rue Nkouma Moungali, Brazzaville</div>
+                                <div>Email: <a href="#" class="__cf_email__ text-primary" >[cfi-ciras@gmail.com]</a></div>
+                                <div>Téléphone: +242 00 000 0000</div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div>
+                                    <strong> {{invoice.student.lastname | upper}} {{ invoice.student.firstname }} </strong>
+                                </div>
+                                <div>République du Congo</div>
+                                <div> {{ invoice.student.address}} </div>
+                                <div>Email: <a href="#" class="__cf_email__ text-primary">[{{invoice.student.email}}]</a></div>
+                                <div>Phone: +242 {{invoice.student.tel}}</div>
+                            </div>
+                        </div>
+                        <div class="table-responsive-sm">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="center">#</th>
+                                        <th>Article</th>
+                                        <th>Parcours</th>
+                                        <th class="right">Montant</th>
+                                        <th class="right">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="center bg-light text-dark">1</td>
+                                        <td class="left strong bg-light text-dark"> {{invoice.item.name}} </td>
+                                        <td class="left bg-light text-dark"> {{invoice.career.title}} </td>
+                                        <td class="right bg-light text-dark"> {{invoice.amount}} XAF</td>
+                                        <td class="right bg-light text-dark">{{regulation.amount_payment}} XAF</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 col-sm-5 ms-auto QA_section">
+                            <table class="table table-clear QA_table">
+                                <tbody>
+                                    <tr>
+                                        <td class="left bg-light text-dark"><strong>Total</strong></td>
+                                        <td class="right bg-light text-dark"><strong>{{invoice.amount}} XAF</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="left bg-light text-dark"><strong>Date</strong></td>
+                                        <td class="right bg-light text-dark"><strong> {{invoice.invoice_date}} </strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('generate-pdf-button').addEventListener('click', function() {
+            var element = document.getElementById('releve-pdf'); // Remplacez 'pdf-content' par l'ID ou la classe de l'élément contenant votre contenu HTML
+            var options = {
+                filename: 'bulletin_{{student_career.student.lastname}}_{{student_career.student.firstname}}.pdf', // Spécifiez ici le nom du fichier personnalisé
+            };
+        
+            html2pdf().set(options).from(element).save();
+        });
+    </script>
+{% endblock content %}

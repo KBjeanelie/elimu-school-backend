@@ -1,0 +1,112 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<!-- =============== MAIN PAGE =============================-->
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Engagements Financiers</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a href=''>Engagement financier</a></li>
+                        </ol>
+                    </div>
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <img src="{% static 'img/icon/calender_icon.svg' %}" alt>
+                            {% now "l, j F Y" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30 pt-4">
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="white_box_tittle list_header">
+                                <div class="box_right d-flex lms_block">
+                                    <div class="serach_field_2">
+                                        <div class="search_inner">
+                                            <form Active="#">
+                                                <div class="search_field">
+                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
+                                                </div>
+                                                <button type="submit"> <i class="ti-search"></i> </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="add_button ms-2">
+                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="QA_table mb_30">
+                                <table id="dataTable" class="table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Matricule</th>
+                                            <th scope="col">Etudiants</th>
+                                            <th scope="col">Frais de scolarité</th>
+                                            <th scope="col">Date d'envois</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for engagement in engagements %}
+                                            <tr>
+                                                <td><h6>{{engagement.student.registration_number}}</h6></td>
+                                                <td><h6><span class="badge rounded-pill bg-info">{{engagement.student.lastname|upper}} {{engagement.student.firstname|capfirst}}</span></h6></td>
+                                                <td><h6> {{engagement.school_fees}}</h6> </td>
+                                                <td>{{engagement.send_date}}</td>
+                                                <td>
+                                                    {% if not engagement.is_send %}
+                                                    <div class="action_btns d-flex">
+                                                        <a href='{% url "accountant_dashboard:send_financials" engagement.id %}' class="action_btn mr_10"> <i class="fas fa-paper-plane"></i> </a>
+                                                    </div>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        $('#searchInput').keyup(function(){
+            var searchText = $(this).val().toLowerCase();
+            $('#dataTable tbody tr').each(function(){
+                var currentRowText = $(this).text().toLowerCase();
+                if(currentRowText.indexOf(searchText) !== -1){
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

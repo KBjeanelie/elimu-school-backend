@@ -1,0 +1,737 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Etudiants</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:students" %}' >Etudiants</a></li>
+                            <li class="breadcrumb-item"><a>{{ student.lastname }}</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="white_card position-relative mb_20">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 align-self-center">
+                                
+                                {% if student.file_exists %}
+                                    <img src="{{ student.picture.url }}" alt class="mx-auto d-block" height="300" />
+                                {% else %}
+                                    <img src="{% static 'img/staf/student.png' %}" alt class="mx-auto d-block" height="300" />
+                                {% endif %}
+                                    
+                            </div>
+                            <div class="col-lg-6 align-self-center">
+                                <div class="single-pro-detail">
+                                    <p class="mb-1">Etudiant</p>
+                                    <div class="custom-border mb-3"></div>
+                                    <h3 class="pro-title"> {{student.firstname}} {{student.lastname|upper}} </h3><br>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Parcours : {{student_career.career.title}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Filière : {{student_career.career.sector.title}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Semestre actuelle : {{student_career.semester.title}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Niveau : {{student_career.semester.level.label}} </h6>
+                                    {% if not user.is_admin %}
+                                    <div class="quantity mt-3">
+                                        <a href='{% url "manager_dashboard:edit_student" student.id %}' class="btn bg-dark text-white px-4 d-inline-block "><i class="fa fa-edit me-2"></i>Modifier</a>
+                                        <!--<a href class="btn bg-danger text-white px-4 d-inline-block "><i class="fa fa-trash me-2"></i>Supprimer</a>-->
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-12">
+                <div class="white_card mb_30 ">
+                    <div class="white_card_header">
+                        <div class="bulder_tab_wrapper">
+                            <ul class="nav" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Information Personnelle</a>
+                                </li>
+                                <!--<li class="nav-item">
+                                    <a class="nav-link" id="parents-tab" data-bs-toggle="tab" href="#parents" role="tab" aria-controls="parents" aria-selected="false">Parents</a>
+                                </li>-->
+                                <li class="nav-item">
+                                    <a class="nav-link" id="schedule-tab" data-bs-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Emplois du temps</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="sanctions-tab" data-bs-toggle="tab" href="#sanctions" role="tab" aria-controls="sanctions" aria-selected="false">Sanctions / Appréciations</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="notes-tab" data-bs-toggle="tab" href="#notes" role="tab" aria-controls="notes" aria-selected="false">Notes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="factures-tab" data-bs-toggle="tab" href="#factures" role="tab" aria-controls="factures" aria-selected="false">Factures</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="documents-tab" data-bs-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false">Documents</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="compta-tab" data-bs-toggle="tab" href="#compta" role="tab" aria-controls="compta" aria-selected="false">Comptabilité</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="bulletin-tab" data-bs-toggle="tab" href="#bulletin" role="tab" aria-controls="bulletin" aria-selected="false">Bulletin</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="parcours-tab" data-bs-toggle="tab" href="#parcours" role="tab" aria-controls="parcours" aria-selected="false">Parcours</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="white_card_body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">Information d'identification</h4>
+                                            <hr>
+                                            <h6>Matricule : {{student.registration_number|upper}} </h6><br>
+                                            <h6>Nom : <i>{{student.lastname | upper}}</i> </h6><br>
+                                            <h6>Prénom : {{student.firstname}} </h6><br>
+                                            <h6>Date de naissance : {{student.bithday}} </h6><br>
+                                            <h6>Genre : {{student.sex}} </h6><br>
+                                            <h6>Parcours : {{student_career.career.title}} </h6><br>
+                                            <h6>Filière : {{student_career.career.sector.title}} </h6><br>
+                                            <h6>Niveau : {{student_career.semester.level.label}} </h6><br>
+                                            <h6>Année académique : {{student_career.academic_year.label}} </h6><br>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">Coordonnées</h4>
+                                            <hr>
+                                            <h6>Adresse de résidence : {{student.address}} </h6><br>
+                                            <h6>Numéro de téléphone : {{student.tel}} </h6><br>
+                                            <h6>Adresse email : {{student.email}} </h6><br>
+                                            <h6>Lieu de naissance : {{student.birthday_place}} </h6><br>
+                                            <h6>Ville : {{student.city}} </h6><br>
+                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">Information d'identification</h4>
+                                            <hr>
+                                            <h6>Groupe sanguin : {{student.blood_type}} </h6><br>
+                                            <h6>Allergies : {{student.allergy}} </h6><br>
+                                            <h6>Civilité : {{student.nationality}} </h6><br>
+                                            <h6>Nom Utilisateurs : </h6><br>
+                                            <h6>Mot de passe : *************</h6><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4 class="text-center">Responsable 1</h4><hr>
+                                            <h6>Nom : </h6><br>
+                                            <h6>Prénom : </h6><br>
+                                            <h6>Genre : </h6><br>
+                                            <h6>Adresse de résidence : </h6><br>
+                                            <h6>Numéro de téléphone : </h6><br>
+                                            <h6>Adresse email : </h6><br>
+                                            <h6>Ville : </h6><br>
+                                            <h6>Pays : </h6><br>
+                                            <h6>Profession : </h6><br>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h4 class="text-center">Responsable 2</h4><hr>
+                                            <h6>Nom : </h6><br>
+                                            <h6>Prénom : </h6><br>
+                                            <h6>Genre : </h6><br>
+                                            <h6>Adresse de résidence : </h6><br>
+                                            <h6>Numéro de téléphone : </h6><br>
+                                            <h6>Adresse email : </h6><br>
+                                            <h6>Ville : </h6><br>
+                                            <h6>Pays : </h6><br>
+                                            <h6>Profession : </h6><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+
+                                        <!-- EMPLOI DU TOIS POUR LE LUNDI-->
+                                        <div class="col-md-3">
+                                            <div class="card bg-primary mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-timer" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{ monday_schedule.0.day|capfirst }}</h4></div>
+                                                <div class="widget-subheading mt-2">
+                                                    <ol>
+                                                        {% for schedule in monday_schedule %}
+                                                            {% if schedule.start_hours == '13h' %}
+                                                                <li>Pause : <br> 12 - 13h</li>
+                                                                <hr>
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% else %}
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ol>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EMPLOI DU TOIS POUR LE MARDI-->
+                                        <div class="col-md-3">
+                                            <div class="card bg-danger mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-timer" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{ tueday_schedule.0.day|capfirst }}</h4></div>
+                                                <div class="widget-subheading mt-2">
+                                                    <ol>
+                                                        {% for schedule in tueday_schedule %}
+                                                            {% if schedule.start_hours == '13h' %}
+                                                                <li>Pause : <br> 12 - 13h</li>
+                                                                <hr>
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% else %}
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ol>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EMPLOI DU TOIS POUR LE MERCREDI-->
+                                        <div class="col-md-3">
+                                            <div class="card bg-success mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-timer" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{ wednesday_schedule.0.day|capfirst }}</h4></div>
+                                                <div class="widget-subheading mt-2">
+                                                    <ol>
+                                                        {% for schedule in wednesday_schedule %}
+                                                            {% if schedule.start_hours == '13h' %}
+                                                                <li>Pause : <br> 12 - 13h</li>
+                                                                <hr>
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% else %}
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ol>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EMPLOI DU TOIS POUR LE JEUDI-->
+                                        <div class="col-md-3">
+                                            <div class="card bg-info mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-timer" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{ thursday_schedule.0.day|capfirst }}</h4></div>
+                                                <div class="widget-subheading mt-2">
+                                                    <ol>
+                                                        {% for schedule in thursday_schedule %}
+                                                            {% if schedule.start_hours == '13h' %}
+                                                                <li>Pause : <br> 12 - 13h</li>
+                                                                <hr>
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% else %}
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ol>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EMPLOI DU TOIS POUR LE VENDREDI-->
+                                        <div class="col-md-3">
+                                            <div class="card bg-warning mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-timer" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{ friday_schedule.0.day|capfirst }}</h4></div>
+                                                <div class="widget-subheading mt-2">
+                                                    <ol>
+                                                        {% for schedule in friday_schedule %}
+                                                            {% if schedule.start_hours == '13h' %}
+                                                                <li>Pause : <br> 12 - 13h</li>
+                                                                <hr>
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% else %}
+                                                                <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                                <hr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ol>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- EMPLOI DU TOIS POUR LE SAMEDI-->
+                                        <div class="col-md-3">
+                                            <div class="card bg-dark mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-timer" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{ saturday_schedule.0.day|capfirst }}</h4></div>
+                                                <div class="widget-subheading mt-2">
+                                                    <ol>
+                                                        {% for schedule in saturday_schedule %}
+                                                            {% if schedule.start_hours == '13h' %}
+                                                            <li>Pause : <br> 12 - 13h</li>
+                                                            <hr>
+                                                            <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                            <hr>
+                                                            {% else %}
+                                                            <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
+                                                            <hr>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ol>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="sanctions" role="tabpanel" aria-labelledby="sanctions-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="QA_table mb_30">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Matière</th>
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">Type de sanction/appréciation</th>
+                                                            <th scope="col">Commentaire</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for sanction in sanctions_student %}
+                                                            <tr>
+                                                                <td> <h6> {{sanction.subject.label}} </h6> </td>
+                                                                <td> <h6> {{sanction.sanction_date}} </h6> </td>
+                                                                <td><h6> {{sanction.type.title}} </h6></td>
+                                                                <td><h6> {{sanction.comment}} </h6></td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="notes" role="tabpanel" aria-labelledby="notes-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <h3 class="text-center">Tableau de note de Contrôle</h3>
+                                            <div class="QA_table mb_30">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Matière</th>
+                                                            <th scope="col">Note</th>
+                                                            <th scope="col">Parcours</th>
+                                                            <th scope="col">Semestre</th>
+                                                            <th scope="col">Type d'évaluation</th>
+                                                            <!--<th scope="col">Est public ?</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for evaluation in controle_evaluations %}
+                                                            <tr>
+                                                                <td><h6> {{evaluation.subject.label}} </h6></td>
+                                                                <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
+                                                                <td><h6>{{evaluation.career.title}}</h6></td>
+                                                                <td><h6>{{evaluation.semester.title}}</h6></td>
+                                                                <td><h6> {{evaluation.type_evaluation.title}} </h6></td>
+                                                                <!--<td><h6> <a class="status_btn">Active</a> </h6></td>-->
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-12">
+                                            <h3 class="text-center">Tableau de note des Partiels</h3>
+                                            <div class="QA_table mb_30">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Matière</th>
+                                                            <th scope="col">Note</th>
+                                                            <th scope="col">Parcours</th>
+                                                            <th scope="col">Semestre</th>
+                                                            <th scope="col">Type d'évaluation</th>
+                                                            <!--<th scope="col">Est public ?</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for evaluation in partiel_evaluations %}
+                                                            <tr>
+                                                                <td><h6> {{evaluation.subject.label}} </h6></td>
+                                                                <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
+                                                                <td><h6>{{evaluation.career.title}}</h6></td>
+                                                                <td><h6>{{evaluation.semester.title}}</h6></td>
+                                                                <td><h6> {{evaluation.type_evaluation.title}} </h6></td>
+                                                                <!--<td><h6> <a class="status_btn">Active</a> </h6></td>-->
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="factures" role="tabpanel" aria-labelledby="factures-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-12 mt">
+                                            <div class="QA_table mb_30">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">N° Factures</th>
+                                                            <th scope="col">Parcours</th>
+                                                            <th scope="col">Montant</th>
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">État</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for invoice in invoices_student %}
+                                                            <tr>
+                                                                <td><h6> {{invoice.invoice_number}} </h6></td>
+                                                                <td><h6>{{invoice.career.title}}</h6></td>
+                                                                <td><h6> {{invoice.amount}} </h6></td>
+                                                                <td><h6>{{invoice.invoice_date}}</h6></td>
+                                                                {% if invoice.invoice_status == 'Entièrement payé' %}
+                                                                    <td><h6><span class="badge rounded-pill bg-success">{{invoice.invoice_status}}</span></h6></td>
+                                                                {% else %}
+                                                                    <td><h6><span class="badge rounded-pill bg-danger"> {{invoice.invoice_status}} </span></h6></td>
+                                                                {% endif %}
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            {% if not user.is_admin %}
+                                            <div class="page_title_right">
+                                                <div class="page_date_button d-flex align-items-rigth">
+                                                    <a href="#" class="btn mb-3 btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalLong"> <i class="fas fa-plus-square"></i> Ajouter un document</a>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="QA_table mb_30 mt-5">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Titre</th>
+                                                            <th scope="col">Type du document</th>
+                                                            <th scope="col">Fichier</th>
+                                                            <th scope="col">Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='elementList'>
+                                                        {% for document in documents %}
+                                                            <tr data-id='{{document.id}}'>
+                                                                <td><h6> {{document.title}} </h6></td>
+                                                                <td><h6>{{document.document_type.title}}</h6></td>
+                                                                <td><h6><a href="#">{{document.file.name}}</a></h6></td>
+                                                                <td><h6> {{document.created_at}} </h6></td>
+                                                                <td>
+                                                                    <div class="action_btns d-flex">
+                                                                        <a href="{{document.file.url}}" class="action_btn mr_10"> <i class="fas fa-eye"></i> </a>
+                                                                        <!--<a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a>-->
+                                                                        <a href="#" onclick='deleteDocument({{document.id}})'  id="delete-document" data-url="{% url 'manager_dashboard:student_delete_document' document.id %}" class="action_btn"> <i class="fas fa-trash"></i> </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="compta" role="tabpanel" aria-labelledby="compta-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="card bg-success mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-server" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;">{{total_engagements}}F CFA</h4></div>
+                                                <div class="widget-subheading">Facturé cette année</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card bg-info mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-server" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;">{{amount_payed}}F CFA</h4></div>
+                                                <div class="widget-subheading">Déjà Payé</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="card bg-danger mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-server" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{not_payed}} </h4></div>
+                                                <div class="widget-subheading">Reste à payés</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="card bg-primary mb-3 widget-chart">
+                                                <div class="icon-wrapper rounded-circle">
+                                                    <div class="icon-wrapper-bg bg-primary"></div>
+                                                    <i class="ti-receipt" style="color: white;"></i>
+                                                </div>
+                                                <div><h4 style="color: white;"> {{count_invoices}} </h4></div>
+                                                <div class="widget-subheading">Factures payés</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 mt">
+                                            <div class="QA_table mb_30">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">N°Facture</th>
+                                                            <th scope="col">Date</th>
+                                                            <th scope="col">État</th>
+                                                            <th scope="col">Crédité</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for regulation in regulations %}
+                                                        <tr>
+                                                            <td> <h6>{{regulation.invoice_number}} </h6></td>
+                                                            <td> <h6>{{regulation.invoice_date}} </h6></td>
+                                                            <td><h6><span class="badge rounded-pill bg-success">{{regulation.invoice_status}}</span></h6></td>
+                                                            <td><h6>{{regulation.amount}}F CFA</h6></td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="bulletin" role="tabpanel" aria-labelledby="bulletin-tab">
+                                <div class="builder_select">
+                                    <div class="row ">
+                                        <div class="col-xl-12">
+                                            <h3 class="text-center">Tableau des Moyennes</h3>
+                                            <div class="QA_table mb_30">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Matricule</th>
+                                                            <th scope="col">Moyennes</th>
+                                                            <th scope="col">Rang</th>
+                                                            <th scope="col">Parcours</th>
+                                                            <th scope="col">Session</th>
+                                                            <th scope="col">Niveau</th>
+                                                            <th scope="col">Appréciation</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for result in results %}
+                                                            <tr>
+                                                                <td> {{result.nui}} </td>
+                                                                <td> {{result.average}} </td>
+                                                                <td> {{result.rang}}</td>
+                                                                <td>{{result.parcours}}</td>
+                                                                <td> {{result.semestre}} </td>
+                                                                <td> {{result.niveau}} </td>
+                                                                <td>
+                                                                    {% if result.average >= 10 %}
+                                                                    <span class="badge rounded-pill bg-success"> Admis </span>
+                                                                    {% else %}
+                                                                    <span class="badge rounded-pill bg-danger"> Échoué </span>
+                                                                    {% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="parcours" role="tabpanel" aria-labelledby="parcours-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        {% for result in results %}
+                                            <div class="col-md-3">
+                                                <div class="card mb-3 widget-chart">
+                                                    <div class="icon-wrapper rounded-circle">
+                                                        <div class="icon-wrapper-bg bg-primary"></div>
+                                                        <i class="ti-home text-primary"></i>
+                                                    </div>
+                                                    <div><h4 style="color: white;"> {{result.parcours}} </h4></div>
+                                                    <div class="widget-subheading">
+                                                        <ol>
+                                                            <li>Parcours : <br> {{result.parcours}}</li><hr>
+                                                            <li>Semestre : <br> {{result.semestre}}</li><hr>
+                                                            <li>Niveau : <br> {{result.niveau}}</li><hr>
+                                                            <li>Moyennes : <br> {{result.average}} </li><hr>
+                                                            <li>Année académique : <br> {{result.year}} </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Ajouter une Facture</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Titre du document</label>
+                        {{form.title}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Type de document</label>
+                        {{form.document_type}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Fichier</label>
+                        {{form.file}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti-close"></i> Close</button>
+                    <button type="submit" class="btn btn-success"><i class="ti-save"></i> Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    // Supprimer un élément
+    function deleteDocument(id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        var url = document.getElementById('delete-document').dataset.url
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+</script>
+{% endblock content %}

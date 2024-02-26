@@ -1,0 +1,247 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<!-- =============== MAIN PAGE =============================-->
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Factures Etudiants</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:index" %}'> Accueil</a></li>
+                        </ol>
+                    </div>
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <a href="#" class="white_btn3" data-bs-toggle="modal" data-bs-target="#exampleModalLong"> <i class="fas fa-plus-square"></i> Ajouter une facture</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30 pt-4">
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="white_box_tittle list_header">
+                                <div class="box_right d-flex lms_block">
+                                    <div class="serach_field_2">
+                                        <div class="search_inner">
+                                            <form Active="#">
+                                                <div class="search_field">
+                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
+                                                </div>
+                                                <button type="submit"> <i class="ti-search"></i> </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="add_button ms-2">
+                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="QA_table mb_30">
+                                <table id="dataTable" class="table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">N° Facture</th>
+                                            <th scope="col">Date de facture</th>
+                                            <th scope="col">Étudiant</th>
+                                            <th scope="col">Parcours</th>
+                                            <th scope="col">Montant</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="elementList">
+                                        {% for invoice in invoices %}
+                                            <tr data-id='{{invoice.id}}'>
+                                                <td><h6>{{ invoice.invoice_number }}</h6></td>
+                                                <td><h6>{{ invoice.invoice_date }}</h6></td>
+                                                <td><h6>{{ invoice.student.fullname }}</h6></td>
+                                                <td><h6>{{ invoice.career.title }}</h6></td>
+                                                <td><h6>{{ invoice.amount }} XAF</h6></td>
+                                                <td><h6>
+                                                    {% if invoice.is_repayment %}
+                                                        <span class="badge rounded-pill bg-danger">Remboursé</span>
+                                                    {% else %}
+                                                        {% if invoice.invoice_status == 'Entièrement payé' %}
+                                                            <span class="badge rounded-pill bg-success">{{ invoice.invoice_status}}</span>
+                                                        {% elif  invoice.invoice_status == 'Non payé' %}
+                                                            <span class="badge rounded-pill bg-warning">{{ invoice.invoice_status}}</span>
+                                                        {% else %}
+                                                            <span class="badge rounded-pill bg-danger">{{ invoice.invoice_status}}</span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </h6></td>
+                                                <td>
+                                                    <div class="action_btns d-flex">
+                                                        {% if not invoice.is_repayment %}
+                                                            <a href='{% url "accountant_dashboard:invoice" invoice.id %}' class="action_btn mr_10"> <i class="ti-eye"></i></a>
+                                                            <a href='{% url "accountant_dashboard:invoice_edit" invoice.id %}' class="action_btn mr_10"> <i class="ti-pencil"></i> </a>
+                                                            <a href="#" onclick="deleteInvoice({{invoice.id}})" class="action_btn mr_10"> <i class="ti-trash"></i> </a>
+                                                        {% endif %}
+                                                        
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FORMULAIRE D'AJOUT DE LA FACTURES -->
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Ajouter une Facture</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Article</label>
+                        {{form.item}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Parcours</label>
+                        {{form.career}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Etudiant</label>
+                        {{form.student}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Montant</label>
+                        {{form.amount}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Status de la facture</label>
+                        {{form.invoice_status}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Commentaire</label>
+                        {{form.comment}}
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="ti-close"></i> Close</button>
+                    <button type="submit" class="btn btn-success"><i class="ti-save"></i> Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    // Supprimer un élément
+    function deleteInvoice(invoice_id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        $.ajax({
+            url: `${invoice_id}/delete/`,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${invoice_id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+
+    $(document).ready(function() {
+        $(".btn-edit").click(function() {
+            var invoiceId = $(this).data("invoice-id");
+
+            // Ici, vous devez utiliser Ajax pour récupérer les informations de la facture
+            // associée à invoiceId depuis le serveur et les pré-remplir dans le formulaire.
+
+            // Exemple d'utilisation de jQuery Ajax
+            $.ajax({
+                url: "/get_invoice_details/",  // URL à remplacer par votre endpoint Django
+                method: "GET",
+                data: { invoice_id: invoiceId },
+                success: function(data) {
+                    // Remplissez les champs du formulaire avec les données récupérées
+                    $("#editForm input[name='invoice_date']").val(data.invoice_date);
+                    // ... Continuez pour les autres champs ...
+                },
+                error: function(error) {
+                    console.log("Erreur lors de la récupération des détails de la facture:", error);
+                }
+            });
+        });
+
+        // Vous pouvez également ajouter un gestionnaire pour le clic sur le bouton Enregistrer les modifications ici
+        $("#saveChanges").click(function() {
+            // Récupérez les données du formulaire et utilisez Ajax pour les enregistrer sur le serveur
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function(){
+        $('#searchInput').keyup(function(){
+            var searchText = $(this).val().toLowerCase();
+            $('#dataTable tbody tr').each(function(){
+                var currentRowText = $(this).text().toLowerCase();
+                if(currentRowText.indexOf(searchText) !== -1){
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

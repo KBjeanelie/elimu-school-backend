@@ -1,0 +1,176 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Résultats acedémique</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:academic_result" %}'>Résultats académique</a></li>
+                            <li class="breadcrumb-item"><a >Réléves de notes</a></li>
+                        </ol>
+                    </div>
+                    {% if not user.is_admin %}
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <a href='{% url "manager_dashboard:add_bulletin" %}' class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter un rélévé</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <form method="post" class="row g-3">
+                        {% csrf_token %}
+                        <div class="col-auto">
+                            <label class="form-label" for="inputStateSemester">Selectionner le semestre</label>
+                            <select id="inputStateSemester" class="form-control" name="semester" required>
+                                {% for semester in semesters %}
+                                    <option value="{{semester.id}}"> {{semester.title}} </option>
+                                {% endfor %}
+                            </select> 
+                        </div>
+                        <div class="col-auto">
+                            <label class="form-label" for="inputStateCareer">Selectionner le parcours</label>
+                            <select id="inputStateCareer" class="form-control" name="career" required>
+                                
+                                {% for career in careers %}
+                                    <option value="{{career.id}}"> {{career.title}} </option>
+                                {% endfor %}
+                            </select> 
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-primary mt-4">Rechercher</button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+        
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30 pt-4">
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="QA_table mb_30">
+                                <div class="white_box_tittle list_header">
+                                    <h4>Liste des bulletins</h4>
+                                    <div class="box_right d-flex lms_block">
+                                        <div class="serach_field_2">
+                                            <div class="search_inner">
+                                                <form Active="#">
+                                                    <div class="search_field">
+                                                        <input type="text" id="searchInput" placeholder="rechercher un....">
+                                                    </div>
+                                                    <button type="submit"> <i class="ti-search"></i> </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="add_button ms-2">
+                                            <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id='dataTable' class="table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Matricule</th>
+                                            <th scope="col">Nom complet</th>
+                                            <th scope="col">Moyenne</th>
+                                            <th scope="col">Session</th>
+                                            <th scope="col">Niveau</th>
+                                            <th scope="col">Appreciation</th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="elementList">
+                                        {% for result in results %}
+                                            <tr class='bg-light' data-id='{{result.id}}'>
+                                                <td>
+                                                    <h6> {{result.student.registration_number}} </h6>
+                                                </td>
+                                                <td><h6> {{result.student.lastname|upper}} {{result.student.firstname|capfirst}}</h6></td>
+                                                <td><h6><span class="badge rounded-pill bg-info"> {{result.average}} </span></h6></td>
+                                                <td><h6> {{result.semester.title}} </h6></td>
+                                                <td><h6> {{result.semester.level.label}} </h6></td>
+                                                <td><h6>
+                                                    {% if result.average >= 10 %}
+                                                        <span class="badge rounded-pill bg-success"> Validé</span>
+                                                    {% else %}
+                                                        <span class="badge rounded-pill bg-danger"> Récalé</span>
+                                                    {% endif %}
+                                                </h6></td>
+                                                <td>
+                                                    <div class="action_btns d-flex">
+                                                        {% if not user.is_admin %}
+                                                        <a href='{% url "manager_dashboard:editer_bulletin" result.id %}' class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
+                                                        {% endif %}
+                                                        <a href="{{result.file.url}}" target='blank' class="action_btn mr_10"> <i class="fas fa-download"></i> </a>
+                                                        {% if not user.is_admin %}
+                                                        <a href="#" onclick='deleteBulletin({{result.id}})' class="action_btn mr_10"> <i class="fas fa-trash"></i> </a>
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    // Supprimer un élément
+    function deleteBulletin(id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        $.ajax({
+            url: `${id}/delete/`,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    </script>
+{% endblock content %}

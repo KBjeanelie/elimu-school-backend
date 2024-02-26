@@ -1,0 +1,253 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Enseignants</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:teachers" %}'>Enseignants</a></li>
+                            <li class="breadcrumb-item"><a> {{ teacher.fullname }} </a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="white_card position-relative mb_20">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 align-self-center">
+                                {% if teacher.file_exists %}
+                                    <img src="{{ teacher.picture.url }}" alt class="mx-auto d-block" height="300" />
+                                {% else %}
+                                <img src="{% static 'img/staf/teacher.png' %}" alt class="mx-auto d-block" height="300" />
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 align-self-center">
+                                <div class="single-pro-detail">
+                                    <p class="mb-1">Enseignant</p>
+                                    <div class="custom-border mb-3"></div>
+                                    <h3 class="pro-title"> {{ teacher.firstname}} {{ teacher.lastname | upper}} </h3><br>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Sexe : {{ teacher.sex }} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Email :  {{ teacher.email}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Téléphone : +242 {{ teacher.tel }} </h6>
+                                    {% if not user.is_admin %}
+                                    <div class="quantity mt-3">
+                                        <a href='{% url "manager_dashboard:edit_teacher" teacher.id %}' class="btn btn-dark text-white px-4 d-inline-block "><i class="fa fa-edit me-2"></i>Modifier</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-12">
+                <div class="white_card mb_30 ">
+                    <div class="white_card_header">
+                        <div class="bulder_tab_wrapper">
+                            <ul class="nav" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Information Personnelle</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="schedule-tab" data-bs-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Emplois du temps</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="documents-tab" data-bs-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false">Documents</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="white_card_body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">Information d'identification</h4>
+                                            <hr>
+                                            <h6>Nom : {{ teacher.lastname | upper }} </h6><br>
+                                            <h6>Prénom : {{ teacher.firstname }} </h6><br>
+                                            <h6>Date de naissance : {{ teacher.bithday }} </h6><br>
+                                            <h6>Genre : {{ teacher.sex }} </h6><br>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">Coordonnées</h4>
+                                            <hr>
+                                            <h6>Adresse de résidence : {{ teacher.address }} </h6><br>
+                                            <h6>Numéro de téléphone : +242 {{ teacher.tel}} </h6><br>
+                                            <h6>Adresse email : {{ teacher.email }} </h6><br>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4 class="text-center">Information d'identification</h4>
+                                            <hr>
+                                            <h6>Civilité : {{ teacher.nationality}} </h6><br>
+                                            <h6>Nom Utilisateurs : {{ account.username }} </h6><br>
+                                            <h6>Mot de passe : *************</h6><br>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        {% for schedule in schedules_for_subject %}
+                                            <div class="col-md-3">
+                                                <div class="card {% if schedule.day == 'lundi' %}bg-primary{% elif schedule.day == 'mardi' %}bg-danger{% elif schedule.day == 'mercredi' %}bg-success{% elif schedule.day == 'jeudi' %}bg-info{% elif schedule.day == 'vendredi' %}bg-warning{% else %}bg-dark{% endif %} mb-3 widget-chart">
+                                                    <div class="icon-wrapper rounded-circle">
+                                                        <div class="icon-wrapper-bg bg-primary"></div>
+                                                        <i class="ti-timer" style="color: white;"></i>
+                                                    </div>
+                                                    <div><h4 style="color: white;">{{ schedule.day | capfirst}}</h4></div>
+                                                    <div class="widget-subheading mt-2">
+                                                        <ol>
+                                                            <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li><hr>
+                                                            <li>Parcours : <br> {{ schedule.career.title}} </li><hr>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="documents" role="tabpanel" aria-labelledby="documents-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            {% if not user.is_admin %}
+                                            <div class="page_title_right">
+                                                <div class="page_date_button d-flex align-items-rigth">
+                                                    <a href="#" class="btn mb-3 btn-success" data-bs-toggle="modal" data-bs-target="#exampleModalLong"> <i class="fas fa-plus-square"></i> Ajouter un document</a>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                            <div class="QA_table mb_30 mt-5">
+                                                <table class="table lms_table_active ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Titre</th>
+                                                            <th scope="col">Type du document</th>
+                                                            <th scope="col">Fichier</th>
+                                                            <th scope="col">Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='elementList'>
+                                                        {% for document in documents %}
+                                                            <tr data-id='{{document.id}}'>
+                                                                <td><h6> {{document.title}} </h6></td>
+                                                                <td><h6>{{document.document_type.title}}</h6></td>
+                                                                <td><h6><a href="#">{{document.file.name}}</a></h6></td>
+                                                                <td><h6> {{document.created_at}} </h6></td>
+                                                                <td>
+                                                                    <div class="action_btns d-flex">
+                                                                        <a href="{{document.file.url}}" target='blank' class="action_btn mr_10"> <i class="fas fa-eye"></i> </a>
+                                                                        <!--<a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a>-->
+                                                                        <a href="#" onclick='deleteDocument({{document.id}})'  id="delete-document" data-url="{% url 'manager_dashboard:teacher_delete_document' document.id %}" class="action_btn"> <i class="fas fa-trash"></i> </a>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Ajouter une Facture</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Titre du document</label>
+                        {{form.title}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Type de document</label>
+                        {{form.document_type}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Fichier</label>
+                        {{form.file}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti-close"></i> Close</button>
+                    <button type="submit" class="btn btn-success"><i class="ti-save"></i> Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    // Supprimer un élément
+    function deleteDocument(id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        var url = document.getElementById('delete-document').dataset.url
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+</script>
+{% endblock content %}

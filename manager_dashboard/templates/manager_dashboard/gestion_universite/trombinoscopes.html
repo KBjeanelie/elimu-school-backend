@@ -1,0 +1,115 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Trombinoscope</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a href="javascript:void(0);">Trombinoscope</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-12">
+                <div class="white_card mb_30 ">
+                    <div class="white_card_header">
+                        <div class="bulder_tab_wrapper">
+                            <ul class="nav" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="student-tab" data-bs-toggle="tab" href="#student" role="tab" aria-controls="profile" aria-selected="false">Trombinoscope des étudiants</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="teacher-tab" data-bs-toggle="tab" href="#teacher" role="tab" aria-controls="teacher" aria-selected="false">Trombinoscope des enseignants</a>
+                                </li>
+                                {% comment %} <li class="nav-item">
+                                    <a class="nav-link" id="direction-tab" data-bs-toggle="tab" href="#direction" role="tab" aria-controls="direction" aria-selected="false">Trombinoscope de la direction</a>
+                                </li> {% endcomment %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="white_card_body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        {% for student in students %}
+                                            <div class="col-md-4 col-lg-4 col-xl-4 box-col-6">
+                                                <div class="card custom-card">
+                                                    <div class="card-header"><img class="img-fluid" src="{% static 'img/profilebox/3.jpg' %}" alt data-original-title title></div>
+                                                    <div class="card-profile">
+                                                        <a href='{% url "manager_dashboard:student_detail" student.id %}'> 
+                                                            {% if student.file_exists %}
+                                                                <img class="rounded-circle" src="{{ student.picture.url }}" alt data-original-title title>
+                                                            {% else %}
+                                                                <img class="rounded-circle" src="{% static 'img/staf/student.png' %}" alt height="52" alt="No Picture" alt data-original-title title>
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="text-center profile-details">
+                                                        <h4> <a href='{% url "manager_dashboard:student_detail" student.id %}' >{{ student.firstname }} {{ student.lastname | upper}}</a> </h4>
+                                                        <h6>Date de naissance : {{ student.bithday }} </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% empty %}
+                                            <p>trombinoscopes pour etudiant ici</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="teacher" role="tabpanel" aria-labelledby="teacher-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        {% for teacher in teachers %}
+                                            <div class="col-md-4 col-lg-4 col-xl-4 box-col-6">
+                                                <div class="card custom-card">
+                                                    <div class="card-header"><img class="img-fluid" src="{% static 'img/profilebox/2.jpg' %}" alt data-original-title title></div>
+                                                    <div class="card-profile">
+                                                        <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}'> 
+                                                            {% if teacher.file_exists %}
+                                                                <img class="rounded-circle" src="{{ teacher.picture.url }}" alt data-original-title title>
+                                                            {% else %}
+                                                                <img src="{% static 'img/staf/teacher.png' %}" alt height="52" alt="No Picture">
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="text-center profile-details">
+                                                        <h4> <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}' >{{ teacher.firstname }} {{ teacher.lastname | upper}}</a> </h4>
+                                                        <h6>Date de naissance : {{ teacher.bithday }} </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% empty %}
+                                            <p>trombinoscopes pour enseignants ici</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {% comment %} <div class="tab-pane fade" id="direction" role="tabpanel" aria-labelledby="direction-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <p>trombinoscopes pour direction ici</p>
+                                    </div>
+                                </div>
+                            </div> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

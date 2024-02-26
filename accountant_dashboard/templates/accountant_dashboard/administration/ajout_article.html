@@ -1,0 +1,75 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<!-- =============== MAIN PAGE =============================-->
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Catalogue des articles</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:index" %}'> Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:items" %}'> Catalogues des articles</a></li>
+                            <li class="breadcrumb-item"><a href="">Ajouter</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-8">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Ajouter un article </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Nom</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Montant par défaut</label>
+                                {{ form.default_amount }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Quantité par defaut</label>
+                                {{ form.defaut_quantity }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Code analytique</label>
+                                {{ form.analytic_code }}
+                            </div>
+                            <div class="form-check">
+                                {{ form.is_active}}
+                                <label class="form-label form-check-label" for="gridCheck">Est Actif ?</label>
+                            </div>
+                            <a  href='{% url "accountant_dashboard:items" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
+                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Programmes</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary'href='{% url "manager_dashboard:programs" %}'>Programmes</a></li>
+                            <li class="breadcrumb-item"><a>Ajouter</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-8">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Ajouter un Programme </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Titre</label>
+                                {{ form.title }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Description</label>
+                                {{ form.description }}
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label" for="date">Date</label>
+                                    {{ form.program_date}}
+                                    <i>date actuelle: {{form.program_date.value}} </i>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label" for="level">Responsable</label>
+                                    {{ form.person_in_charge}}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="level">Fichier</label>
+                                {{ form.file }}
+                                <i>fichier actuelle: {{ program.file.name }} </i>
+                            </div>
+                            <a href='{% url "manager_dashboard:programs" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
+                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

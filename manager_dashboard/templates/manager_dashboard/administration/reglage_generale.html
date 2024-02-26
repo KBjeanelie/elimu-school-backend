@@ -1,0 +1,110 @@
+{% extends '../base.html' %}
+{% load static %}
+
+
+{% block content %}
+    
+    <!-- =============== MAIN PAGE =============================-->
+    <div class="main_content_iner overly_inner ">
+        <div class="container-fluid p-0 ">
+            <!-- ================= Entête ====================-->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                        <div class="page_title_left d-flex align-items-center">
+                            <h3 class="f_s_25 f_w_700 dark_text mr_30">Réglage généraux</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col-xl-12 ">
+                    <div class="white_card card_height_100 mb_30 user_crm_wrapper">
+                        <div class="crm_reports_bnner">
+                            <div class="row justify-content-end ">
+                                <div class="col-lg-6">
+                                    <h4>ELIMU Universite</h4>
+                                    <p>Administrer votre établissement universitaire en toute simplicité et sécurité</p>
+                                    <a href="#">savoir plus <i class="fas fa-arrow-right"></i> </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12">
+                    <div class="white_card card_height_100 mb_30">
+                        <div class="white_card_body">
+                            <form method='post'>
+                                {% csrf_token %}
+                                <h5 class="text-primary mt-2">Informations générales</h5><hr>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Nom de l'établissement</label>
+                                        {{form.name}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Numéro de téléphoe</label>
+                                        {{form.tel}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Adresse de l'établissement</label>
+                                        {{form.address}}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Adresse du siège social</label>
+                                        {{form.social_address}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Adresse email</label>
+                                        {{form.email}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Pied de page bulletin</label>
+                                        {{form.bulletin_foot}}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Device</label>
+                                        {{form.currency}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Système scolaire</label>
+                                        {{form.système}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Durée académique (nombre de mois)</label>
+                                        {{form.month}}
+                                    </div>
+                                </div>
+                                <h5 class="text-primary mt-4">Frais d'admission</h5><hr>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Frais d'admission</label>
+                                        {{form.status_fees}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Frais d'inscription</label>
+                                        {{form.subscription_fees}}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label" for="level">Frais de réinscription</label>
+                                        {{form.re_registration_fees}}
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Sauvegarder</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+{% endblock content %}
+    

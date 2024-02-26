@@ -1,0 +1,117 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Enseignants</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:teachers" %}'>Enseignants</a></li>
+                            <li class="breadcrumb-item"><a>{{teacher.fullname}}</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-8">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Modifier un Enseignant </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Nom</label>
+                                {{ form.lastname }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Prénom</label>
+                                {{ form.firstname }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Adrèsse</label>
+                                {{ form.address }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Téléphone</label>
+                                {{ form.tel }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Ville</label>
+                                {{ form.city }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="level">Sexe</label>
+                                {{ form.sex }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Date de naissance</label>
+                                {{ form.bithday }}
+                                <i>date actuelle: {{teacher.bithday}}</i>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Nationalité</label>
+                                {{ form.nationality }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Email</label>
+                                {{ form.email }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Dernier diplôme obtenue</label>
+                                {{ form.last_diploma }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Date d'entrée dans l'établissement</label>
+                                {{ form.start_of_contrat }}
+                                <i>date actuelle: {{teacher.start_of_contrat}}</i>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Date de sorti dans l'établissement</label>
+                                {{ form.end_of_contrat }}
+                                <i>date actuelle: {{teacher.end_of_contrat}}</i>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Photo</label>
+                                {{ form.picture }}
+                                <i>fichier actuelle: {{teacher.picture.name}}</i>
+                            </div>
+                            <div>
+                                <div class="form-check">
+                                    {{ form.status }}
+                                    <label class="form-label form-check-label" for="gridCheck"> Accès en ligne ?</label>
+                                </div>
+                            </div>
+                            <div>
+                                <a href='{% url "manager_dashboard:teachers" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
+                                <button type="submit" class="btn btn-dark"> <i class="ti-pencil"></i> Modifier</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

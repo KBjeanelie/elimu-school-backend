@@ -1,0 +1,149 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- =============== MAIN PAGE =============================-->
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Rapport des dépenses </h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:index" %}'> Accueil</a></li>
+                            <li class="breadcrumb-item"><a href=''> Rapport des dépenses</a></li>
+                        </ol>
+                    </div>
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <a href='{% url "accountant_dashboard:add_spend" %}' class="white_btn3">Ajouter une dépense</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30 pt-4">
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="white_box_tittle list_header">
+                                <div class="box_right d-flex lms_block">
+                                    <div class="serach_field_2">
+                                        <div class="search_inner">
+                                            <form Active="#">
+                                                <div class="search_field">
+                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
+                                                </div>
+                                                <button type="submit"> <i class="ti-search"></i> </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="add_button ms-2">
+                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="QA_table mb_30">
+                                <table id="dataTable" class="table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Articles</th>
+                                            <th scope="col">Montant</th>
+                                            <th scope="col">Motif</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="elementList">
+                                        {% for spend in spends %}
+                                            <tr data-id="{{ spend.id }}">
+                                                <td><h6> {{ spend.item.name}}</h6></td>
+                                                <td><h6> {{ spend.amount }} XAF </h6></td>
+                                                <td><h6> {{ spend.comment }} </h6></td>
+                                                <td>
+                                                    <div class="action_btns d-flex">
+                                                        <a href='{% url "accountant_dashboard:edit_spend" spend.id %}' class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
+                                                        <a href="#" onclick="deleteItem({{ spend.id }})" class="action_btn"> <i class="fas fa-trash"></i> </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function(){
+        $('#searchInput').keyup(function(){
+            var searchText = $(this).val().toLowerCase();
+            $('#dataTable tbody tr').each(function(){
+                var currentRowText = $(this).text().toLowerCase();
+                if(currentRowText.indexOf(searchText) !== -1){
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+
+    // Supprimer un élément
+    function deleteItem(item_id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        $.ajax({
+            url: `${item_id}/delete/`,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${item_id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+</script>
+
+{% endblock content %}

@@ -1,0 +1,63 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Monter en Niveau  </h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><h5>{{academic_year.label}}</h5></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Information sur l'étudiant</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Passage en semestre superieure</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="col-auto mb-3">
+                                <label class="form-label" for="inputStateSemester">Nouveau Semestre</label>
+                                <select id="inputStateSemester" class="form-control" name="semester" required>
+                                    {% for semester in semesters %}
+                                        <option value="{{semester.id}}"> {{semester.title}} </option>
+                                    {% endfor %}
+                                </select> 
+                            </div>  
+                            <button type="submit" class="btn btn-dark"> <i class="ti-save"></i> Modifier</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

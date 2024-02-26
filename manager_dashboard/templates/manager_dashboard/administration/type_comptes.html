@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>ELIMU Universite</title>
+    <link rel="icon" href="../img/mini_logo.png" type="image/png">
+
+    <link rel="stylesheet" href="../css/bootstrap1.min.css" />
+
+    <link rel="stylesheet" href="../vendors/themefy_icon/themify-icons.css" />
+
+    <link rel="stylesheet" href="../vendors/niceselect/css/nice-select.css" />
+
+    <link rel="stylesheet" href="../vendors/owl_carousel/css/owl.carousel.css" />
+
+    <link rel="stylesheet" href="../vendors/gijgo/gijgo.min.css" />
+
+    <link rel="stylesheet" href="../vendors/font_awesome/css/all.min.css" />
+    <link rel="stylesheet" href="../vendors/tagsinput/tagsinput.css" />
+
+    <link rel="stylesheet" href="../vendors/datepicker/date-picker.css" />
+    <link rel="stylesheet" href="../vendors/vectormap-home/vectormap-2.0.2.css" />
+
+    <link rel="stylesheet" href="../vendors/scroll/scrollable.css" />
+
+    <link rel="stylesheet" href="../vendors/datatable/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="../vendors/datatable/css/responsive.dataTables.min.css" />
+    <link rel="stylesheet" href="../vendors/datatable/css/buttons.dataTables.min.css" />
+
+    <link rel="stylesheet" href="../vendors/text_editor/summernote-bs4.css" />
+
+    <link rel="stylesheet" href="../vendors/morris/morris.css">
+
+    <link rel="stylesheet" href="../vendors/material_icon/material-icons.css" />
+
+    <link rel="stylesheet" href="../css/metisMenu.css">
+
+    <link rel="stylesheet" href="../css/style1.css" />
+    <link rel="stylesheet" href="../css/colors/default.css" id="colorSkinCSS">
+</head>
+
+<body class="crm_body_bg">
+
+    <nav class="sidebar dark_sidebar">
+        <div class="logo d-flex justify-content-between">
+            <a class="large_logo" href="index-2.html"><img src="../img/logo_white.png" alt></a>
+            <a class="small_logo" href="index-2.html"><img src="../img/mini_logo.png" alt></a>
+            <div class="sidebar_close_icon d-lg-none">
+                <i class="ti-close"></i>
+            </div>
+        </div>
+        <ul id="sidebar_menu">
+
+            <li class>
+                <a href="../index.html" aria-expanded="false">
+                    <div class="nav_icon_small">
+                    <img src="../img/menu-icon/dashboard.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Tableau de bord</span>
+                    </div>
+                </a>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/16.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Gestion universite </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="../gestion_universite/trombinoscopes.html">Trombinoscope</a></li>
+                    <li><a href="../gestion_universite/enseignants.html">Enseignant</a></li>
+                    <li><a href="../gestion_universite/etudiants.html">Etudiant</a></li>
+                    <li><a href="../gestion_universite/parents.html">Parent</a></li>
+                    <li><a href="../gestion_universite/annee_academiques.html">Année academique</a></li>
+                    <li><a href="../gestion_universite/niveaux.html">Niveau</a></li>
+                    <li><a href="../gestion_universite/semestres.html">Semestre</a></li>
+                    <li><a href="../gestion_universite/filieres.html">Filière</a></li>
+                    <li><a href="../gestion_universite/parcours.html">Parcours</a></li>
+                    <li><a href="../gestion_universite/groupe_matieres.html">Groupe de Matière</a></li>
+                    <li><a href="../gestion_universite/matieres.html">Matière</a></li>
+                    <li><a href="../gestion_universite/programmes.html">Programme</a></li>
+                    <li><a href="../gestion_universite/sanctions.html">Sanction & Appreciation</a></li>
+                    <li><a href="../gestion_universite/suivis.html">Indicateur & Suivis</a></li>
+                </ul>
+            </li>
+            
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/15.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Gestion du Temps </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="">Emploi du temps</a></li>
+                    <li><a href="">Présence des étudiants</a></li>
+                    <li><a href="">Absences de l'équipe</a></li>
+                </ul>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/11.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Contenu pédagogique </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="">Bibliothèque</a></li>
+                    <li><a href="">Gestion de media</a></li>
+                    <li><a href="">Gestion des ebooks</a></li>
+                </ul>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/8.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Communication </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="">Messages</a></li>
+                    <li><a href="">Notifications</a></li>
+                    <li><a href="">Informations</a></li>
+                    <li><a href="">Évenements</a></li>
+                    <li><a href="">Groupe de discussion</a></li>
+                </ul>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/20.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Evaluation & Bulletin </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="">Bulletin academique</a></li>
+                    <li><a href="">Évaluations</a></li>
+                    <li><a href="">Tableau des moyennes</a></li>
+                    <li><a href="">Tableau des notes</a></li>
+                </ul>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/4.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Gestion Comptes </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="">Équipe de direction</a></li>
+                    <li><a href="">Comptes enseignants</a></li>
+                    <li><a href="">Comptes étudiants</a></li>
+                </ul>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="../img/menu-icon/18.svg" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Administration </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href="type_evaluations.html">Type d'Évaluations</a></li>
+                    <li><a href="type_documents.html">Type de document</a></li>
+                    <li><a href="type_sanctions.html">Type de sanction</a></li>
+                    <li><a href="type_comptes.html">Type de comptes</a></li>
+                    <li><a href="types_conges.html">Type de congé</a></li>
+                    <li><a href="">Réglage général</a></li>
+                    
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="main_content dashboard_part large_header_bg">
+        <!-- ========================= HEADER ======================= -->
+        <div class="container-fluid g-0">
+            <div class="row">
+                <div class="col-lg-12 p-0 ">
+
+                    <div class="header_iner d-flex justify-content-between align-items-center">
+                        <div class="sidebar_icon d-lg-none"><i class="ti-menu"></i></div>
+                        <div class="line_icon open_miniSide d-none d-lg-block">
+                            <img src="../img/line_img.png" alt>
+                        </div>
+                        <!-- <div class="serach_field-area d-flex align-items-center">
+                            <div class="search_inner">
+                                <form action="#">
+                                    <div class="search_field">
+                                        <input type="text" placeholder="Search">
+                                    </div>
+                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt> </button>
+                                </form>
+                            </div>
+                        </div> -->
+                        <div class="header_right d-flex justify-content-between align-items-center">
+
+                            <div class="header_notification_warp d-flex align-items-center">
+                                <li style="margin-right: 25px;">
+                                    Année academique :
+                                    <span class="badge rounded-pill bg-primary">2023 - 2024</span>
+                                </li>
+                                <li>
+                                    <a class="bell_notification_clicker" href="#"> <img src="../img/icon/bell.svg" alt><span>2</span></a>
+                                    <div class="Menu_NOtification_Wrap">
+                                        <div class="notification_Header"><h4>Notifications</h4></div>
+                                        <div class="Notification_body">
+                                            <div class="single_notify d-flex align-items-center">
+                                                <div class="notify_thumb">
+                                                    <a href="#"><img src="../img/staf/2.png" alt></a>
+                                                </div>
+                                                <div class="notify_content">
+                                                <a href="#"><h5>Cool Marketing </h5></a>
+                                                <p>Lorem ipsum dolor sit amet</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="nofity_footer">
+                                            <div class="submit_button text-center pt_20">
+                                                <a href="#" class="btn_1">Voir plus</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+
+                            <div class="profile_info">
+                                <img src="../img/client_img.png" alt="#">
+                                <div class="profile_info_iner">
+                                    <div class="profile_author_name">
+                                        <p>Gestionnaire </p>
+                                        <h5>Elijah WALTER</h5>
+                                </div>
+                                <div class="profile_info_details">
+                                    <a href="#">MonProfile </a>
+                                    <a href="#">Se deconnecter</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main_content_iner overly_inner ">
+            <div class="container-fluid p-0 ">
+                <!-- ================= Entête ====================-->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                            <div class="page_title_left d-flex align-items-center">
+                                <h3 class="f_s_25 f_w_700 dark_text mr_30">Tableau de bord</h3>
+                                <ol class="breadcrumb page_bradcam mb-0">
+                                    <li class="breadcrumb-item"><a href="../index.html">Accueil</a></li>
+                                    <li class="breadcrumb-item"><a>Type de Comptes</a></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="white_card card_height_100 mb_30 pt-4">
+                            <div class="white_card_body">
+                                <div class="QA_section">
+                                    <div class="white_box_tittle list_header">
+                                        <h4>Type de Comptes </h4>
+                                    </div>
+                                    <div class="QA_table mb_30">
+                                        <table class="table lms_table_active ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Rôles</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Gestionnaire</td>
+                                                    <td>
+                                                        <div class="action_btns d-flex">
+                                                            <a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
+                                                            <a href="#" class="action_btn"> <i class="fas fa-trash"></i> </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="white_card card_height_100 mb_30">
+                            <div class="white_card_header">
+                                <div class="box_header m-0">
+                                    <div class="main-title">
+                                        <h3 class="m-0">Ajouter un type de Compte</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="white_card_body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label class="form-label" for="libelle">Rôle</label>
+                                        <input type="text" class="form-control" id="libelle" placeholder="Comptable">
+                                    </div>
+                                    <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--======================== FOOTER PAGE ===========================-->
+        <div class="footer_part">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="footer_iner text-center">
+                            <p>2020 © eneo group - conçu par <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Tableau de Bord</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+
+
+
+    <div id="back-top" style="display: none;">
+        <a title="Go to Top" href="#"><i class="ti-angle-up"></i></a>
+    </div>
+
+    <script src="../js/jquery1-3.4.1.min.js"></script>
+
+    <script src="../js/popper1.min.js"></script>
+
+    <script src="../js/bootstrap1.min.js"></script>
+
+    <script src="../js/metisMenu.js"></script>
+
+    <script src="../vendors/count_up/jquery.waypoints.min.js"></script>
+
+    <script src="../vendors/chartlist/Chart.min.js"></script>
+
+    <script src="../vendors/count_up/jquery.counterup.min.js"></script>
+
+    <script src="../vendors/niceselect/js/jquery.nice-select.min.js"></script>
+
+    <script src="../vendors/owl_carousel/js/owl.carousel.min.js"></script>
+
+    <script src="../vendors/datatable/js/jquery.dataTables.min.js"></script>
+    <script src="../vendors/datatable/js/dataTables.responsive.min.js"></script>
+    <script src="../vendors/datatable/js/dataTables.buttons.min.js"></script>
+    <script src="../vendors/datatable/js/buttons.flash.min.js"></script>
+    <script src="../vendors/datatable/js/jszip.min.js"></script>
+    <script src="../vendors/datatable/js/pdfmake.min.js"></script>
+    <script src="../vendors/datatable/js/vfs_fonts.js"></script>
+    <script src="../vendors/datatable/js/buttons.html5.min.js"></script>
+    <script src="../vendors/datatable/js/buttons.print.min.js"></script>
+
+    <script src="../vendors/datepicker/datepicker.js"></script>
+    <script src="../vendors/datepicker/datepicker.en.js"></script>
+    <script src="../vendors/datepicker/datepicker.custom.js"></script>
+    <script src="../js/chart.min.js"></script>
+    <script src="../vendors/chartjs/roundedBar.min.js"></script>
+
+    <script src="../vendors/progressbar/jquery.barfiller.js"></script>
+
+    <script src="../vendors/tagsinput/tagsinput.js"></script>
+
+    <script src="../vendors/text_editor/summernote-bs4.js"></script>
+    <script src="../vendors/am_chart/amcharts.js"></script>
+
+    <script src="../vendors/scroll/perfect-scrollbar.min.js"></script>
+    <script src="../vendors/scroll/scrollable-custom.js"></script>
+
+    <script src="../vendors/vectormap-home/vectormap-2.0.2.min.js"></script>
+    <script src="../vendors/vectormap-home/vectormap-world-mill-en.js"></script>
+
+    <script src="../vendors/apex_chart/apex-chart2.js"></script>
+    <script src="../vendors/apex_chart/apex_dashboard.js"></script>
+
+    <script src="../vendors/chart_am/core.js"></script>
+    <script src="../vendors/chart_am/charts.js"></script>
+    <script src="../vendors/chart_am/animated.js"></script>
+    <script src="../vendors/chart_am/kelly.js"></script>
+    <script src="../vendors/chart_am/chart-custom.js"></script>
+
+    <script src="../js/dashboard_init.js"></script>
+    <script src="../js/custom.js"></script>
+</body>
+
+</html>

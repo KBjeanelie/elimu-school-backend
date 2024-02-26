@@ -1,0 +1,80 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+        <div class="col-12">
+            <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                <div class="page_title_left d-flex align-items-center">
+                    <h3 class="f_s_25 f_w_700 dark_text mr_30">Tableau de bord</h3>
+                    <ol class="breadcrumb page_bradcam mb-0">
+                        <li class="breadcrumb-item"><a href="../index.html">Accueil</a></li>
+                        <li class="breadcrumb-item"><a>Media</a></li>
+                    </ol>
+                </div>
+                <div class="page_title_right">
+                    <div class="page_date_button d-flex align-items-center">
+                        <a href="#" class="white_btn3" data-bs-toggle="modal" data-bs-target="#exampleModalLong"> <i class="fas fa-plus-square"></i> Ajouter un dossier</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="row">
+            {% for folder in folders %}
+                <figure class="col-lg-3 col-md-6 mb_30" itemprop="associatedMedia" itemscope>
+                    <a href="{% url 'manager_dashboard:content_folder' folder.id %}" itemprop="contentUrl">
+                        <img class="img-thumbnail" src="{% static 'img/products/folder.png' %}" width="150px" itemprop="thumbnail" alt="Image description">
+                    </a>
+                    <div class="row">
+                        <div class="col-auto">
+                            <h6 class="text-dark mt-0"> {{ folder.label}} </h6> <i> créé par {{ folder.owner.lastname }} </i>
+                        </div>
+                    </div>
+                    {% comment %} <div class="action_btns d-flex align-items-center">
+                        <a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
+                        <a href="#" class="action_btn mr_10"> <i class="fas fa-download"></i> </a>
+                        <a href="#" class="action_btn"> <i class="fas fa-trash"></i> </a>
+                    </div> {% endcomment %}
+                </figure>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" action='{% url "manager_dashboard:folders" %}'>
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Ajouter un Dossier</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Nom du dossier</label>
+                        {{form.label}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Propriétaire</label>
+                        {{form.owner}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti-close"></i> Close</button>
+                    <button type="submit" class="btn btn-success"><i class="ti-save"></i> Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+    

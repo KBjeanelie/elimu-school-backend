@@ -1,0 +1,172 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:academic_result" %}'>Résultats Academique</a></li>
+                            <li class="breadcrumb-item"><a>releve de notes </a></li>
+                        </ol>
+                    </div>
+                    <div class="page_title_right">
+                        <div class="page_date_button d-flex align-items-center">
+                            <a href='{% url "manager_dashboard:bulletin_valid" student_career.id %}' class='btn btn-success'><i class="fas fa-check"></i> Validé le bulletin</a>
+                        </div>
+                        <div class="page_date_button d-flex align-items-center">
+                            <button id="generate-pdf-button" class='btn btn-primary'><i class="fas fa-download"></i> Générer le PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <div class="white_card card_height_100 mb_30 pt-4" >
+                    <div class="white_card_body" >
+                        <div class="QA_section" id="releve-pdf">
+                            <div class="card" >
+                                <div class="card-header">
+                                    releve de note
+                                    <!-- <strong>15/08/2020</strong> -->
+                                    <span class="float-end"> <strong>Status:</strong> authentique</span>
+                                </div>
+                                <div class="card-body">
+                                <div class="row mb-2">
+                                    <div class="col-sm-4 ">
+                                        <p class="text-dark text-center">
+                                            <strong>
+                                                CENTRE D'INFORMATIQUE ET DE RECHERCHE DE L'ARMEE ET <br> DE LA SÉCURITE <br>
+                                                ________________________
+                                            </strong>
+                                        </p>
+
+                                        <p class="text-center mt-1 text-dark">
+                                            <strong>
+                                                CENTRE DE FORMATION <br> EN INFORMATIQUE <br>
+                                                ________________
+                                            </strong>
+                                        </p>
+
+                                        <p class="text-center mt-1 text-dark">
+                                            <strong>
+                                                SERVICE DE LA SCOLARITE <br> ET DES EXAMENS <br>
+                                                ___________
+                                            </strong>
+                                        </p>
+                                        
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-4">
+                                        <p class="text-center text-dark">
+                                            <strong>RÉPUBLIQUE DU CONGO</strong> <br>
+                                            <span style="font-size: small;" >Unité - Travail - Progrès</span>
+                                        </p>
+                                        <p class="text-dark text-center mt-1">
+                                            <strong>ANNEE ACADEMIQUE : </strong> {{year.label}}
+                                        </p>
+                                        <p class="text-dark text-center mt-1">
+                                            <strong>SEMESTRE : </strong> {{student_career.semester.title}}
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <h4 class="text-center">
+                                            <strong>RELEVE DES NOTES</strong> <br>
+                                        </h4>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-dark"><strong>Matricule : {{student_career.student.registration_number |upper}} </strong> <br></p>
+                                        <p class="text-dark"><strong>Nom : {{student_career.student.lastname |upper}} </strong>  <br></p>
+                                        <p class="mt-2 text-dark"><strong>Filère : {{student_career.career.sector.title |upper}}</strong> <br></p>
+                                        <p class="text-dark"><strong>Parcours : {{student_career.career.title |upper}}</strong> <br></p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="text-dark"><strong>Prénom : </strong> {{student_career.student.firstname |capfirst}} <br></p>
+                                        <p class="text-dark mt-2"><strong>Niveau : {{student_career.semester.level.label}}</strong></p>
+                                    </div>
+                                </div>
+                                <div class="table-responsive-sm">
+                                    <table style="width:100%; border-collapse: collapse;">
+                                        <thead>
+                                            <tr style="padding: 15px; border: 1px solid;">
+                                                <th style="padding: 2px; text-align:center; border: 1px solid;">Matière</th>
+                                                <th style="padding: 2px; text-align:center; border: 1px solid;">Contrôle1</th>
+                                                <th style="padding: 2px; text-align:center; border: 1px solid;" class="right">Partiel1</th>
+                                                <th style="padding: 2px; text-align:center; border: 1px solid;" class="center">Coef</th>
+                                                <th style="padding: 2px; text-align:center; border: 1px solid;" class="right">TOTAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for subject in subjects %}
+                                                <tr style="border: 1px solid;">
+                                                    <td class="center" style="font-size: 12px; padding: 5px; border: 1px solid;">{{subject.label}}</td>
+                                                    <td class="left strong" style="font-size: 12px; padding: 5px; border: 1px solid; text-align: center;">{{subject.controle}}</td>
+                                                    <td class="left" style="font-size: 12px; padding: 5px; border: 1px solid; text-align: center;">{{subject.partiel}}</td>
+                                                    <td class="right" style="font-size: 12px; padding: 5px; border: 1px solid; text-align: center;">{{subject.coefficient}}</td>
+                                                    <td class="center" style="font-size: 12px; padding: 5px; border: 1px solid; text-align: center;">{{subject.total}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4 mt-2">
+                                        <p class="text-dark"><strong>TOTAL DES COEFFICIENTS :</strong> {{result.count_coefficient}} </p>
+                                        <p class="text-dark"><strong>MOYENNE SEMESTRIELLE :</strong> {{result.average}} </p>
+                                    </div>
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-4 mt-2">
+                                        <p class="text-dark"><strong>TOTAL GENERAL :</strong> {{result.total_general}}</p>
+                                        <p class="text-dark"><strong>CLASSEMENT :</strong> 4</p>
+                                        <p class="text-dark"><strong>DECISION:
+                                            {% if result.average >= 10 %}
+                                            <span class='text-danger' style='font-size:20px'> ADMIS</span>
+                                            {% endif %}
+                                        </strong>
+                                            
+                                        <p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <figure class="col-lg-4 ml-5 mb-5 col-md-6 mb_30" itemprop="associatedMedia" itemscope>
+                                        <img class="img-fluid" src="/media/{{qr_code_path}} " height="90" width="90" itemprop="thumbnail" alt="QR CODE">
+                                    </figure>
+                                    <div class="col-lg-4 col-sm-5 ms-auto QA_section">
+                                        <p class="mb-5 text-dark mt-3">
+                                            <strong>
+                                                Le directeur du CFI-CIRAS <br>
+                                                ________________________
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('generate-pdf-button').addEventListener('click', function() {
+        var element = document.getElementById('releve-pdf'); // Remplacez 'pdf-content' par l'ID ou la classe de l'élément contenant votre contenu HTML
+        var options = {
+            filename: 'bulletin_{{student_career.student.lastname}}_{{student_career.student.firstname}}.pdf', // Spécifiez ici le nom du fichier personnalisé
+        };
+    
+        html2pdf().set(options).from(element).save();
+    });
+</script>
+
+{% endblock content %}

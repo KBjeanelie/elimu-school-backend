@@ -1,0 +1,41 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner ">
+    <div class="container-fluid p-0 sm_padding_15px">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="dashboard_header mb_50">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="dashboard_header_title">
+                                <h3> Informations</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% for info in informations %}
+                <div class="col-lg-8">
+                    <div class="card_box box_shadow position-relative mb_30     ">
+                        <div class="white_box_tittle     ">
+                            <div class="main-title2 ">
+                                <h3 class="mb-2 nowrap "> {{ info.title}} </h3>
+                            </div>
+                        </div>
+                        <div class="box_body">
+                            {% autoescape off %}
+                                {{ info.content | safe }}
+                                {{ info.media }}
+                            {% endautoescape %}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p>Aucune information disponible pour le moment</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
