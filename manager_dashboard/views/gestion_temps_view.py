@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.gestion_ecole_forms import ScheduleForm
-from backend.models.gestion_ecole import AcademicYear, Career, Schedule, Semester
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Schedule, Series
 from django.contrib import messages
 
 class AddScheduleView(View):
@@ -58,8 +58,8 @@ class ScheduleView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        semesters = Semester.objects.filter(level__school=request.user.school)
-        careers = Career.objects.filter(sector__school=request.user.school)
+        semesters = Series.objects.filter(level__school=request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=request.user.school)
         context = {
             'semesters':semesters,
             'careers':careers,
@@ -74,7 +74,7 @@ class ScheduleView(View):
     def post(self, request, *args, **kwargs):
         #semester_id = request.POST['semester']
         career_id = request.POST['career']
-        career = Career.objects.get(pk=career_id)
+        career = ClassRoom.objects.get(pk=career_id)
         
         monday_schedule = Schedule.objects.filter(career__id=career_id, day='lundi').order_by('start_hours')
         tueday_schedule = Schedule.objects.filter(career__id=career_id, day='mardi').order_by('start_hours')
@@ -83,8 +83,8 @@ class ScheduleView(View):
         friday_schedule = Schedule.objects.filter(career__id=career_id, day='vendredi').order_by('start_hours')
         saturday_schedule = Schedule.objects.filter(career__id=career_id, day='samedi').order_by('start_hours')
         
-        semesters = Semester.objects.filter(level__school=request.user.school)
-        careers = Career.objects.filter(sector__school=request.user.school)
+        semesters = Series.objects.filter(level__school=request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=request.user.school)
         
         context = {
             'semesters':semesters,

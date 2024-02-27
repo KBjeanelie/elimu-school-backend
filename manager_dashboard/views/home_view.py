@@ -2,7 +2,7 @@ from django.shortcuts import redirect, render
 from django.views import View
 from django.db.models import Sum
 from backend.models.facturation import FinancialCommitment
-from backend.models.gestion_ecole import AcademicYear, StudentCareer, Teacher
+from backend.models.gestion_ecole import AcademicYear, StudentClassroom, Teacher
 from backend.models.user_account import User
 
 class NotAcademicYearFound(View):
@@ -25,7 +25,7 @@ class ManagerIndexView(View):
     
     def get(self, request, *args, **kwargs):
         academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
-        total_student = StudentCareer.objects.filter(academic_year=academic_year, is_next=False).count()
+        total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
         # Récupérer tous les engagements financiers
         if academic_year is None:
             total_engagements = 0

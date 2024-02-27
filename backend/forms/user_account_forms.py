@@ -1,5 +1,5 @@
 from django import forms
-from backend.models.gestion_ecole import Student, StudentCareer
+from backend.models.gestion_ecole import Student, StudentClassroom
 from backend.models.user_account import User
 
 class LoginForm(forms.ModelForm):
@@ -87,7 +87,7 @@ class UserTeacherForm(forms.ModelForm):
 class UserStudentForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(UserStudentForm, self).__init__(*args, **kwargs)
-        student_ids = StudentCareer.objects.filter(academic_year__school=user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        student_ids = StudentClassroom.objects.filter(academic_year__school=user.school, academic_year__status=True).values_list('student', flat=True).distinct()
         self.fields['student'].queryset = Student.objects.filter(id__in=student_ids)
     class Meta:
         model = User

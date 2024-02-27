@@ -9,13 +9,10 @@ from django.db.models import Sum
 from backend.models.facturation import FinancialCommitment, Invoice
 from backend.forms.gestion_ecole_forms import (
     AcademicYearForm,
-    CareerForm, 
     GroupSubjectForm, 
     LevelForm, 
     ProgramForm, 
     SanctionAppreciationForm, 
-    SectorForm, 
-    SemesterForm, 
     StudentDocumentForm, 
     SubjectForm, 
     TeacherDocumentForm, 
@@ -201,7 +198,7 @@ class SemesterView(View):
     
     def get(self, request, *args, **kwargs):
         form = SemesterForm(request.user)
-        context = {'semesters':Semester.objects.filter(level__school=request.user.school), 'form':form}
+        context = {'semesters':Series.objects.filter(level__school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
 
     def post(self, request, *args, **kwargs):
@@ -210,15 +207,15 @@ class SemesterView(View):
             form.save()
             return redirect(to='manager_dashboard:semesters')
 
-        context = {'semesters':Semester.objects.filter(level__school=request.user.school), 'form':form}
+        context = {'semesters':Series.objects.filter(level__school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(Semester, pk=pk)
+        instance = get_object_or_404(Series, pk=pk)
         instance.delete()
         
         form = SemesterForm(request.user)
-        context = {'semesters':Semester.objects.filter(level__school=request.user.school), 'form':form}
+        context = {'semesters':Series.objects.filter(level__school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
 #===END
 
@@ -276,7 +273,7 @@ class CareerView(View):
     
     def get(self, request, *args, **kwargs):
         form = CareerForm(request.user)
-        context = {'careers':Career.objects.filter(sector__school=request.user.school), 'form':form}
+        context = {'careers':ClassRoom.objects.filter(sector__school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
 
     def post(self, request, *args, **kwargs):
@@ -286,15 +283,15 @@ class CareerView(View):
             redirect('manager_dashboard:careers')
     
         form = CareerForm(request.user)
-        context = {'careers':Career.objects.filter(sector__school=request.user.school), 'form':form}
+        context = {'careers':ClassRoom.objects.filter(sector__school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(Career, pk=pk)
+        instance = get_object_or_404(ClassRoom, pk=pk)
         instance.delete()
         
         form = CareerForm(request.user)
-        context = {'careers':Career.objects.filter(sector__school=request.user.school), 'form':form}
+        context = {'careers':ClassRoom.objects.filter(sector__school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
 #===END
 
@@ -646,7 +643,7 @@ class TrombinoscopeView(View):
 
     def get(self, request, *args, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
-        students = StudentCareer.objects.filter(academic_year=academic_year, is_registered=True, is_valid=False).order_by('-created_at')
+        students = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=True, is_valid=False).order_by('-created_at')
         teachers = Teacher.objects.filter(school=request.user.school)
         context = {'students': students, 'teachers':teachers}
         return render(request, template_name=self.template, context=context)
@@ -864,8 +861,8 @@ class AddStudentView(View):
         return redirect('backend:logout')
 
     def get(self, request, *args, **kwargs):
-        careers = Career.objects.filter(sector__school=self.request.user.school)
-        semesters = Semester.objects.filter(level__school=self.request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=self.request.user.school)
+        semesters = Series.objects.filter(level__school=self.request.user.school)
         type_documents = DocumentType.objects.filter(status=True, school=request.user.school)
         context = {'careers':careers, 'semesters':semesters, 'type_documents':type_documents,}
         return render(request, template_name=self.template, context=context)
@@ -881,11 +878,11 @@ class AddStudentView(View):
         )
         new_student.save()
 
-        career = get_object_or_404(Career, id=request.POST['career'])
-        semester = get_object_or_404(Semester, id=request.POST['semester'])
+        career = get_object_or_404(ClassRoom, id=request.POST['career'])
+        semester = get_object_or_404(Series, id=request.POST['semester'])
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
 
-        student_career = StudentCareer.objects.create(
+        student_career = StudentClassroom.objects.create(
             career=career,
             semester=semester,
             academic_year=academic_year,
@@ -924,7 +921,7 @@ class StudentsView(View):
     def get(self, request, *args, **kwargs):
         try:
             academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
-            students = StudentCareer.objects.filter(academic_year=academic_year, is_registered=True, is_valid=False).order_by('-created_at')
+            students = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=True, is_valid=False).order_by('-created_at')
             context = {'student_careers': students}
             return render(request, template_name=self.template, context=context)
         except AcademicYear.DoesNotExist:
@@ -952,8 +949,8 @@ class StudentDetailView(View):
         invoices_student = Invoice.objects.filter(student=student, academic_year=academic_year)
         controle_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Contrôle')
         partiel_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Partiel')
-        students_career = StudentCareer.objects.filter(student=student, school=request.user.school)
-        student_career = get_object_or_404(StudentCareer, student=student, academic_year=academic_year, is_valid=False)
+        students_career = StudentClassroom.objects.filter(student=student, school=request.user.school)
+        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
         regulations = Invoice.objects.filter(academic_year=academic_year, invoice_status='Entièrement payé', student=student).order_by('-created_at')
         results = []
         monday_schedule = Schedule.objects.filter(career=student_career.career, day='lundi').order_by('start_hours')
@@ -1026,7 +1023,7 @@ class StudentDetailView(View):
         invoices_student = Invoice.objects.filter(student=student)
         controle_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Contrôle')
         partiel_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Partiel')
-        student_carreer = get_object_or_404(StudentCareer, student=student)
+        student_carreer = get_object_or_404(StudentClassroom, student=student)
         form = StudentDocumentForm()
         
         

@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from backend.forms.communication_forms import EventForm, GroupForm, InformationForm
-from backend.models.communication import Event, Group, Information
+from backend.forms.communication_forms import EventForm, InformationForm
+from backend.models.communication import Event, Information
 from django.contrib import messages
 
 class EditInformationView(View):

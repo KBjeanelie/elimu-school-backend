@@ -1,6 +1,7 @@
 from django.db import models
-from backend.models.gestion_ecole import AcademicYear, Career, Etablishment
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Etablishment
 from backend.models.user_account import Student
+from elimu_school.constant import months
 
 # Create your models here.
 # class Donation(models.Model):
@@ -104,7 +105,7 @@ class Item(models.Model):
     
     analytic_code = models.TextField(blank=True)
     
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -122,11 +123,13 @@ class Invoice(models.Model):
     
     amount = models.FloatField(default=0)
     
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     
-    career = models.ForeignKey(Career, on_delete=models.SET_NULL, null=True)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
     
     item = models.ForeignKey(Item, on_delete=models.SET_NULL, blank=True, null=True)
+    
+    schooling_of = models.CharField(max_length=10, choices=months)
     
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE, null=True)
     

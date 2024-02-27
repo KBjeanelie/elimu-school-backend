@@ -68,3 +68,62 @@ statues = [
     ('Activé', 'Activé'),
     ('Desactivé', 'Desactivé')
 ]
+
+months = [
+    ('Janvier', 'Janvier'),
+    ('Février', 'Février'),
+    ('Mars', 'Mars'),
+    ('Avril', 'Avril'),
+    ('Mai', 'Mai'),
+    ('Juin', 'Juin'),
+    ('Juillet', 'Juillet'),
+    ('Août', 'Août'),
+    ('Septembre', 'Septembre'),
+    ('Octobre', 'Octobre'),
+    ('Novembre', 'Novembre'),
+    ('Décembre', 'Décembre'),
+]
+
+
+last_diploma = (
+    ('Doctorat', 'Doctorat'),
+    ('Master', 'Master'),
+    ('Licence', 'Licence'),
+    ('DUT', 'DUT'),
+    ('Baccalauréat', 'Baccalauréat')
+)
+cities = (
+    ('pointe_noire', "Pointe Noire"),
+    ('brazzaville', "Brazzaville")
+)
+
+type_blood = (
+    ('O+', "O+"),
+    ('O-', "O-"),
+    ('A+', "A+"),
+    ('A-', "A-"),
+    ('B+', "B+"),
+    ('B-', "B-"),
+    ('AB+', "AB+"),
+    ('AB-', "AB-"),
+)
+
+sexes = (
+    ('masculin', 'Masculin'),
+    ('feminin', 'Féminin')
+)
+cycles = (
+    ('Primaire', 'Primaire'),
+    ('College', 'College'),
+    ('College Technique industrielle', ' College technique industrielle'),
+    ('Lycée général', 'Lycée général'),
+    ('Lycée technique commerciale', 'Lycée technique commerciale'),
+    ('Lycée technique industrielle', 'Lycée technique industrielle')
+)
+
+types_of_classroom = (
+    ('Primaire', 'Primaire'),
+    ('College', 'College'),
+    ('Lycée', 'Lycée')
+)
+types = [('Obligatoire', 'Obligatoire'), ('Secondaire', 'Secondaire')]

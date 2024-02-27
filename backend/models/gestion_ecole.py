@@ -1,8 +1,9 @@
 import os
 from django.db import models
 from elimu_school import settings
-from elimu_school.constant import days_of_the_weeks, hours_of_the_day, currencies, systemes, statues
+from elimu_school.constant import *
 import uuid
+import hashlib
 
 class Etablishment(models.Model):
     name = models.CharField(max_length=120)
@@ -21,44 +22,13 @@ class Etablishment(models.Model):
     def __str__(self):
         return f"Etablissement: {self.name}"
 
-
-last_diploma = (
-    ('Doctorat', 'Doctorat'),
-    ('Master', 'Master'),
-    ('Licence', 'Licence'),
-    ('DUT', 'DUT'),
-    ('Baccalauréat', 'Baccalauréat')
-)
-cities = (
-    ('pointe_noire', "Pointe Noire"),
-    ('brazzaville', "Brazzaville")
-)
-
-type_blood = (
-    ('O+', "O+"),
-    ('O-', "O-"),
-    ('A+', "A+"),
-    ('A-', "A-"),
-    ('B+', "B+"),
-    ('B-', "B-"),
-    ('AB+', "AB+"),
-    ('AB-', "AB-"),
-)
-
-sexes = (
-    ('masculin', 'Masculin'),
-    ('feminin', 'Féminin')
-)
-
 #=============================================================================================================================
 #=================================== CE SONT LES MODEL REPRÉSENTANT CHAQUE PROFIL UTILISATEUR DE L'APP =======================
 # Represent an objet of Student and his profil info
 
-import hashlib
-
 class ShortUUID4Field(models.CharField):
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('max_length', 15)
+        kwargs.setdefault('max_length', 10)
         kwargs.setdefault('unique', True)
         kwargs.setdefault('editable', False)
         super().__init__(*args, **kwargs)
@@ -154,7 +124,7 @@ class Teacher(models.Model):
     
     email = models.CharField(max_length=120, unique=True, blank=True)
     
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True, blank=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     
     status = models.CharField(max_length=20, blank=True)
     
@@ -234,39 +204,101 @@ class AcademicYear(models.Model):
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     status = models.BooleanField(default=True)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"Academic Year: {self.label}"
+        return f"{self.label}"
 
+# Class representing Semester
+class Series(models.Model):
+    title = models.CharField(max_length=50)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"{self.title}"
+    
 # Class representing Academic Level
 class Level(models.Model):
     label = models.CharField(max_length=50)
     fees = models.IntegerField(default=1000)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    cycles = models.CharField(choices=cycles, max_length=30)
+    serie = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True, null=True)
+    principal_teacher =models.ForeignKey(Teacher, on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"Level: {self.label}"
+        return f"{self.label} | {self.serie}| {self.cycles}"
 
-# Class representing Semester
-class Semester(models.Model):
+# Class representing Career (Educational Program/Path)
+class ClassRoom(models.Model):
     title = models.CharField(max_length=50)
-    level = models.ForeignKey(Level, on_delete=models.SET_NULL, null=True, blank=True)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    types = models.CharField(choices=types_of_classroom, max_length=10)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"Semester: {self.title}"
+        return f"{self.title} | {self.level}"
+
+# Class representing Student Career (Association between students and careers)
+class StudentClassroom(models.Model):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
+    academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
+    is_registered =  models.BooleanField(default=False)
+    is_valid =  models.BooleanField(default=False)
+    is_next = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Parcours : {self.student} en {self.classroom}"
+
+# Class representing Group Subject
+class GroupSubject(models.Model):
+    title = models.CharField(max_length=50)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"Group Subject: {self.title}"
+
+# Class representing Subject
+class Subject(models.Model):
+    label = models.CharField(max_length=50)
+    teacher_in_charge = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, blank=True)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    type = models.CharField(max_length=12, choices=types)
+    subject_group = models.ForeignKey(GroupSubject, on_delete=models.SET_NULL, null=True, blank=True)
+    possible_evaluation = models.BooleanField(default=True)
+    possible_averaging = models.BooleanField(default=True)
+    coefficient = models.IntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.label} | {self.level}"
+
+# Class representing Schedule (Class Timetable)
+class Schedule(models.Model):
+    start_hours = models.CharField(max_length=15, choices=hours_of_the_day)
+    end_hours = models.CharField(max_length=15, choices=hours_of_the_day)
+    day = models.CharField(max_length=10, choices=days_of_the_weeks)
+    subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"Class Schedule for: {self.subject}"
 
 # Class representing Academic Program
 class Program(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
-    program_date = models.DateField(blank=True)
     person_in_charge = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
     file = models.FileField(upload_to='programmes', blank=True)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -289,7 +321,7 @@ class Program(models.Model):
 # Class representing Document Type
 class DocumentType(models.Model):
     title = models.CharField(max_length=50)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -299,20 +331,20 @@ class DocumentType(models.Model):
 # Class representing Sanction Appreciation Type
 class SanctionAppreciationType(models.Model):
     title = models.CharField(max_length=50)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
     def __str__(self):
-        return f"Sanction Appreciation Type: {self.title}"
+        return {self.title}
 
 # Class representing Document
 class StudentDocument(models.Model):
     title = models.CharField(max_length=50)
     document_type = models.ForeignKey(DocumentType, on_delete=models.SET_NULL, blank=True, null=True)
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     file = models.FileField(upload_to='student_documents')
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
@@ -329,8 +361,7 @@ class StudentDocument(models.Model):
 class TeacherDocument(models.Model):
     title = models.CharField(max_length=50)
     document_type = models.ForeignKey(DocumentType, on_delete=models.SET_NULL, blank=True, null=True)
-    teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     file = models.FileField(upload_to='teacher_documents')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -345,89 +376,14 @@ class TeacherDocument(models.Model):
         # Supprimer l'objet
         super(TeacherDocument, self).delete(*args, **kwargs)
 
-# Class representing Group Subject
-class GroupSubject(models.Model):
-    title = models.CharField(max_length=50)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"Group Subject: {self.title}"
-
-# Class representing Sector (Field of Study)
-class Sector(models.Model):
-    title = models.CharField(max_length=50)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"Sector: {self.title}"
-
-# Class representing Subject
-class Subject(models.Model):
-    label = models.CharField(max_length=50)
-    sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, blank=True, null=True)
-    teacher_in_charge = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, blank=True)
-    level = models.ForeignKey(Level, on_delete=models.SET_NULL, blank=True, null=True)
-    types = [('obligatory', 'Obligatory'), ('secondary', 'Secondary')]
-    type = models.CharField(max_length=12, choices=types)
-    subject_group = models.ForeignKey(GroupSubject, on_delete=models.SET_NULL, null=True, blank=True)
-    possible_evaluation = models.BooleanField(default=True)
-    possible_averaging = models.BooleanField(default=True)
-    coefficient = models.IntegerField(default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return f"Matiere : {self.label}"
-
-# Class representing Career (Educational Program/Path)
-class Career(models.Model):
-    title = models.CharField(max_length=50)
-    sector = models.ForeignKey(Sector, on_delete=models.SET_NULL, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"Career: {self.title}"
-
-# Class representing Student Career (Association between students and careers)
-class StudentCareer(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, blank=True, null=True)
-    career = models.ForeignKey(Career, on_delete=models.SET_NULL, blank=True, null=True)
-    academic_year = models.ForeignKey(AcademicYear, on_delete=models.SET_NULL, blank=True, null=True)
-    semester = models.ForeignKey(Semester, on_delete=models.SET_NULL, blank=True, null=True)
-    is_registered =  models.BooleanField(default=False)
-    is_valid =  models.BooleanField(default=False)
-    is_next = models.BooleanField(default=False)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    def __str__(self):
-        return f"Parcours : {self.student} en {self.career}"
-
-# Class representing Schedule (Class Timetable)
-class Schedule(models.Model):
-    start_hours = models.CharField(max_length=15, choices=hours_of_the_day)
-    end_hours = models.CharField(max_length=15, choices=hours_of_the_day)
-    day = models.CharField(max_length=10, choices=days_of_the_weeks)
-    subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, blank=True, null=True)
-    career = models.ForeignKey(Career, on_delete=models.SET_NULL, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        return f"Class Schedule for: {self.subject}"
-
 # Class representing Sanction Appreciation (Student Discipline)
 class SanctionAppreciation(models.Model):
     comment = models.TextField(blank=True)
     type = models.ForeignKey(SanctionAppreciationType, on_delete=models.SET_NULL, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, blank=True, null=True)
     student = models.ForeignKey(Student, on_delete=models.SET_NULL, blank=True, null=True)
-    career = models.ForeignKey(Career, on_delete=models.SET_NULL, blank=True, null=True)
-    sanction_date = models.DateField(blank=True, null=True)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.SET_NULL, blank=True, null=True)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE, null=True)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

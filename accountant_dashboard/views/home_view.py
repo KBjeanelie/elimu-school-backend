@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.models.facturation import FinancialCommitment
 from django.db.models import Sum
-from backend.models.gestion_ecole import AcademicYear, StudentCareer, Teacher
+from backend.models.gestion_ecole import AcademicYear, StudentClassroom, Teacher
 from backend.models.user_account import Student, User
 from django.contrib import messages
 
@@ -22,7 +22,7 @@ class AccountantIndexView(View):
             total_engagements = 0
             academic_year = False
         
-        total_student = StudentCareer.objects.filter(academic_year=academic_year, is_next=False).count()
+        total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
         count_teacher = Teacher.objects.filter(school=request.user.school).count()
         context = {
             'count_user':count_user,
@@ -58,7 +58,7 @@ class PreRegistrationView(View):
     def get(self, request, *args, **kwargs):
         try:
             academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
-            students = StudentCareer.objects.filter(academic_year=academic_year, is_registered=False).order_by('-created_at')
+            students = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=False).order_by('-created_at')
             context = {'student_careers':students, 'year':academic_year}
             return render(request, template_name=self.template, context=context)
         except AcademicYear.DoesNotExist:
@@ -84,12 +84,12 @@ class PreRegistrationDetailView(View):
 
     def get(self, request, pk, *args, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
-        student_career = get_object_or_404(StudentCareer, pk=pk, academic_year=academic_year)
+        student_career = get_object_or_404(StudentClassroom, pk=pk, academic_year=academic_year)
         context = {'student_career':student_career}
         return render(request, template_name=self.template, context=context)
     
     def check(self, pk, *args, **kwargs):
-        student_career = get_object_or_404(StudentCareer, pk=pk)
+        student_career = get_object_or_404(StudentClassroom, pk=pk)
         student_career.is_registered = True
         student_career.save()
         
@@ -109,7 +109,7 @@ class PreRegistrationDetailView(View):
         return redirect('accountant_dashboard:pre_registrations')
     
     def delete(self, pk, *args, **kwargs):
-        student_career = get_object_or_404(StudentCareer, pk=pk)
+        student_career = get_object_or_404(StudentClassroom, pk=pk)
         student = get_object_or_404(Student, id=student_career.student.id)
         student_career.delete()
         student.delete()

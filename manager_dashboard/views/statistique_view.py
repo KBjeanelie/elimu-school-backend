@@ -3,7 +3,7 @@ from django.views import View
 from backend.forms.evaluation_forms import ReportCardForm
 from backend.models.evaluations import ReportCard
 from manager_dashboard.views.gestion_evaluation_view import calculate_results, get_all_results
-from backend.models.gestion_ecole import AcademicYear, Career, Semester, StudentCareer
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, StudentClassroom
 from django.http import Http404, JsonResponse
 from django.contrib import messages
 
@@ -40,10 +40,10 @@ class ResultatAcademique(View):
         
     
     def get_context_data(self, request, **kwargs):
-        semesters = Semester.objects.filter(level__school=self.request.user.school)
-        careers = Career.objects.filter(sector__school=self.request.user.school)
+        semesters = Series.objects.filter(level__school=self.request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=self.request.user.school)
         academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
-        total_student = StudentCareer.objects.filter(academic_year=academic_year, is_next=False).count()
+        total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
         results = get_all_results(request.user)
         admis, echouer = 0, 0
         
@@ -71,9 +71,9 @@ class ResultatAcademique(View):
         semester_id = request.POST.get('semester')
         career_id = request.POST.get('career')
         try:
-            career = Career.objects.get(pk=career_id)
-            semester = Semester.objects.get(pk=semester_id)
-        except (Career.DoesNotExist, Semester.DoesNotExist):
+            career = ClassRoom.objects.get(pk=career_id)
+            semester = Series.objects.get(pk=semester_id)
+        except (ClassRoom.DoesNotExist, Series.DoesNotExist):
             raise Http404("Selected semester or career does not exist.")
         
         context = self.get_context_data(request)
@@ -185,8 +185,8 @@ class ReportCardView(View):
     def get(self, request, *args, **kwargs):
         year = AcademicYear.objects.get(status=True, school=request.user.school)
         results = ReportCard.objects.filter(academic_year=year).order_by('-created_at')
-        semesters = Semester.objects.filter(level__school=request.user.school)
-        careers = Career.objects.filter(sector__school=request.user.school)
+        semesters = Series.objects.filter(level__school=request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=request.user.school)
         
         context = {
             'semesters': semesters,
@@ -203,8 +203,8 @@ class ReportCardView(View):
 
         results = ReportCard.objects.filter(semester__id=semester_id, career__id=career_id, academic_year=year)
         
-        semesters = Semester.objects.filter(level__school=request.user.school)
-        careers = Career.objects.filter(sector__school=request.user.school)
+        semesters = Series.objects.filter(level__school=request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=request.user.school)
         
         if results:
             context = {
@@ -243,11 +243,11 @@ class NextLevelView(View):
         return redirect('backend:logout')
     
     def get_context_data(self, request, **kwargs):
-        semesters = Semester.objects.filter(level__school=self.request.user.school)
-        careers = Career.objects.filter(sector__school=self.request.user.school)
+        semesters = Series.objects.filter(level__school=self.request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=self.request.user.school)
         academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
         
-        student_validated = StudentCareer.objects.filter(is_valid=True, is_registered=True, is_next=False, academic_year=academic_year)
+        student_validated = StudentClassroom.objects.filter(is_valid=True, is_registered=True, is_next=False, academic_year=academic_year)
         context = {
             'academic_year': academic_year, 
             'student_validated': student_validated, 
@@ -261,7 +261,7 @@ class NextLevelView(View):
         return render(request, template_name=self.template_name, context=context)
     
     def unChecked(self, pk, *args, **kwargs):
-        student_career = get_object_or_404(StudentCareer, pk=pk)
+        student_career = get_object_or_404(StudentClassroom, pk=pk)
         student_career.is_registered = True
         student_career.is_valid = False;
         student_career.save()
@@ -272,15 +272,15 @@ class NextLevelView(View):
         career_id = request.POST.get('career')
         
         try:
-            career = Career.objects.get(pk=career_id)
-            semester = Semester.objects.get(pk=semester_id)
-        except (Career.DoesNotExist, Semester.DoesNotExist):
+            career = ClassRoom.objects.get(pk=career_id)
+            semester = Series.objects.get(pk=semester_id)
+        except (ClassRoom.DoesNotExist, Series.DoesNotExist):
             raise Http404("Selected semester or career does not exist.")
         
         context = self.get_context_data(request)
         
         academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
-        student_validated = StudentCareer.objects.filter(
+        student_validated = StudentClassroom.objects.filter(
             semester__id=semester_id,
             career__id=career_id,
             is_valid=True, 
@@ -315,19 +315,19 @@ class AddNextLevelView(View):
         return redirect('backend:logout')
     
     def get(self, request,pk, *args, **kwargs):
-        semesters = Semester.objects.filter(level__school=self.request.user.school)
+        semesters = Series.objects.filter(level__school=self.request.user.school)
         context={'semesters':semesters}
         return render(request, template_name=self.template_name, context=context)
     
     def post(self, request, pk, *args, **kwargs):
-        student_career = StudentCareer.objects.get(pk=pk)
+        student_career = StudentClassroom.objects.get(pk=pk)
         student_career.is_next = True
         student_career.save()
-        next_student_career = StudentCareer.objects.create(
+        next_student_career = StudentClassroom.objects.create(
             student=student_career.student,
             career=student_career.career,
             academic_year=student_career.academic_year,
-            semester=Semester.objects.get(id=request.POST['semester']),
+            semester=Series.objects.get(id=request.POST['semester']),
             is_registered=student_career.is_registered,
             school=student_career.school
         )

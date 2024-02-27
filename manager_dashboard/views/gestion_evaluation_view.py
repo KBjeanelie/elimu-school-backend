@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views import View
 from backend.forms.evaluation_forms import AssessmentForm
 from backend.models.evaluations import Assessment
-from backend.models.gestion_ecole import AcademicYear, Career, Semester, StudentCareer, Subject
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, StudentClassroom, Subject
 from django.db.models import Sum
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -17,11 +17,11 @@ def calculate_results(semester_id, career_id, user):
         return[]
     
     try:
-        semester = Semester.objects.get(pk=semester_id)
-        career = Career.objects.get(pk=career_id)
+        semester = Series.objects.get(pk=semester_id)
+        career = ClassRoom.objects.get(pk=career_id)
 
         evaluations = Assessment.objects.filter(semester=semester, career=career, academic_year=academic_year).order_by('-note')
-        student_career = StudentCareer.objects.filter(semester=semester, career=career, academic_year=academic_year, is_next=False)
+        student_career = StudentClassroom.objects.filter(semester=semester, career=career, academic_year=academic_year, is_next=False)
     
         if evaluations.exists():
             results = []
@@ -85,7 +85,7 @@ def calculate_results(semester_id, career_id, user):
         else:
             return []
 
-    except (Semester.DoesNotExist, Career.DoesNotExist, Subject.DoesNotExist) as e:
+    except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
         return HttpResponse(f"Erreur: {e}")
 
 
@@ -95,13 +95,13 @@ def get_all_results(user):
     except (AcademicYear.DoesNotExist):
         return[]
     
-    semesters = Semester.objects.filter(level__school=user.school)
+    semesters = Series.objects.filter(level__school=user.school)
     results = []
     
     for semester in semesters:
         try:
             evaluations = Assessment.objects.filter(academic_year=academic_year, semester=semester).order_by('semester__title')
-            student_career = StudentCareer.objects.filter(academic_year=academic_year, is_valid=False, semester=semester, is_next=False)
+            student_career = StudentClassroom.objects.filter(academic_year=academic_year, is_valid=False, semester=semester, is_next=False)
 
             if evaluations.exists():
                 controle_evaluations = evaluations.filter(type_evaluation__title='Contrôle')
@@ -159,7 +159,7 @@ def get_all_results(user):
                 for i, result in enumerate(results, start=1):
                     result['rang'] = i
                     
-        except (Semester.DoesNotExist, Career.DoesNotExist, Subject.DoesNotExist) as e:
+        except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
             return HttpResponse(f"Erreur: {e}")
         
     return results
@@ -303,8 +303,8 @@ class NoteTableView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        semesters = Semester.objects.filter(level__school=request.user.school)
-        careers = Career.objects.filter(sector__school=request.user.school)
+        semesters = Series.objects.filter(level__school=request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
         context = {
             'semesters':semesters,
@@ -319,14 +319,14 @@ class NoteTableView(View):
         subject_id = request.POST['subject']
         
         try:
-            semester = Semester.objects.get(pk=semester_id)
-            career = Career.objects.get(pk=career_id)
+            semester = Series.objects.get(pk=semester_id)
+            career = ClassRoom.objects.get(pk=career_id)
             subject = Subject.objects.get(pk=subject_id)
 
             evaluations = Assessment.objects.filter(semester=semester, career=career, subject=subject).order_by('-note')
 
-            semesters = Semester.objects.filter(level__school=request.user.school)
-            careers = Career.objects.filter(sector__school=request.user.school)
+            semesters = Series.objects.filter(level__school=request.user.school)
+            careers = ClassRoom.objects.filter(sector__school=request.user.school)
             subjects = Subject.objects.filter(level__school=request.user.school)
             
             if evaluations.exists():
@@ -355,7 +355,7 @@ class NoteTableView(View):
                 }
                 return render(request, template_name=self.template, context=context)
 
-        except (Semester.DoesNotExist, Career.DoesNotExist, Subject.DoesNotExist) as e:
+        except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
             return HttpResponse(f"Erreur: {e}")
 
     
@@ -377,8 +377,8 @@ class AverageTableView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        semesters = Semester.objects.filter(level__school=request.user.school)
-        careers = Career.objects.filter(sector__school=request.user.school)
+        semesters = Series.objects.filter(level__school=request.user.school)
+        careers = ClassRoom.objects.filter(sector__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
         
         context = {
@@ -394,14 +394,14 @@ class AverageTableView(View):
         subject_id = request.POST['subject']
         
         try:
-            semester = Semester.objects.get(pk=semester_id)
-            career = Career.objects.get(pk=career_id)
+            semester = Series.objects.get(pk=semester_id)
+            career = ClassRoom.objects.get(pk=career_id)
             subject = Subject.objects.get(pk=subject_id)
 
             evaluations = Assessment.objects.filter(semester=semester, career=career, subject=subject).order_by('-note')
 
-            semesters = Semester.objects.filter(level__school=request.user.school)
-            careers = Career.objects.filter(sector__school=request.user.school)
+            semesters = Series.objects.filter(level__school=request.user.school)
+            careers = ClassRoom.objects.filter(sector__school=request.user.school)
             subjects = Subject.objects.filter(level__school=request.user.school)
             
             if evaluations.exists():
@@ -453,7 +453,7 @@ class AverageTableView(View):
                 }
                 return render(request, template_name=self.template, context=context)
 
-        except (Semester.DoesNotExist, Career.DoesNotExist, Subject.DoesNotExist) as e:
+        except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
             return HttpResponse(f"Erreur: {e}")
 
 class BulletinDetailView(View):
@@ -475,8 +475,8 @@ class BulletinDetailView(View):
     
     def get_context_data(self, request, pk, *args, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
-        student_career = StudentCareer.objects.get(pk=pk, academic_year=academic_year)
-        total_student = StudentCareer.objects.filter(semester=student_career.semester, career=student_career.career, academic_year=academic_year).count()
+        student_career = StudentClassroom.objects.get(pk=pk, academic_year=academic_year)
+        total_student = StudentClassroom.objects.filter(semester=student_career.semester, career=student_career.career, academic_year=academic_year).count()
         evaluations = Assessment.objects.filter(semester=student_career.semester, career=student_career.career, academic_year=academic_year).order_by('subject__label')
         subjects = []
         result = {}
@@ -538,7 +538,7 @@ class BulletinDetailView(View):
         return render(request, template_name=self.template_name, context=context)
     
     def check(self, pk, *args, **kwargs):
-        student_career = get_object_or_404(StudentCareer, pk=pk)
+        student_career = get_object_or_404(StudentClassroom, pk=pk)
         student_career.is_registered = True
         student_career.is_valid = True;
         student_career.save()

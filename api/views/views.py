@@ -9,7 +9,7 @@ from backend.models.evaluations import Assessment
 from rest_framework.permissions import IsAuthenticated
 from backend.models.facturation import FinancialCommitment, Invoice
 from itertools import chain
-from backend.models.gestion_ecole import AcademicYear, Schedule, StudentCareer
+from backend.models.gestion_ecole import AcademicYear, Schedule, StudentClassroom
 from manager_dashboard.views.gestion_evaluation_view import calculate_results
 
 
@@ -79,7 +79,7 @@ class SchedulesList(generics.ListAPIView):
         user = self.request.user
         student = user.student
         academic_year = AcademicYear.objects.get(school=user.school, status=True)
-        student_career = get_object_or_404(StudentCareer, student=student, academic_year=academic_year, is_valid=False)
+        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
         
         # Filtrer les horaires pour chaque jour de la semaine
         monday_schedule = Schedule.objects.filter(career=student_career.career, day='lundi')
@@ -105,8 +105,8 @@ class StudentSchoolCareer(APIView):
         results = []
         student = request.user.student
         academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
-        students_career = StudentCareer.objects.filter(student=student, school=request.user.school)
-        student_career = get_object_or_404(StudentCareer, student=student, academic_year=academic_year, is_valid=False)
+        students_career = StudentClassroom.objects.filter(student=student, school=request.user.school)
+        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
         
         for s in students_career:
             R = calculate_results(semester_id=s.semester.id, career_id=s.career.id, user=request.user)

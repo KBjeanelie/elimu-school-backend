@@ -1,6 +1,6 @@
 import os
 from django.db import models
-from backend.models.gestion_ecole import Career, Etablishment, Sector
+from backend.models.gestion_ecole import ClassRoom, Etablishment, Level
 from backend.models.user_account import Teacher
 from elimu_school import settings
 
@@ -10,9 +10,7 @@ class eBook(models.Model):
 
         author = models.ForeignKey(Teacher, on_delete=models.CASCADE, blank=True, null=True)
 
-        sector = models.ForeignKey(Sector, on_delete=models.CASCADE, blank=True, null=True)
-
-        career = models.ForeignKey(Career, on_delete=models.CASCADE, blank=True, null=True)
+        level = models.ForeignKey(Level, on_delete=models.CASCADE, blank=True, null=True)
 
         photo_cover = models.ImageField(upload_to='images_ebook')
 
@@ -20,7 +18,7 @@ class eBook(models.Model):
 
         is_private = models.BooleanField(default=False)
 
-        school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+        school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
 
         created_at = models.DateTimeField(auto_now_add=True)
 

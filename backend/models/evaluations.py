@@ -1,6 +1,6 @@
 import os
 from django.db import models
-from backend.models.gestion_ecole import AcademicYear, Career, Etablishment, Semester, Subject
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Etablishment, Series, Subject
 from backend.models.user_account import Student
 from elimu_school import settings
 
@@ -20,8 +20,8 @@ class Assessment(models.Model):
     type_evaluation = models.ForeignKey(TypeOfEvaluation, on_delete=models.SET_NULL, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.DO_NOTHING)
-    career = models.ForeignKey(Career, on_delete=models.DO_NOTHING)
-    semester = models.ForeignKey(Semester, on_delete=models.DO_NOTHING)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.DO_NOTHING)
+    serie = models.ForeignKey(Series, on_delete=models.DO_NOTHING)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -34,8 +34,8 @@ class ReportCard(models.Model):
     average = models.FloatField(default=10)
     file = models.FileField(upload_to='releves_notes')
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    career = models.ForeignKey(Career, on_delete=models.DO_NOTHING)
-    semester = models.ForeignKey(Semester, on_delete=models.DO_NOTHING)
+    career = models.ForeignKey(ClassRoom, on_delete=models.DO_NOTHING)
+    semester = models.ForeignKey(Series, on_delete=models.DO_NOTHING)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

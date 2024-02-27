@@ -1,13 +1,11 @@
 from django import forms
-
-from backend.models.gestion_ecole import Career
-from ..models.communication import Information, Event, Group, GroupMedia
+from ..models.communication import Information, Event
 from ckeditor.widgets import CKEditorWidget
 
 class InformationForm(forms.ModelForm):
     class Meta:
         model = Information
-        fields = ['title', 'date_info', 'content', 'file', 'status', 'school']
+        fields = '__all__'
         widgets = {
             'content': CKEditorWidget(),
             'status': forms.CheckboxInput(
@@ -40,7 +38,7 @@ class InformationForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['title', 'start_date', 'end_date', 'content', 'file', 'status', 'photo', 'school']
+        fields = '__all__'
         widgets = {
             'content': CKEditorWidget(),
             'status': forms.CheckboxInput(
@@ -81,40 +79,3 @@ class EventForm(forms.ModelForm):
                 }
             ),
         }
-
-
-class GroupForm(forms.ModelForm):
-    
-    def __init__(self, user, *args, **kwargs):
-        super(GroupForm, self).__init__(*args, **kwargs)
-        # Filtrer les niveaux en fonction de l'utilisateur connecté
-        self.fields['career'].queryset = Career.objects.filter(sector__school=user.school)
-        
-    class Meta:
-        model = Group
-        fields = ['title', 'career', 'school']
-        
-        widgets = {
-            'title': forms.TextInput(
-                attrs={
-                    'type': 'text',
-                    'id': 'title',
-                    'class': 'form-control',
-                    'name': 'title',
-                    'placeholder': 'nom du group',
-                    'required': True
-
-                }
-            ),
-            'career': forms.Select(
-                attrs={
-                    "class": "form-control",
-                    "required": True
-                }
-            ),
-        }
-
-class GroupMediaForm(forms.ModelForm):
-    class Meta:
-        model = GroupMedia
-        fields = ['discussion_group', 'legend', 'file']
