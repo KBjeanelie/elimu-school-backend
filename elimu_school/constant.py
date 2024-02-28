@@ -146,3 +146,9 @@ periode_of_exam = [
     ('Novembre', 'Novembre'),
     ('Décembre', 'Décembre'),
 ]
+
+do_classes = [
+    ('Le matin', 'Le matin'),
+    ('Après midi', 'Après midi'),
+    ('Plein temps', 'Plein temps'),
+]

@@ -240,6 +240,7 @@ class ClassRoom(models.Model):
     title = models.CharField(max_length=50)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
     types = models.CharField(choices=types_of_classroom, max_length=10)
+    do_class = models.CharField(choices=do_classes, max_length=11, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):

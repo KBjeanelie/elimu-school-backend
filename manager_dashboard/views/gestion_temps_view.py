@@ -58,11 +58,9 @@ class ScheduleView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        semesters = Series.objects.filter(level__school=request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=request.user.school)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         context = {
-            'semesters':semesters,
-            'careers':careers,
+            'classrooms':classrooms,
         }
         return render(request, template_name=self.template, context=context)
     
@@ -73,29 +71,27 @@ class ScheduleView(View):
     
     def post(self, request, *args, **kwargs):
         #semester_id = request.POST['semester']
-        career_id = request.POST['career']
-        career = ClassRoom.objects.get(pk=career_id)
+        classroom_id = request.POST['classroom']
+        classroom = ClassRoom.objects.get(pk=classroom_id)
         
-        monday_schedule = Schedule.objects.filter(career__id=career_id, day='lundi').order_by('start_hours')
-        tueday_schedule = Schedule.objects.filter(career__id=career_id, day='mardi').order_by('start_hours')
-        wednesday_schedule = Schedule.objects.filter(career__id=career_id, day='mercredi').order_by('start_hours')
-        thursday_schedule = Schedule.objects.filter(career__id=career_id, day='jeudi').order_by('start_hours')
-        friday_schedule = Schedule.objects.filter(career__id=career_id, day='vendredi').order_by('start_hours')
-        saturday_schedule = Schedule.objects.filter(career__id=career_id, day='samedi').order_by('start_hours')
-        
-        semesters = Series.objects.filter(level__school=request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=request.user.school)
+        monday_schedule = Schedule.objects.filter(classroom=classroom, day='lundi').order_by('start_hours')
+        tueday_schedule = Schedule.objects.filter(classroom=classroom, day='mardi').order_by('start_hours')
+        wednesday_schedule = Schedule.objects.filter(classroom=classroom, day='mercredi').order_by('start_hours')
+        thursday_schedule = Schedule.objects.filter(classroom=classroom, day='jeudi').order_by('start_hours')
+        friday_schedule = Schedule.objects.filter(classroom=classroom, day='vendredi').order_by('start_hours')
+        saturday_schedule = Schedule.objects.filter(classroom=classroom, day='samedi').order_by('start_hours')
+
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         
         context = {
-            'semesters':semesters,
-            'careers':careers,
+            'classrooms':classrooms,
             'monday_schedule':monday_schedule,
             'tueday_schedule':tueday_schedule,
             'wednesday_schedule':wednesday_schedule,
             'thursday_schedule':thursday_schedule,
             'friday_schedule':friday_schedule,
             'saturday_schedule':saturday_schedule,
-            'career':career
+            'classroom':classroom
         }
         return render(request, template_name=self.template, context=context)
     

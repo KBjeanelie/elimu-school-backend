@@ -64,6 +64,7 @@
                                             <th scope="col">Titre</th>
                                             <th scope="col">Niveau</th>
                                             <th scope="col">Cycle</th>
+                                            <th scope="col">Fréquence de fréquentation</th>
                                         </tr>
                                     </thead>
                                     <tbody id="elementList">
@@ -72,6 +73,7 @@
                                                 <td> <h6> {{ classroom.title }} </h6></td>
                                                 <td> <h6> {{ classroom.level }}</h6></td>
                                                 <td> <h6> {{ classroom.types }} </h6></td>
+                                                <td> <h6> {{ classroom.do_class }} </h6></td>
                                                 {% if not user.is_admin_school %}
                                                 <td>
                                                     <div class="action_btns d-flex">

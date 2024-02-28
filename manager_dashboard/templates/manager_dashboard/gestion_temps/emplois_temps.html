@@ -40,11 +40,11 @@
                     <form method="post" class="row g-3">
                         {% csrf_token %}
                         <div class="col-auto">
-                            <label class="form-label" for="inputStateCareer">Selectionner le parcours</label>
-                            <select id="inputStateCareer" class="form-control" name="career" required>
+                            <label class="form-label" for="inputStateCareer">Selectionner une salle de classe</label>
+                            <select id="inputStateCareer" class="form-control" name="classroom" required>
                                 
-                                {% for career in careers %}
-                                    <option value="{{career.id}}"> {{career.title}} </option>
+                                {% for classroom in classrooms %}
+                                    <option value="{{classroom.id}}"> {{classroom.title}} </option>
                                 {% endfor %}
                             </select> 
                         </div>
@@ -64,7 +64,7 @@
                         {% if monday_schedule or tueday_schedule or wednesday_schedule or thursday_schedule or friday_schedule or saturday_schedule%}
                             <div class="row mt-5">
                                 <div class="col-xl-12 mb-3 bg-info">
-                                    <h4 class="p-2 text-center text-white"> {{career.title | upper}} </h4>
+                                    <h4 class="p-2 text-center text-white"> {{classroom.title | upper}} </h4>
                                 </div>
                                 <!-- EMPLOI DU TOIS POUR LE LUNDI-->
                                 <div class="col-md-3">
@@ -77,18 +77,55 @@
                                         <div class="widget-subheading mt-2">
                                             <ol id='elementList'>
                                                 {% for schedule in monday_schedule %}
-                                                    {% if schedule.start_hours == '13h' %}
-                                                        <li>Pause : <br> 12 - 13h</li>
-                                                        <hr>
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                    {% if schedule.classroom.do_class == 'Le matin' %}
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
+                                                    {% elif schedule.classroom.do_class == 'Après midi' %}
+                                                        {% if schedule.end_hours == '15h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 15h00 - 15h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% else %}
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% elif schedule.end_hours == '12h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Fin de la première vague : <br> 12h00 - 14h:00</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             </ol>
@@ -108,18 +145,55 @@
                                         <div class="widget-subheading mt-2">
                                             <ol id='elementList'>
                                                 {% for schedule in tueday_schedule %}
-                                                    {% if schedule.start_hours == '13h' %}
-                                                        <li>Pause : <br> 12 - 13h</li>
-                                                        <hr>
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                    {% if schedule.classroom.do_class == 'Le matin' %}
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
+                                                    {% elif schedule.classroom.do_class == 'Après midi' %}
+                                                        {% if schedule.end_hours == '15h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 15h00 - 15h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% else %}
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% elif schedule.end_hours == '12h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Fin de la première vague : <br> 12h00 - 14h:00</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             </ol>
@@ -139,18 +213,55 @@
                                         <div class="widget-subheading mt-2">
                                             <ol id='elementList'>
                                                 {% for schedule in wednesday_schedule %}
-                                                    {% if schedule.start_hours == '13h' %}
-                                                        <li>Pause : <br> 12 - 13h</li>
-                                                        <hr>
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                    {% if schedule.classroom.do_class == 'Le matin' %}
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
+                                                    {% elif schedule.classroom.do_class == 'Après midi' %}
+                                                        {% if schedule.end_hours == '15h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 15h00 - 15h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% else %}
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% elif schedule.end_hours == '12h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Fin de la première vague : <br> 12h00 - 14h:00</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             </ol>
@@ -170,22 +281,58 @@
                                         <div class="widget-subheading mt-2">
                                             <ol id='elementList'>
                                                 {% for schedule in thursday_schedule %}
-                                                    {% if schedule.start_hours == '13h' %}
-                                                        <li>Pause : <br> 12 - 13h</li>
-                                                        <hr>
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                    {% if schedule.classroom.do_class == 'Le matin' %}
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
+                                                    {% elif schedule.classroom.do_class == 'Après midi' %}
+                                                        {% if schedule.end_hours == '15h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 15h00 - 15h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% else %}
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% elif schedule.end_hours == '12h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Fin de la première vague : <br> 12h00 - 14h:00</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             </ol>
-                                            
                                         </div>
                                     </div>
                                 </div>
@@ -201,18 +348,55 @@
                                         <div class="widget-subheading mt-2">
                                             <ol id='elementList'>
                                                 {% for schedule in friday_schedule %}
-                                                    {% if schedule.start_hours == '13h' %}
-                                                        <li>Pause : <br> 12 - 13h</li>
-                                                        <hr>
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                    {% if schedule.classroom.do_class == 'Le matin' %}
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
+                                                    {% elif schedule.classroom.do_class == 'Après midi' %}
+                                                        {% if schedule.end_hours == '15h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 15h00 - 15h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% else %}
-                                                        <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
-                                                            <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
-                                                        </li>
-                                                        <hr>
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% elif schedule.end_hours == '12h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Fin de la première vague : <br> 12h00 - 14h:00</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             </ol>
@@ -232,14 +416,55 @@
                                         <div class="widget-subheading mt-2">
                                             <ol id='elementList'>
                                                 {% for schedule in saturday_schedule %}
-                                                    {% if schedule.start_hours == '13h' %}
-                                                    <li>Pause : <br> 12 - 13h</li>
-                                                    <hr>
-                                                    <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
-                                                    <hr>
+                                                    {% if schedule.classroom.do_class == 'Le matin' %}
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
+                                                    {% elif schedule.classroom.do_class == 'Après midi' %}
+                                                        {% if schedule.end_hours == '15h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 15h00 - 15h:30</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% else %}
-                                                    <li>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}</li>
-                                                    <hr>
+                                                        {% if schedule.end_hours == '10h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Pause : <br> 10h00 - 10h:30</li>
+                                                            <hr>
+                                                        {% elif schedule.end_hours == '12h' %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                            <li>Fin de la première vague : <br> 12h00 - 14h:00</li>
+                                                            <hr>
+                                                        {% else %}
+                                                            <li data-id='{{schedule.id}}'>{{ schedule.subject.label }} : <br> {{ schedule.start_hours }} - {{ schedule.end_hours }}
+                                                                <a href="#" onclick='deleteSchedule({{schedule.id}})' class="text-danger"> <i class="ti-trash"></i> </a>
+                                                            </li>
+                                                            <hr>
+                                                        {% endif %}
                                                     {% endif %}
                                                 {% endfor %}
                                             </ol>
@@ -249,7 +474,7 @@
                                 </div>
                             </div>
                         {% else %}
-                        <p> Aucun enplois du temps enregistré pour le parcours {{career.title | upper}}
+                        <h6> Aucun enplois du temps enregistré pour la salle de classe {{classroom.title | upper}} </h6>
                         {% endif %}
                     </div>
                 </div>

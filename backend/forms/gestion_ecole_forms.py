@@ -479,6 +479,12 @@ class ClassRoomForm(forms.ModelForm):
                     'required': True,
                 }
             ),
+            'do_class': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'required': True,
+                }
+            ),
         }
 
 class GroupSubjectForm(forms.ModelForm):
