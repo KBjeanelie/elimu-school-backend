@@ -226,6 +226,7 @@ class Level(models.Model):
     cycles = models.CharField(choices=cycles, max_length=30)
     serie = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True, null=True)
     principal_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):

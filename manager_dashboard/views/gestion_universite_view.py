@@ -208,7 +208,9 @@ class EditLevelView(View):
     
     def post(self, request, pk, *args, **kwargs):
         level = get_object_or_404(Level, pk=pk)
-        form = LevelForm(request.POST, instance=level)
+        data = request.POST.copy()
+        data['school'] = request.user.school
+        form = LevelForm(data, instance=level)
         if form.is_valid():
             form.save()
             messages.success(request, "Niveau modifier avec succès !")
@@ -236,7 +238,9 @@ class AddLevelView(View):
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
-        form = LevelForm(request.POST)
+        data = request.POST.copy()
+        data['school'] = request.user.school
+        form = LevelForm(data)
         if form.is_valid():
             form.save()
             messages.success(request, "Niveau ajouter avec succès !")
