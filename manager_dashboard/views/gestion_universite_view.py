@@ -916,10 +916,9 @@ class AddStudentView(View):
         return redirect('backend:logout')
 
     def get(self, request, *args, **kwargs):
-        careers = ClassRoom.objects.filter(sector__school=self.request.user.school)
-        semesters = Series.objects.filter(level__school=self.request.user.school)
+        levels = ClassRoom.objects.filter(level__school=self.request.user.school)
         type_documents = DocumentType.objects.filter(status=True, school=request.user.school)
-        context = {'careers':careers, 'semesters':semesters, 'type_documents':type_documents,}
+        context = {'levels':levels, 'type_documents':type_documents,}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -933,15 +932,12 @@ class AddStudentView(View):
         )
         new_student.save()
 
-        career = get_object_or_404(ClassRoom, id=request.POST['career'])
-        semester = get_object_or_404(Series, id=request.POST['semester'])
+        classroom = get_object_or_404(ClassRoom, id=request.POST['classroom'])
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
 
         student_career = StudentClassroom.objects.create(
-            career=career,
-            semester=semester,
+            classroom=classroom,
             academic_year=academic_year,
-            school=request.user.school,
             student=new_student
         )
 
@@ -953,7 +949,6 @@ class AddStudentView(View):
                     student=new_student,
                     document_type=doc,
                     file=request.FILES[doc.title],
-                    school=request.user.school
                 )
                 doc_student.save()
 
