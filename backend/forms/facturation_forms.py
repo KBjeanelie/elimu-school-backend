@@ -85,6 +85,12 @@ class InvoiceForm(forms.ModelForm):
                     'required': True
                 }
             ),
+            'schooling_of': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'required': True
+                }
+            ),
             'invoice_status': forms.Select(
                 attrs={
                     'class': 'form-control',

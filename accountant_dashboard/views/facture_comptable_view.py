@@ -85,29 +85,12 @@ class InvoiceView(View):
         return render(request, template_name=self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):
-        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
-        form = InvoiceForm(request.user, request.POST)
+        data = request.POST.copy()
+        data['academic_year'] = AcademicYear.objects.get(school=request.user.school, status=True)
+        data['invoice_number'] = generate_invoice_number()
+        form = InvoiceForm(request.user, data)
         if form.is_valid():
-            invoice_number = generate_invoice_number()
-            career = form.cleaned_data['career']
-            item = form.cleaned_data['item']
-            amount = form.cleaned_data['amount']
-            student = form.cleaned_data['student']
-            comment = form.cleaned_data['comment']
-            invoice_status = form.cleaned_data['invoice_status']
-            
-            # Utilisation des valeurs récupérées pour créer une nouvelle instance de la facture
-            invoice = Invoice(
-                invoice_number=invoice_number,
-                career=career,
-                item=item,
-                amount=amount,
-                student=student,
-                comment=comment,
-                invoice_status=invoice_status,
-                academic_year=academic_year
-            )
-            invoice.save()
+            form.save()
             messages.success(request, "La facture a été enregistré avec succès !")
             return redirect("accountant_dashboard:invoices")
         
@@ -118,7 +101,8 @@ class InvoiceView(View):
         instance = get_object_or_404(Invoice, pk=pk)
         instance.delete()
         
-        invoices = Invoice.objects.all().order_by('-created_at')
+        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
+        invoices = Invoice.objects.filter(academic_year=academic_year)
         context = {'invoices':invoices}
         return render(request, template_name=self.template_name, context=context)
 
@@ -168,7 +152,10 @@ class EditInvoiceView(View):
     
     def post(self, request, pk, *args, **kwargs):
         invoice = Invoice.objects.get(pk=pk)
-        form = InvoiceForm(request.user, request.POST, instance=invoice)
+        data = request.POST.copy()
+        data['academic_year'] = AcademicYear.objects.get(school=request.user.school, status=True)
+        data['invoice_number'] = generate_invoice_number()
+        form = InvoiceForm(request.user, data, instance=invoice)
         if form.is_valid():
             form.save()
             messages.success(request, "La facture a été modifier avec succès !")

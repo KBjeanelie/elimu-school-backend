@@ -39,9 +39,8 @@
                                     <h5 class="text-dark font_s_13 mt-2 mb-1">Matricule : {{student_career.student.registration_number|upper}} </h5>
                                     <h5 class="text-dark font_s_13 mt-2 mb-1">Téléphone : {{student_career.student.tel}} </h5>
                                     <hr>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Parcours : {{student_career.career.title}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Filière : {{student_career.career.sector.title}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.semester.level.label}} </h5>
+                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.level.label}} </h5>
+                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.title}} </h5>
                                     <div class="quantity mt-3">
                                         <a href='{% url "accountant_dashboard:pre_registrations_check" student_career.id %}' class="btn bg-success text-white px-4 d-inline-block "><i class="ti-check-box me-2"></i>Valider</a>
                                         <a href='{% url "accountant_dashboard:pre_registrations_delete" student_career.id %}' class="btn bg-danger text-white px-4 d-inline-block "><i class="fa fa-trash me-2"></i>Refuser</a>

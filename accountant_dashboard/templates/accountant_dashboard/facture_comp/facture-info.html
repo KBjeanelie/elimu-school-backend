@@ -35,12 +35,12 @@
                         <div class="row mb-4">
                             <div class="col-sm-6">
                                 <div>
-                                    <strong>CENTRE DE FORMATION EN INFORMATIQUE </strong>
+                                    <strong>{{user.school.name|upper}} </strong>
                                 </div>
                                 <div>République du Congo</div>
-                                <div>50 rue Nkouma Moungali, Brazzaville</div>
-                                <div>Email: <a href="#" class="__cf_email__ text-primary" >[cfi-ciras@gmail.com]</a></div>
-                                <div>Téléphone: +242 00 000 0000</div>
+                                <div>{{user.school.address|capfirst}}</div>
+                                <div>Email: <a href="#" class="__cf_email__ text-primary" >[{{user.school.email}}]</a></div>
+                                <div>Téléphone: +242 {{user.school.tel}}</div>
                             </div>
                             <div class="col-sm-6">
                                 <div>
@@ -58,7 +58,7 @@
                                     <tr>
                                         <th class="center">#</th>
                                         <th>Article</th>
-                                        <th>Parcours</th>
+                                        <th>Salle de classe</th>
                                         <th class="right">Montant</th>
                                         <th class="right">Total</th>
                                     </tr>
@@ -67,7 +67,7 @@
                                     <tr>
                                         <td class="center bg-light text-dark">1</td>
                                         <td class="left strong bg-light text-dark"> {{invoice.item.name}} </td>
-                                        <td class="left bg-light text-dark"> {{invoice.career.title}} </td>
+                                        <td class="left bg-light text-dark"> {{invoice.classroom.title}} </td>
                                         <td class="right bg-light text-dark"> {{invoice.amount}} XAF</td>
                                         <td class="right bg-light text-dark">{{regulation.amount_payment}} XAF</td>
                                     </tr>
@@ -98,7 +98,7 @@
         document.getElementById('generate-pdf-button').addEventListener('click', function() {
             var element = document.getElementById('releve-pdf'); // Remplacez 'pdf-content' par l'ID ou la classe de l'élément contenant votre contenu HTML
             var options = {
-                filename: 'bulletin_{{student_career.student.lastname}}_{{student_career.student.firstname}}.pdf', // Spécifiez ici le nom du fichier personnalisé
+                filename: 'facture_{{invoice.student.lastname}}_{{invoice.student.firstname}}.pdf', // Spécifiez ici le nom du fichier personnalisé
             };
         
             html2pdf().set(options).from(element).save();

@@ -61,7 +61,8 @@
                                             <th scope="col">N° Facture</th>
                                             <th scope="col">Date de facture</th>
                                             <th scope="col">Étudiant</th>
-                                            <th scope="col">Parcours</th>
+                                            <th scope="col">Classe</th>
+                                            <th scope="col">Écolage de</th>
                                             <th scope="col">Montant</th>
                                             <th scope="col">Status</th>
                                             <th scope="col"></th>
@@ -73,7 +74,8 @@
                                                 <td><h6>{{ invoice.invoice_number }}</h6></td>
                                                 <td><h6>{{ invoice.invoice_date }}</h6></td>
                                                 <td><h6>{{ invoice.student.fullname }}</h6></td>
-                                                <td><h6>{{ invoice.career.title }}</h6></td>
+                                                <td><h6>{{ invoice.classroom.title }}</h6></td>
+                                                <td><h6>{{ invoice.schooling_of }}</h6></td>
                                                 <td><h6>{{ invoice.amount }} XAF</h6></td>
                                                 <td><h6>
                                                     {% if invoice.is_repayment %}
@@ -95,7 +97,6 @@
                                                             <a href='{% url "accountant_dashboard:invoice_edit" invoice.id %}' class="action_btn mr_10"> <i class="ti-pencil"></i> </a>
                                                             <a href="#" onclick="deleteInvoice({{invoice.id}})" class="action_btn mr_10"> <i class="ti-trash"></i> </a>
                                                         {% endif %}
-                                                        
                                                     </div>
                                                 </td>
                                             </tr>
@@ -130,8 +131,8 @@
                         {{form.item}}
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="level">Parcours</label>
-                        {{form.career}}
+                        <label class="form-label" for="level">Salle de classe</label>
+                        {{form.classroom}}
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="libelle">Etudiant</label>
@@ -140,6 +141,10 @@
                     <div class="mb-3">
                         <label class="form-label" for="libelle">Montant</label>
                         {{form.amount}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Écolage de </label>
+                        {{form.schooling_of}}
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="libelle">Status de la facture</label>

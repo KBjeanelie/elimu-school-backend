@@ -99,7 +99,7 @@ class PreRegistrationDetailView(View):
             student_career.student.save()
             
             #enregistrer un engagement financiers
-            amount_level = student_career.semester.level.fees * student_career.school.month
+            amount_level = student_career.classroom.level.fees * 9
             financialCommitment = FinancialCommitment.objects.create(
                 student=student_career.student,
                 academic_year=student_career.academic_year,

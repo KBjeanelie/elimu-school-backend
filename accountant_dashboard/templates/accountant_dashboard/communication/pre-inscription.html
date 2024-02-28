@@ -49,8 +49,8 @@
                                         <th class="border-top-0">Nom</th>
                                         <th class="border-top-0">Prénom</th>
                                         <th class="border-top-0">Date de Naissance</th>
-                                        <th class="border-top-0">Parcours</th>
-                                        <th class="border-top-0">Niveau</th>
+                                        <th class="border-top-0">Genre</th>
+                                        <th class="border-top-0">Classe</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,8 +68,8 @@
                                             <td><h6> {{student_career.student.lastname}} </h6></td>
                                             <td><h6> {{student_career.student.firstname}} </h6></td>
                                             <td><h6> {{student_career.student.bithday}} </h6></td>
-                                            <td><h6> {{student_career.career.title}} </h6></td>
-                                            <td><h6> {{student_career.semester.level.label}} </h6></td>
+                                            <td><h6> {{student_career.student.sex|capfirst}} </h6></td>
+                                            <td><h6> {{student_career.classroom.title}} </h6></td>
                                             <td>
                                                 <div class="action_btns d-flex">
                                                     <a href='{% url "accountant_dashboard:pre_registrations_detail" student_career.id %}' class="action_btn mr_10"><i class="fas fa-eye" aria-hidden="true"></i></a>
