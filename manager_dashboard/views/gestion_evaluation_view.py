@@ -197,6 +197,8 @@ class EditAssessmentView(View):
             form.save()
             messages.success(request, "Evaluation a été modifier avec succès")
             return redirect('manager_dashboard:evaluations')
+        else:
+            print(form.errors)
         messages.error(request, "ERREUR: Impossible de modifier l'évaluation")
         context = {'form':form}
         return render(request, template_name=self.template, context=context)

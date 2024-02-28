@@ -67,8 +67,8 @@
                                                 <th scope="col">Nom complet</th>
                                                 <th scope="col">Matière</th>
                                                 <th scope="col">Note</th>
-                                                <th scope="col">Parcours</th>
-                                                <th scope="col">Semestre</th>
+                                                <th scope="col">Salle de classe</th>
+                                                <th scope="col">Période</th>
                                                 <th scope="col">Type d'évaluation</th>
                                                 <!--<th scope="col">Est public ?</th>-->
                                             </tr>
@@ -82,8 +82,8 @@
                                                     <td><h6> {{evaluation.student.fullname}} </h6></td>
                                                     <td><h6> {{evaluation.subject.label}} </h6></td>
                                                     <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
-                                                    <td><h6>{{evaluation.career.title}}</h6></td>
-                                                    <td><h6>{{evaluation.semester.title}}</h6></td>
+                                                    <td><h6>{{evaluation.classroom.title}}</h6></td>
+                                                    <td><h6>{{evaluation.period}}</h6></td>
                                                     <td><h6> {{evaluation.type_evaluation.title}} </h6></td>
                                                     <!--<td><h6> <a class="status_btn">Active</a> </h6></td>-->
                                                     {% if not user.is_admin_school %}

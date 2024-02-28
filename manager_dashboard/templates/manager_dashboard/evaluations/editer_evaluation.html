@@ -42,8 +42,8 @@
                         <form method="post">
                             {% csrf_token %}
                             <div class="mb-3">
-                                <label class="form-label" for="level">Parcours</label>
-                                {{ form.career }}
+                                <label class="form-label" for="level">Salle de classe</label>
+                                {{ form.classroom }}
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="level">Matières</label>
@@ -58,8 +58,8 @@
                                 {{ form.note }}
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="level">Semestre</label>
-                                {{ form.semester }}
+                                <label class="form-label" for="level">Periode d'évaluation</label>
+                                {{ form.period }}
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="level">Type d'évaluation</label>
