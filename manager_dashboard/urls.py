@@ -3,7 +3,7 @@ from django.urls import path
 
 from elimu_school import settings
 from manager_dashboard.views.administration_view import EditProfileView, ProfileAppView, TypeDocumentDeleteView, TypeDocumentView, TypeEvaluationDeleteView, TypeEvaluationView, TypeSanctionDeleteView, TypeSanctionView, SettingAppView, get_last_document_type, get_last_sanction_type
-from manager_dashboard.views.communication_view import AddEventView, AddInformationView, EditEventView, EditInformationView, EventDetail, EventView, GroupDiscussionView, InformationDetail, InformationView
+from manager_dashboard.views.communication_view import AddEventView, AddInformationView, EditEventView, EditInformationView, EventDetail, EventView,  InformationDetail, InformationView
 from manager_dashboard.views.comptes_view import AddDirectionAccount, AddStudentAccount, AddTeacherAccount, EditDirectionAccountView, EditStudentAccountView, EditTeacherAccountView, ListAllDirectionAccount, ListAllStudentAccount, ListAllTeacherAccount
 from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook, eBookView
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
@@ -78,8 +78,7 @@ urlpatterns = [
     path(route='gestion_temps/emplois-du-temps/<int:pk>/delete/', view=ScheduleView.as_view(), name='delete_time'),
     
     #=================== THIS ROUTE IS FOR Communication MODULE ========================
-    path(route='communication/group-discussions/', view=GroupDiscussionView.as_view(), name='discussion_group'),
-    path(route='communication/group-discussions/<int:pk>/delete/', view=GroupDiscussionView.as_view(), name='delete_discussion_group'),
+    
     path(route='communication/informations/', view=InformationView.as_view(), name='informations'),
     path(route='communication/informations/<int:pk>/delete/', view=InformationView.as_view(), name='delete_information'),
     path(route='communication/informations/<int:pk>/detail/', view=InformationDetail.as_view(), name='info'),

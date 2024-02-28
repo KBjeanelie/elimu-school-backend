@@ -24,16 +24,12 @@ class EditInformationView(View):
     
     def post(self, request, pk, *args, **kwargs):
         info = get_object_or_404(Information, pk=pk)
-        old_date = info.date_info
         
         mutable_data = request.POST.copy()
         mutable_files = request.FILES.copy()
     
         if 'file' not in mutable_files or not mutable_files['file']:
             mutable_files['file'] = None
-            
-        if 'date_info' not in request.POST or not request.POST['date_info']:
-            mutable_data['date_info'] = old_date
             
         mutable_data['school'] = request.user.school
         form = InformationForm(mutable_data, mutable_files, instance=info)
@@ -239,41 +235,41 @@ class EventDetail(View):
         return render(request, template_name=self.template, context=object)
 
 
-class GroupDiscussionView(View):
-    template = "manager_dashboard/communication/group-discussions.html"
+# class GroupDiscussionView(View):
+#     template = "manager_dashboard/communication/group-discussions.html"
     
-    def dispatch(self,request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('backend:login')
+#     def dispatch(self,request, *args, **kwargs):
+#         if not request.user.is_authenticated:
+#             return redirect('backend:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
-            return super().dispatch(request, *args, **kwargs)
+#         if request.user.is_manager or request.user.is_admin_school:
+#             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+#         return redirect('backend:logout')
     
-    def get(self, request, *args, **kwargs):
-        groups = Group.objects.filter(school=request.user.school)
-        form = GroupForm(request.user)
-        contexte_object = {'group_discussions': groups, 'form':form}
-        return render(request, template_name=self.template, context=contexte_object)
+#     def get(self, request, *args, **kwargs):
+#         groups = Group.objects.filter(school=request.user.school)
+#         form = GroupForm(request.user)
+#         contexte_object = {'group_discussions': groups, 'form':form}
+#         return render(request, template_name=self.template, context=contexte_object)
     
-    def post(self, request, *args, **kwargs):
-        data = request.POST.copy()
-        data['school'] = request.user.school
-        form = GroupForm(request.user, data)
-        if form.is_valid():
-            form.save()
-            return redirect('manager_dashboard:discussion_group')
+#     def post(self, request, *args, **kwargs):
+#         data = request.POST.copy()
+#         data['school'] = request.user.school
+#         form = GroupForm(request.user, data)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('manager_dashboard:discussion_group')
         
-        groups = Group.objects.filter(school=request.user.school)
-        contexte_object = {'group_discussions': groups, 'form':form}
-        return render(request, template_name=self.template, context=contexte_object)
+#         groups = Group.objects.filter(school=request.user.school)
+#         contexte_object = {'group_discussions': groups, 'form':form}
+#         return render(request, template_name=self.template, context=contexte_object)
     
-    def delete(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(Group, pk=pk)
-        instance.delete()
+#     def delete(self, request, pk, *args, **kwargs):
+#         instance = get_object_or_404(Group, pk=pk)
+#         instance.delete()
         
-        groups = Group.objects.filter(school=request.user.school)
-        form = GroupForm(request.user)
-        contexte_object = {'group_discussions': groups, 'form':form}
-        return render(request, template_name=self.template, context=contexte_object)
+#         groups = Group.objects.filter(school=request.user.school)
+#         form = GroupForm(request.user)
+#         contexte_object = {'group_discussions': groups, 'form':form}
+#         return render(request, template_name=self.template, context=contexte_object)
