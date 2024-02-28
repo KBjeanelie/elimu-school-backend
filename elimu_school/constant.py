@@ -127,3 +127,22 @@ types_of_classroom = (
     ('Lycée', 'Lycée')
 )
 types = [('Obligatoire', 'Obligatoire'), ('Secondaire', 'Secondaire')]
+
+
+periode_of_exam = [
+    ('Premier trimestre', 'Premier trimestre'),
+    ('Deuxième trimestre', 'Deuxième trimestre'),
+    ('Troisième trimestre', 'Troisième trimestre'),
+    ('Janvier', 'Janvier'),
+    ('Février', 'Février'),
+    ('Mars', 'Mars'),
+    ('Avril', 'Avril'),
+    ('Mai', 'Mai'),
+    ('Juin', 'Juin'),
+    ('Juillet', 'Juillet'),
+    ('Août', 'Août'),
+    ('Septembre', 'Septembre'),
+    ('Octobre', 'Octobre'),
+    ('Novembre', 'Novembre'),
+    ('Décembre', 'Décembre'),
+]
