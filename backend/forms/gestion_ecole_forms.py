@@ -683,6 +683,8 @@ class SanctionAppreciationForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(SanctionAppreciationForm, self).__init__(*args, **kwargs)
         self.fields['type'].queryset = SanctionAppreciationType.objects.filter(school=user.school)
+        self.fields['subject'].queryset = Subject.objects.filter(level__school=user.school)
+        self.fields['classroom'].queryset = ClassRoom.objects.filter(level__school=user.school)
         student_ids = StudentClassroom.objects.filter(academic_year__school=user.school, academic_year__status=True).values_list('student', flat=True).distinct()
         self.fields['student'].queryset = Student.objects.filter(id__in=student_ids)
         

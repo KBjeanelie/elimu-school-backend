@@ -103,7 +103,7 @@
     function deleteSanction(sanction_id) {
         var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
         $.ajax({
-            url: `/gestion_universite/sanctions-&-appreciations/${sanction_id}/delete/`,
+            url: `${sanction_id}/delete/`,
             type: 'DELETE',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
