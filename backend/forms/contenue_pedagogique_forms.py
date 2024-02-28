@@ -1,5 +1,6 @@
 from django import forms
 from backend.models.contenue_pedagogique import eBook
+from backend.models.gestion_ecole import Level, Teacher
 
 # class FolderForm(forms.ModelForm):
 #     class Meta:
@@ -67,11 +68,12 @@ from backend.models.contenue_pedagogique import eBook
 #         fields = ['label', 'author', 'code_isbn', 'location', 'attachement', 'sector']
 
 class eBookForm(forms.ModelForm):
-    # def __init__(self, user, *args, **kwargs):
-    #     super(eBookForm, self).__init__(*args, **kwargs)
-    #     # Filtrer les niveaux en fonction de l'utilisateur connecté
-    #     self.fields['career'].queryset = ClassRoom.objects.filter(sector__school=user.school)
-    #     self.fields['sector'].queryset = Sector.objects.filter(school=user.school)
+    
+    def __init__(self, user, *args, **kwargs):
+        super(eBookForm, self).__init__(*args, **kwargs)
+        # Filtrer les niveaux en fonction de l'utilisateur connecté
+        self.fields['author'].queryset = Teacher.objects.filter(school=user.school)
+        self.fields['level'].queryset = Level.objects.filter(school=user.school)
 
     class Meta:
         model = eBook

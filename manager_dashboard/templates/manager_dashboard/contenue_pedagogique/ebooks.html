@@ -45,7 +45,7 @@
                                 <div class="col-auto">
                                     <h5 class="text-dark mt-0"> {{ ebook.title}} </h5>
                                 </div>
-                                <div class="col"><span class="badge_btn_3  mb-1"> {{ ebook.career.title }} </span></div>
+                                <div class="col"><span class="badge_btn_3  mb-1"> {{ ebook.level }} </span></div>
                             </div>
                             <div class="action_btns d-flex align-items-center">
                                 {% if not user.is_admin_school %}
@@ -74,7 +74,7 @@
     function deleteEbook(ebook_id) {
         var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
         $.ajax({
-            url: `/contenue_pedagogique/ebooks/${ebook_id}/delete/`,
+            url: `${ebook_id}/delete/`,
             type: 'DELETE',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
