@@ -8,7 +8,7 @@ from manager_dashboard.views.comptes_view import AddDirectionAccount, AddStudent
 from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook, eBookView
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
 from manager_dashboard.views.gestion_temps_view import AddScheduleView, ScheduleView
-from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, CareerView, EditAcademicYearView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelView, ProgramView, SanctionAppreciationView, SectorView, SemesterView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
+from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
 from manager_dashboard.views.home_view import ManagerIndexView, NotAcademicYearFound
 from manager_dashboard.views.statistique_view import AddNextLevelView, CloseAcademicYear, NextLevelView, ResultatAcademique, ReportCardView, AddReportCardView, EditReportCardView
 
@@ -17,56 +17,58 @@ app_name = 'manager_dashboard'
 urlpatterns = [
     path(route='', view=ManagerIndexView.as_view(), name='index'),
     
-    path(route='gestion_universite/année-academiques/', view=AcademicYearView.as_view(), name='years'),
-    path(route='gestion_universite/année-academiques/ajouter/', view=AddAcademicYearView.as_view(), name='add_year'),
-    path(route='gestion_universite/année-academiques/<int:pk>/editer/', view=EditAcademicYearView.as_view(), name='edit_year'),
-    path(route='gestion_universite/année-academiques/<int:pk>/delete/', view=AcademicYearView.as_view(), name='delete_year'),
+    path(route='gestion_ecole/année-academiques/', view=AcademicYearView.as_view(), name='years'),
+    path(route='gestion_ecole/année-academiques/ajouter/', view=AddAcademicYearView.as_view(), name='add_year'),
+    path(route='gestion_ecole/année-academiques/<int:pk>/editer/', view=EditAcademicYearView.as_view(), name='edit_year'),
+    path(route='gestion_ecole/année-academiques/<int:pk>/delete/', view=AcademicYearView.as_view(), name='delete_year'),
     
-    path(route='gestion_universite/semestres/', view=SemesterView.as_view(), name='semesters'),
-    path(route='gestion_universite/semestres/<int:pk>/delete/', view=SemesterView.as_view(), name='delete_semester'),
+    path(route='gestion_ecole/series/', view=SeriesView.as_view(), name='series'),
+    path(route='gestion_ecole/series/<int:pk>/delete/', view=SeriesView.as_view(), name='delete_series'),
     
-    path(route='gestion_universite/niveaux/', view=LevelView.as_view(), name='levels'),
-    path(route='gestion_universite/niveaux/<int:pk>/delete/', view=LevelView.as_view(), name='delete_level'),
+    path(route='gestion_ecole/niveaux/', view=LevelsView.as_view(), name='levels'),
+    path(route='gestion_ecole/niveaux/ajouter/', view=AddLevelView.as_view(), name='add_level'),
+    path(route='gestion_ecole/niveaux/<int:pk>/editer/', view=EditLevelView.as_view(), name='edit_level'),
+    path(route='gestion_ecole/niveaux/<int:pk>/delete/', view=LevelsView.as_view(), name='delete_level'),
     
-    path(route='gestion_universite/filières/', view=SectorView.as_view(), name='sectors'),
-    path(route='gestion_universite/filières/<int:pk>/delete/', view=SectorView.as_view(), name='delete_sector'),
+    path(route='gestion_ecole/salle-de-classe/', view=ClassRoomView.as_view(), name='classrooms'),
+    path(route='gestion_ecole/salle-de-classe/ajouter/', view=AddClassRoomView.as_view(), name='add_classroom'),
+    path(route='gestion_ecole/salle-de-classe/<int:pk>/editer/', view=EditClassRoomView.as_view(), name='edit_classroom'),
+    path(route='gestion_ecole/salle-de-classe/<int:pk>/delete/', view=ClassRoomView.as_view(), name='delete_classroom'),
     
-    path(route='gestion_universite/parcours/', view=CareerView.as_view(), name='careers'),
-    path(route='gestion_universite/parcours/<int:pk>/delete/', view=CareerView.as_view(), name='delete_career'),
+
+    path(route='gestion_ecole/groupe-de-matières/', view=GroupSubjectView.as_view(), name='group_subjects'),
+    path(route='gestion_ecole/groupe-de-matières/<int:pk>/delete/', view=GroupSubjectView.as_view(), name='delete_group_subjects'),
     
-    path(route='gestion_universite/groupe-de-matières/', view=GroupSubjectView.as_view(), name='group_subjects'),
-    path(route='gestion_universite/groupe-de-matières/<int:pk>/delete/', view=GroupSubjectView.as_view(), name='delete_group_subjects'),
-    
-    path(route='gestion_universite/matières/', view=SubjectView.as_view(), name='subjects'),
-    path(route='gestion_universite/matières/ajouter/', view=AddSubjectView.as_view(), name='add_subject'),
-    path(route='gestion_universite/matières/<int:pk>/editer/', view=EditSubjectView.as_view(), name='edit_subject'),
-    path(route='gestion_universite/matières/<int:pk>/delete/', view=SubjectView.as_view(), name='delete_subject'),
+    path(route='gestion_ecole/matières/', view=SubjectView.as_view(), name='subjects'),
+    path(route='gestion_ecole/matières/ajouter/', view=AddSubjectView.as_view(), name='add_subject'),
+    path(route='gestion_ecole/matières/<int:pk>/editer/', view=EditSubjectView.as_view(), name='edit_subject'),
+    path(route='gestion_ecole/matières/<int:pk>/delete/', view=SubjectView.as_view(), name='delete_subject'),
     
     
-    path(route='gestion_universite/programmes/', view=ProgramView.as_view(), name='programs'),
-    path(route='gestion_universite/programmes/ajouter/', view=AddProgramView.as_view(), name='add_program'),
-    path(route='gestion_universite/programmes/<int:pk>/editer/', view=EditProgramView.as_view(), name='edit_program'),
-    path(route='gestion_universite/programmes/<int:pk>/delete/', view=ProgramView.as_view(), name='delete_program'),
+    path(route='gestion_ecole/programmes/', view=ProgramView.as_view(), name='programs'),
+    path(route='gestion_ecole/programmes/ajouter/', view=AddProgramView.as_view(), name='add_program'),
+    path(route='gestion_ecole/programmes/<int:pk>/editer/', view=EditProgramView.as_view(), name='edit_program'),
+    path(route='gestion_ecole/programmes/<int:pk>/delete/', view=ProgramView.as_view(), name='delete_program'),
     
-    path(route='gestion_universite/sanctions-&-appreciations/', view=SanctionAppreciationView.as_view(), name='sanction_appreciations'),
-    path(route='gestion_universite/sanctions-&-appreciations/ajouter/', view=AddSanctionView.as_view(), name='add_sanction'),
-    path(route='gestion_universite/sanctions-&-appreciations/<int:pk>/editer/', view=EditSanctionView.as_view(), name='edit_sanction'),
-    path(route='gestion_universite/sanctions-&-appreciations/<int:pk>/delete/', view=SanctionAppreciationView.as_view(), name='delete_sanction'),
+    path(route='gestion_ecole/sanctions-&-appreciations/', view=SanctionAppreciationView.as_view(), name='sanction_appreciations'),
+    path(route='gestion_ecole/sanctions-&-appreciations/ajouter/', view=AddSanctionView.as_view(), name='add_sanction'),
+    path(route='gestion_ecole/sanctions-&-appreciations/<int:pk>/editer/', view=EditSanctionView.as_view(), name='edit_sanction'),
+    path(route='gestion_ecole/sanctions-&-appreciations/<int:pk>/delete/', view=SanctionAppreciationView.as_view(), name='delete_sanction'),
     
-    path(route='gestion_universite/trombinoscopes/', view=TrombinoscopeView.as_view(), name='trombinoscopes'),
+    path(route='gestion_ecole/trombinoscopes/', view=TrombinoscopeView.as_view(), name='trombinoscopes'),
     
-    path(route='gestion_universite/students/<int:pk>/detail/', view=StudentDetailView.as_view(), name='student_detail'),
-    path(route='gestion_universite/students/<int:pk>/edit/', view=EditStudentView.as_view(), name='edit_student'),
-    path(route='gestion_universite/students/ajouter/', view=AddStudentView.as_view(), name='add_student'),
-    path(route='gestion_universite/students/', view=StudentsView.as_view(), name='students'),
-    path(route='gestion_universite/students/<int:pk>/delete-document/', view=StudentDetailView.as_view(), name='student_delete_document'),
+    path(route='gestion_ecole/students/<int:pk>/detail/', view=StudentDetailView.as_view(), name='student_detail'),
+    path(route='gestion_ecole/students/<int:pk>/edit/', view=EditStudentView.as_view(), name='edit_student'),
+    path(route='gestion_ecole/students/ajouter/', view=AddStudentView.as_view(), name='add_student'),
+    path(route='gestion_ecole/students/', view=StudentsView.as_view(), name='students'),
+    path(route='gestion_ecole/students/<int:pk>/delete-document/', view=StudentDetailView.as_view(), name='student_delete_document'),
     
-    path(route='gestion_universite/teachers/', view=TeacherView.as_view(), name='teachers'),
-    path(route='gestion_universite/teachers/ajouter/', view=AddTeacherView.as_view(), name='add_teacher'),
-    path(route='gestion_universite/teachers/<int:pk>/editer/', view=EditTeacherView.as_view(), name='edit_teacher'),
-    path(route='gestion_universite/teachers/<int:pk>/delete/', view=TeacherView.as_view(), name='delete_teacher'),
-    path(route='gestion_universite/teachers/<int:pk>/detail/', view=TeacherDetailView.as_view(), name='teacher_detail'),
-    path(route='gestion_universite/teachers/<int:pk>/delete-document/', view=TeacherDetailView.as_view(), name='teacher_delete_document'),
+    path(route='gestion_ecole/teachers/', view=TeacherView.as_view(), name='teachers'),
+    path(route='gestion_ecole/teachers/ajouter/', view=AddTeacherView.as_view(), name='add_teacher'),
+    path(route='gestion_ecole/teachers/<int:pk>/editer/', view=EditTeacherView.as_view(), name='edit_teacher'),
+    path(route='gestion_ecole/teachers/<int:pk>/delete/', view=TeacherView.as_view(), name='delete_teacher'),
+    path(route='gestion_ecole/teachers/<int:pk>/detail/', view=TeacherDetailView.as_view(), name='teacher_detail'),
+    path(route='gestion_ecole/teachers/<int:pk>/delete-document/', view=TeacherDetailView.as_view(), name='teacher_delete_document'),
     
     #===END
     

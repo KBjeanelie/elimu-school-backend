@@ -225,11 +225,14 @@ class Level(models.Model):
     fees = models.IntegerField(default=1000)
     cycles = models.CharField(choices=cycles, max_length=30)
     serie = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True, null=True)
-    principal_teacher =models.ForeignKey(Teacher, on_delete=models.CASCADE, blank=True, null=True)
+    principal_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"{self.label} | {self.serie}| {self.cycles}"
+        if self.serie:
+            return f"{self.label} | {self.serie}"
+        
+        return f"{self.label}"
 
 # Class representing Career (Educational Program/Path)
 class ClassRoom(models.Model):
@@ -296,14 +299,14 @@ class Schedule(models.Model):
 class Program(models.Model):
     title = models.CharField(max_length=50)
     description = models.TextField(blank=True)
-    person_in_charge = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
     file = models.FileField(upload_to='programmes', blank=True)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"Programme : {self.title} par {self.person_in_charge}"
+        return f"Programme : {self.title}"
     
     def file_exists(self):
         if self.file:
@@ -381,8 +384,8 @@ class SanctionAppreciation(models.Model):
     comment = models.TextField(blank=True)
     type = models.ForeignKey(SanctionAppreciationType, on_delete=models.SET_NULL, blank=True, null=True)
     subject = models.ForeignKey(Subject, on_delete=models.SET_NULL, blank=True, null=True)
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, blank=True, null=True)
-    classroom = models.ForeignKey(ClassRoom, on_delete=models.SET_NULL, blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, null=True)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

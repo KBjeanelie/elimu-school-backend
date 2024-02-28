@@ -1,4 +1,3 @@
-import datetime
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -9,10 +8,12 @@ from django.db.models import Sum
 from backend.models.facturation import FinancialCommitment, Invoice
 from backend.forms.gestion_ecole_forms import (
     AcademicYearForm,
+    ClassRoomForm,
     GroupSubjectForm, 
     LevelForm, 
     ProgramForm, 
-    SanctionAppreciationForm, 
+    SanctionAppreciationForm,
+    SeriesForm, 
     StudentDocumentForm, 
     SubjectForm, 
     TeacherDocumentForm, 
@@ -34,7 +35,7 @@ def convertir_en_hexadecimal(nombre):
 
 #=============================== PARTIE CONCERNANT LES Année academique ==========================
 class EditAcademicYearView(View):
-    template = "manager_dashboard/gestion_universite/editer_annee_academique.html"
+    template = "manager_dashboard/gestion_ecole/editer_annee_academique.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -82,7 +83,7 @@ class EditAcademicYearView(View):
         return render(request, template_name=self.template, context=context)
     
 class AddAcademicYearView(View):
-    template = "manager_dashboard/gestion_universite/ajout_annee_academique.html"
+    template = "manager_dashboard/gestion_ecole/ajout_annee_academique.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -121,7 +122,7 @@ class AddAcademicYearView(View):
         return render(request, template_name=self.template, context=context)
 
 class AcademicYearView(View):
-    template = "manager_dashboard/gestion_universite/annee_academiques.html"
+    template = "manager_dashboard/gestion_ecole/annee_academiques.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -145,9 +146,9 @@ class AcademicYearView(View):
         return JsonResponse({'message': 'Élément supprimé avec succès'})
 #===END
 
-#=============================== PARTIE CONCERNANT LES NIVEAUX ==========================
-class LevelView(View):
-    template = "manager_dashboard/gestion_universite/niveaux.html"
+#=============================== PARTIE CONCERNANT LES SERIES ==========================
+class SeriesView(View):
+    template = "manager_dashboard/gestion_ecole/series.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -159,69 +160,94 @@ class LevelView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = LevelForm()
-        context = {'levels':Level.objects.filter(school=request.user.school), 'form':form}
+        form = SeriesForm()
+        context = {'series':Series.objects.filter(school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
 
     def post(self, request, *args, **kwargs):
-        data = request.POST.copy()
+        data  = request.POST.copy()
         data['school'] = request.user.school
-        form = LevelForm(data)
+        form = SeriesForm(data)
         if form.is_valid():
             form.save()
-            return redirect('manager_dashboard:levels')
+            return redirect(to='manager_dashboard:series')
+        else:
+            print(form.errors)
 
-        context = {'levels':Level.objects.filter(school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
-    
-    def delete(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(Level, pk=pk)
-        instance.delete()
-        # redirection vers l'interface de vue des niveau
-        form = LevelForm()
-        context = {'levels':Level.objects.filter(school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
-#===END
-
-#=============================== PARTIE CONCERNANT LES SEMESTRE ==========================
-class SemesterView(View):
-    template = "manager_dashboard/gestion_universite/semestres.html"
-    
-    def dispatch(self,request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('backend:login')
-        
-        if request.user.is_manager or request.user.is_admin_school:
-            return super().dispatch(request, *args, **kwargs)
-        
-        return redirect('backend:logout')
-    
-    def get(self, request, *args, **kwargs):
-        form = SemesterForm(request.user)
-        context = {'semesters':Series.objects.filter(level__school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
-
-    def post(self, request, *args, **kwargs):
-        form = SemesterForm(request.user, request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(to='manager_dashboard:semesters')
-
-        context = {'semesters':Series.objects.filter(level__school=request.user.school), 'form':form}
+        context = {'series':Series.objects.filter(school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(Series, pk=pk)
         instance.delete()
         
-        form = SemesterForm(request.user)
-        context = {'semesters':Series.objects.filter(level__school=request.user.school), 'form':form}
+        form = SeriesForm()
+        context = {'series':Series.objects.filter(school=request.user.school), 'form':form}
         return render(request, template_name=self.template, context=context)
 #===END
 
-#=============================== PARTIE CONCERNANT LES FILIÈRE ==========================
-class SectorView(View):
-    template = "manager_dashboard/gestion_universite/filieres.html"
+
+#=============================== PARTIE CONCERNANT LES NIVEAU SCOLAIRE ==========================
+class EditLevelView(View):
+    template = "manager_dashboard/gestion_ecole/editer_niveau.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, pk, *args, **kwargs):
+        level = get_object_or_404(Level, pk=pk)
+        form = LevelForm(instance=level)
+        context = {'form':form, 'level':level}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        level = get_object_or_404(Level, pk=pk)
+        form = LevelForm(request.POST, instance=level)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Niveau modifier avec succès !")
+            return redirect('manager_dashboard:levels')
+        
+        messages.error(request, "ERREUR: Imposssible de modifier le niveau")
+        context = {'form':form, 'level':level}
+        return render(request, template_name=self.template, context=context)
+    
+class AddLevelView(View):
+    template = "manager_dashboard/gestion_ecole/ajout_niveau.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, *args, **kwargs):
+        form = LevelForm()
+        context = {'form':form}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, *args, **kwargs):
+        form = LevelForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Niveau ajouter avec succès !")
+            return redirect("manager_dashboard:levels")
+        
+        messages.error(request, "ERREUR: Impossible d'ajouter un niveau")
+        context = {'form':form}
+        return render(request, template_name=self.template, context=context)
+
+class LevelsView(View):
+    template = "manager_dashboard/gestion_ecole/niveaux.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -233,34 +259,78 @@ class SectorView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = SectorForm()
-        context = {'sectors':Sector.objects.filter(school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
-
-    def post(self, request, *args, **kwargs):
-        data = request.POST.copy()
-        data['school'] = request.user.school
-        form = SectorForm(data)
-        if form.is_valid():
-            form.save()
-            return redirect('manager_dashboard:sectors')
-    
-        form = SectorForm()
-        context = {'sectors':Sector.objects.filter(school=request.user.school), 'form':form}
+        levels = Level.objects.all()
+        context = {'levels': levels}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
-        instance = get_object_or_404(Sector, pk=pk)
+        instance = get_object_or_404(Level, pk=pk)
         instance.delete()
-        
-        form = SectorForm()
-        context = {'sectors':Sector.objects.filter(school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
+        return JsonResponse({'message': 'Élément supprimé avec succès'})
 #===END
 
-#=============================== PARTIE CONCERNANT LES PARCOURS ==========================
-class CareerView(View):
-    template = "manager_dashboard/gestion_universite/parcours.html"
+
+#=============================== PARTIE CONCERNANT LES CLASSES ==========================
+class EditClassRoomView(View):
+    template = "manager_dashboard/gestion_ecole/editer_classroom.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, pk, *args, **kwargs):
+        classroom = get_object_or_404(ClassRoom, pk=pk)
+        form = ClassRoomForm(instance=classroom)
+        context = {'form':form, 'classroom':classroom}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        classroom = get_object_or_404(ClassRoom, pk=pk)
+        form = ClassRoomForm(request.POST, instance=classroom)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Salle de classe modifier avec succès !")
+            return redirect('manager_dashboard:classrooms')
+        
+        messages.error(request, "ERREUR: Imposssible de modifier la salle de classe")
+        context = {'form':form, 'classroom':classroom}
+        return render(request, template_name=self.template, context=context)
+    
+class AddClassRoomView(View):
+    template = "manager_dashboard/gestion_ecole/ajout_classroom.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, *args, **kwargs):
+        form = ClassRoomForm()
+        context = {'form':form}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, *args, **kwargs):
+        form = ClassRoomForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Salle de classe ajouter avec succès !")
+            return redirect("manager_dashboard:classrooms")
+        
+        messages.error(request, "ERREUR: Impossible d'ajouter une salle de classe")
+        context = {'form':form}
+        return render(request, template_name=self.template, context=context)
+
+class ClassRoomView(View):
+    template = "manager_dashboard/gestion_ecole/classrooms.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -272,32 +342,20 @@ class CareerView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = CareerForm(request.user)
-        context = {'careers':ClassRoom.objects.filter(sector__school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
-
-    def post(self, request, *args, **kwargs):
-        form = CareerForm(request.user,request.POST)
-        if form.is_valid():
-            form.save()
-            redirect('manager_dashboard:careers')
-    
-        form = CareerForm(request.user)
-        context = {'careers':ClassRoom.objects.filter(sector__school=request.user.school), 'form':form}
+        classrooms = ClassRoom.objects.all()
+        context = {'classrooms': classrooms}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(ClassRoom, pk=pk)
         instance.delete()
-        
-        form = CareerForm(request.user)
-        context = {'careers':ClassRoom.objects.filter(sector__school=request.user.school), 'form':form}
-        return render(request, template_name=self.template, context=context)
+        return JsonResponse({'message': 'Élément supprimé avec succès'})
 #===END
+
 
 #=============================== PARTIE CONCERNANT LES GROUPES DE MATIÈRES ==========================
 class GroupSubjectView(View):
-    template = "manager_dashboard/gestion_universite/groupe_matieres.html"
+    template = "manager_dashboard/gestion_ecole/groupe_matieres.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -335,7 +393,7 @@ class GroupSubjectView(View):
 
 #=============================== PARTIE CONCERNANT LES MATIÈRES ==========================
 class EditSubjectView(View):
-    template = "manager_dashboard/gestion_universite/editer_matiere.html"
+    template = "manager_dashboard/gestion_ecole/editer_matiere.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -365,7 +423,7 @@ class EditSubjectView(View):
         return render(request, template_name=self.template, context=context)
     
 class AddSubjectView(View):
-    template = "manager_dashboard/gestion_universite/ajout_matiere.html"
+    template = "manager_dashboard/gestion_ecole/ajout_matiere.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -393,7 +451,7 @@ class AddSubjectView(View):
         return render(request, template_name=self.template, context=context)
 
 class SubjectView(View):
-    template = "manager_dashboard/gestion_universite/matieres.html"
+    template = "manager_dashboard/gestion_ecole/matieres.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -405,7 +463,7 @@ class SubjectView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        subjects = Subject.objects.filter(level__school=request.user.school)
+        subjects = Subject.objects.filter(subject_group__school=request.user.school) or Subject.objects.filter(subject_group__isnull=True)
         items_per_page = 10
         
         paginator = Paginator(subjects, items_per_page)
@@ -429,14 +487,14 @@ class SubjectView(View):
         instance = get_object_or_404(Subject, pk=pk)
         instance.delete()
         
-        subjects = Subject.objects.filter(level__school=request.user.school)
+        subjects = Subject.objects.filter(level__serie__school=request.user.school)
         context = {'subject':subjects}
         return render(request, template_name=self.template, context=context)
 #===END
 
 #=============================== PARTIE CONCERNANT LES PROGRAMMES ==========================
 class EditProgramView(View):
-    template = "manager_dashboard/gestion_universite/editer_programme.html"
+    template = "manager_dashboard/gestion_ecole/editer_programme.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -449,14 +507,12 @@ class EditProgramView(View):
     
     def get(self, request, pk, *args, **kwargs):
         program = get_object_or_404(Program, pk=pk)
-        form = ProgramForm(request.user, instance=program)
+        form = ProgramForm(instance=program)
         context = {'form':form, 'program':program}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
         program = get_object_or_404(Program, pk=pk)
-        
-        old_date = program.program_date
         
         mutable_data = request.POST.copy()
         mutable_files = request.FILES.copy()
@@ -464,11 +520,8 @@ class EditProgramView(View):
         if 'file' not in mutable_files or not mutable_files['file']:
             mutable_files['file'] = None
             
-        if 'program_date' not in request.POST or not request.POST['program_date']:
-            mutable_data['program_date'] = old_date
-            
         mutable_data['school'] = request.user.school
-        form = ProgramForm(request.user, mutable_data, mutable_files, instance=program)
+        form = ProgramForm(mutable_data, mutable_files, instance=program)
         
         if form.is_valid():
             form.save()
@@ -480,7 +533,7 @@ class EditProgramView(View):
         return render(request, template_name=self.template, context=context)
 
 class AddProgramView(View):
-    template = "manager_dashboard/gestion_universite/ajout_programme.html"
+    template = "manager_dashboard/gestion_ecole/ajout_programme.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -492,14 +545,14 @@ class AddProgramView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = ProgramForm(request.user)
+        form = ProgramForm()
         context = {'form':form}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
         data = request.POST.copy()
         data['school'] = request.user.school
-        form = ProgramForm(request.user, data)
+        form = ProgramForm(data, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Programme enregistré avec succès !")
@@ -510,7 +563,7 @@ class AddProgramView(View):
         return render(request, template_name=self.template, context=context)
 
 class ProgramView(View):
-    template = "manager_dashboard/gestion_universite/programmes.html"
+    template = "manager_dashboard/gestion_ecole/programmes.html"
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -522,7 +575,7 @@ class ProgramView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        programs = Program.objects.filter(school=request.user.school)
+        programs = Program.objects.all()
         context = {'programs':programs}
         return render(request, template_name=self.template, context=context)
     
@@ -536,7 +589,7 @@ class ProgramView(View):
 
 #================================= PARTIE CONCERNANT LES SANCTIONS ====================
 class EditSanctionView(View):
-    template = "manager_dashboard/gestion_universite/edit_sanction.html"
+    template = "manager_dashboard/gestion_ecole/edit_sanction.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -555,11 +608,8 @@ class EditSanctionView(View):
     
     def post(self, request, pk, *args, **kwargs):
         sanction = get_object_or_404(SanctionAppreciation, pk=pk)
-        old_date = sanction.sanction_date
         
         mutable_data = request.POST.copy()
-        if 'sanction_date' not in request.POST or not request.POST['sanction_date']:
-            mutable_data['sanction_date'] = old_date
         
         mutable_data['school'] = request.user.school
         mutable_data['academic_year'] = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -575,7 +625,7 @@ class EditSanctionView(View):
         return render(request, template_name=self.template, context=context)
     
 class AddSanctionView(View):
-    template = "manager_dashboard/gestion_universite/ajout_sanction.html"
+    template = "manager_dashboard/gestion_ecole/ajout_sanction.html"
     
     def get(self, request, *args, **kwargs):
         form = SanctionAppreciationForm(request.user)
@@ -605,7 +655,7 @@ class AddSanctionView(View):
         return render(request, template_name=self.template, context=context)
 
 class SanctionAppreciationView(View):
-    template = "manager_dashboard/gestion_universite/sanctions.html"
+    template = "manager_dashboard/gestion_ecole/sanctions.html"
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -624,13 +674,14 @@ class SanctionAppreciationView(View):
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(SanctionAppreciation, pk=pk)
         instance.delete()
-        sanctions = SanctionAppreciation.objects.filter(school=request.user.school)
+        
+        sanctions = SanctionAppreciation.objects.filter(academic_year__school=request.user.school, academic_year__status=True)
         context = {'sanctions':sanctions}
         return render(request, template_name=self.template, context=context)
 
 
 class TrombinoscopeView(View):
-    template = "manager_dashboard/gestion_universite/trombinoscopes.html"
+    template = "manager_dashboard/gestion_ecole/trombinoscopes.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -651,7 +702,7 @@ class TrombinoscopeView(View):
 
 #=============================== PARTIE CONCERNANT LES Année academique ==========================
 class EditTeacherView(View):
-    template = "manager_dashboard/gestion_universite/editer_enseignant.html"
+    template = "manager_dashboard/gestion_ecole/editer_enseignant.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -700,7 +751,7 @@ class EditTeacherView(View):
         return render(request, template_name=self.template, context=context)
     
 class AddTeacherView(View):
-    template = "manager_dashboard/gestion_universite/ajout_enseignant.html"
+    template = "manager_dashboard/gestion_ecole/ajout_enseignant.html"
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('backend:login')
@@ -730,7 +781,7 @@ class AddTeacherView(View):
         return render(request, template_name=self.template, context=context)
 
 class TeacherView(View):    
-    template = "manager_dashboard/gestion_universite/enseignants.html"
+    template = "manager_dashboard/gestion_ecole/enseignants.html"
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -755,7 +806,7 @@ class TeacherView(View):
         return render(request, template_name=self.template, context=context)
 
 class TeacherDetailView(View):
-    template = "manager_dashboard/gestion_universite/enseignant_detail.html"
+    template = "manager_dashboard/gestion_ecole/enseignant_detail.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -802,7 +853,7 @@ class TeacherDetailView(View):
 
 #================================= PARTIE CONCERNANT LES ETUDIANT ======================
 class EditStudentView(View):
-    template = "manager_dashboard/gestion_universite/editer_etudiant.html"
+    template = "manager_dashboard/gestion_ecole/editer_etudiant.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -844,7 +895,7 @@ class EditStudentView(View):
 
 
 class AddStudentView(View):
-    template = "manager_dashboard/gestion_universite/ajout_etudiant.html"
+    template = "manager_dashboard/gestion_ecole/ajout_etudiant.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -907,7 +958,7 @@ class AddStudentView(View):
 
 class StudentsView(View):
 
-    template = "manager_dashboard/gestion_universite/etudiants.html"
+    template = "manager_dashboard/gestion_ecole/etudiants.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -930,7 +981,7 @@ class StudentsView(View):
 
 
 class StudentDetailView(View):
-    template = "manager_dashboard/gestion_universite/etudiant_detail.html"
+    template = "manager_dashboard/gestion_ecole/etudiant_detail.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:

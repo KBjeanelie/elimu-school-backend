@@ -440,7 +440,6 @@ class LevelForm(forms.ModelForm):
             'serie' : forms.Select(
                 attrs={
                     'class': 'form-control',
-                    'required': True
                 }
             ),
             'principal_teacher' : forms.Select(
@@ -451,7 +450,7 @@ class LevelForm(forms.ModelForm):
             ),
         }
 
-class CLassRoomForm(forms.ModelForm):
+class ClassRoomForm(forms.ModelForm):
 
     class Meta:
         model = ClassRoom
@@ -612,11 +611,6 @@ class ScheduleForm(forms.ModelForm):
 
 class ProgramForm(forms.ModelForm):
     
-    def __init__(self, user, *args, **kwargs):
-        super(ProgramForm, self).__init__(*args, **kwargs)
-        # Filtrer les niveaux en fonction de l'utilisateur connecté
-        # self.fields['person_in_charge'].queryset = Teacher.objects.filter(school=user.school)
-    
     class Meta:
         model = Program
         fields = '__all__'
@@ -638,7 +632,7 @@ class ProgramForm(forms.ModelForm):
                     'rows':'5'
                 }
             ),
-            'person_in_charge': forms.Select(
+            'level': forms.Select(
                 attrs={
                     'class': 'form-control',
                     'required': True,
@@ -682,9 +676,6 @@ class SanctionAppreciationForm(forms.ModelForm):
     
     def __init__(self, user, *args, **kwargs):
         super(SanctionAppreciationForm, self).__init__(*args, **kwargs)
-        # Filtrer les niveaux en fonction de l'utilisateur connecté
-        # self.fields['career'].queryset = ClassRoom.objects.filter(sector__school=user.school)
-        # self.fields['subject'].queryset = Subject.objects.filter(sector__school=user.school)
         self.fields['type'].queryset = SanctionAppreciationType.objects.filter(school=user.school)
         student_ids = StudentClassroom.objects.filter(academic_year__school=user.school, academic_year__status=True).values_list('student', flat=True).distinct()
         self.fields['student'].queryset = Student.objects.filter(id__in=student_ids)

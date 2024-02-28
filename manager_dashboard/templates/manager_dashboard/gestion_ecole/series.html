@@ -1,0 +1,124 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Series</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a href="">Series</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="white_card card_height_100 mb_30 pt-4">
+                    <div class="white_card_body">
+                        <div class="QA_section">
+                            <div class="white_box_tittle list_header">
+                                <h4>Tous Les Series </h4>
+                            </div>
+                            <div class="QA_table mb_30">
+                                <table class="table lms_table_active ">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Titre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="elementList">
+                                        {% for serie in series %}
+                                            <tr data-id="{{ serie.id }}">
+                                                <td><h6> {{ serie.title }} <h6></td>
+                                                {% if not user.is_admin_school %}
+                                                <td>
+                                                    <div class="action_btns d-flex">
+                                                        {% comment %} <a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a> {% endcomment %}
+                                                        <a href="#" onclick='deleteSemester({{ serie.id }})' class="action_btn"> <i class="fas fa-trash"></i> </a>
+                                                    </div>
+                                                </td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if not user.is_admin_school %}
+            <div class="col-6">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Ajouter un Serie</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Titre</label>
+                                {{ form.title }}
+                            </div>
+                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    // Supprimer un élément
+    function deleteSemester(serie_id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        $.ajax({
+            url: `${serie_id}/delete/`,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${serie_id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+</script>
+{% endblock content %}
