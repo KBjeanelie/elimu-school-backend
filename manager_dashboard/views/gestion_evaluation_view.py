@@ -24,34 +24,31 @@ def moyenne_college_lycee(notes, notes_exam, coefficients):
     return moyenne
 
 
-def calcul_resultat_primaire(period, classroom_id, user, student):
-    try:
-        academic_year = AcademicYear.objects.get(status=True, school=user.school)
-        classroom = ClassRoom.objects.get(pk=classroom_id)
-        evaluations = Assessment.objects.filter(
-            period=period, 
-            classroom=classroom, 
-            academic_year=academic_year, 
-            student=student,
-            type_evaluation='Examen'
-        )
+def calcul_resultat_primaire(period, classroom, student, academic_year):
+    evaluations = Assessment.objects.filter(
+        period=period, 
+        classroom=classroom, 
+        academic_year=academic_year, 
+        student=student,
+        type_evaluation='Examen'
+    )
 
-        # Extraire les notes à partir des évaluations
-        notes = [evaluation.note for evaluation in evaluations]
+    # Extraire les notes à partir des évaluations
+    notes = [evaluation.note for evaluation in evaluations]
 
-        average = moyenne_primaire(notes)
-        student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
-        
-        return {
-            'nui':student_career.student.registration_number,
-            'lastname':student_career.student.lastname,
-            'firstname':student_career.student.firstname,
-            'classroom':student_career.classroom.title,
-            'average':average,
-            'period':period,
-        }
-    except (AcademicYear.DoesNotExist, ClassRoom.DoesNotExist, StudentClassroom.DoesNotExist):
-        return[]
+    average = moyenne_primaire(notes)
+    student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
+    
+    return {
+        'id_student':student_career.student.id,
+        'nui':student_career.student.registration_number,
+        'lastname':student_career.student.lastname,
+        'firstname':student_career.student.firstname,
+        'classroom':student_career.classroom.title,
+        'type':student_career.classroom.types,
+        'average':average,
+        'period':period,
+    }
 
 
 def calcul_resultat_college_lycee(period, classroom_id, user, student):
@@ -92,6 +89,28 @@ def calcul_resultat_college_lycee(period, classroom_id, user, student):
     except (AcademicYear.DoesNotExist, ClassRoom.DoesNotExist, StudentClassroom.DoesNotExist):
         return[]
 
+
+def get_all_results(academic_year):
+    results = []
+    try:
+        students_classrooms = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=True, is_next=False)
+
+        for student_classroom in students_classrooms:
+            if student_classroom.classroom.types == 'Primaire':
+                results.append(calcul_resultat_primaire(
+                    period='Octobre',
+                    classroom=student_classroom.classroom,
+                    student=student_classroom.student,
+                    academic_year=academic_year
+                ))
+            else:
+                pass
+            
+        results = sorted(results, key=lambda x: x['average'], reverse=True)
+        return results;
+    except StudentClassroom.DoesNotExist:
+        return results
+    
 class EditAssessmentView(View):
     template = 'manager_dashboard/evaluations/editer_evaluation.html'
     

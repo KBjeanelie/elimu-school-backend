@@ -61,25 +61,34 @@
             </div>
         </div>
 
-        <div class="container mt-5">
+        <div class="container mt-3">
             <div class="row">
                 <div class="col-12">
                     <form method="post" class="row g-3">
                         {% csrf_token %}
                         <div class="col-auto">
-                            <label class="form-label" for="inputStateSemester">Selectionner le semestre</label>
-                            <select id="inputStateSemester" class="form-control" name="semester" required>
-                                {% for semester in semesters %}
-                                    <option value="{{semester.id}}"> {{semester.title}} </option>
-                                {% endfor %}
+                            <label class="form-label" for="inputStateCareer">Selectionner la période</label>
+                            <select id="inputStateCareer" class="form-control" name="period" required>
+                                <option value="Octobre">Octobre</option>
+                                <option value="Novembre">Novembre</option>
+                                <option value="Décembre">Décembre</option>
+                                <option value="Janvier">Janvier</option>
+                                <option value="Février">Février</option>
+                                <option value="Mars">Mars</option>
+                                <option value="Avril">Avril</option>
+                                <option value="MaiJuin">MaiJuin</option>
+                                <option value="Juin">Juin</option>
+                                <option value="Juillet">Juillet</option>
+                                <option value="Premier trimestre">Premier trimestre</option>
+                                <option value="Deuxième trimestre">Deuxième trimestre</option>
+                                <option value="Troisième trimestre">Troisième trimestre</option>
                             </select> 
                         </div>
                         <div class="col-auto">
-                            <label class="form-label" for="inputStateCareer">Selectionner le parcours</label>
-                            <select id="inputStateCareer" class="form-control" name="career" required>
-                                
-                                {% for career in careers %}
-                                    <option value="{{career.id}}"> {{career.title}} </option>
+                            <label class="form-label" for="inputStateCareer">Selectionner la classe</label>
+                            <select id="inputStateCareer" class="form-control" name="classroom" required>
+                                {% for classroom in classrooms %}
+                                    <option value="{{classroom.id}}"> {{classroom.title}} </option>
                                 {% endfor %}
                             </select> 
                         </div>
@@ -94,7 +103,7 @@
 
         <div class="row mt-5">
             <div class="col-xl-12 mb-3 bg-info">
-                <h4 class="p-2 text-center text-white"> {{semester.title|capfirst}} {{career.title | upper}} </h4>
+                <h4 class="p-2 text-center text-white"> {{period|capfirst}} {{classroom.title | upper}} </h4>
             </div>
             <div class="col-xl-12">
                 <h3 class="text-center">Tableau des Moyennes</h3>
@@ -104,30 +113,33 @@
                             <tr>
                                 <th scope="col">Matricule</th>
                                 <th scope="col">Nom & Prenoms</th>
-                                <th scope="col">Moyennes</th>
                                 <th scope="col">Rang</th>
-                                <th scope="col">Parcours</th>
-                                <th scope="col">Session</th>
-                                <th scope="col">Niveau</th>
+                                <th scope="col">Moyennes</th>
+                                <th scope="col">Classe</th>
                                 <th scope="col">Appréciation</th>
-                                <th scope="col">Option</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for result in results %}
                                 <tr>
-                                    <td> <h6> {{result.nui}} </h6> </td>
+                                    <td> <h6> {{result.nui|upper}} </h6> </td>
                                     <td> <h6> {{result.firstname|capfirst}} {{result.lastname|upper}} </h6> </td>
+                                    <td> <h6> {{ forloop.counter }} </h6> </td>
                                     <td> <h6> {{result.average}} </h6> </td>
-                                    <td> <h6> {{result.rang}} </h6> </td>
-                                    <td> <h6> {{result.parcours}} </h6> </td>
-                                    <td> <h6> {{result.semestre}} </h6> </td>
-                                    <td> <h6> {{result.niveau}} </h6> </td>
+                                    <td> <h6> {{result.classroom}} </h6> </td>
                                     <td> <h6>
-                                        {% if result.average >= 10 %}
-                                         <span class="badge rounded-pill bg-success"> Admis </span>
+                                        {% if result.type == 'Primaire' %}
+                                            {% if result.average >= 5 %}
+                                                <span class="badge rounded-pill bg-success"> Admis </span>
+                                            {% else %}
+                                                <span class="badge rounded-pill bg-success"> Admis </span>
+                                            {% endif %}
                                         {% else %}
-                                         <span class="badge rounded-pill bg-danger"> Échoué </span>
+                                            {% if result.average >= 10 %}
+                                                <span class="badge rounded-pill bg-success"> Admis </span>
+                                            {% else %}
+                                                <span class="badge rounded-pill bg-success"> Admis </span>
+                                            {% endif %}
                                         {% endif %}
                                     </h6></td>
                                     <td>

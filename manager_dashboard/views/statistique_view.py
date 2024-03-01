@@ -2,9 +2,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.evaluation_forms import ReportCardForm
 from backend.models.evaluations import ReportCard
-from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, StudentClassroom
-from django.http import Http404, JsonResponse
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, StudentClassroom, Subject
+from django.http import Http404, HttpResponse, JsonResponse
 from django.contrib import messages
+
+from manager_dashboard.views.gestion_evaluation_view import calcul_resultat_primaire, get_all_results
 
 class NotAcademicYearFound(View):
     template_name = "manager_dashboard/statistique/no_academique.html"
@@ -39,26 +41,33 @@ class ResultatAcademique(View):
         
     
     def get_context_data(self, request, **kwargs):
-        semesters = Series.objects.filter(level__school=self.request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=self.request.user.school)
-        academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
+        academic_year = AcademicYear.objects.get(status=True, school=self.request.user.school)
         total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
-        results = get_all_results(request.user)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        subjects = Subject.objects.filter(level__school=request.user.school)
+        results = get_all_results(academic_year=academic_year)
         admis, echouer = 0, 0
         
         for i in results:
-            if i['average'] >= 10:
-                admis += 1
+            if i['type'] ==  'Primaire':
+                if i['average'] >= 5:
+                    admis += 1
+                else:
+                    echouer += 1
             else:
-                echouer += 1
+                if i['average'] >= 10:
+                    admis += 1
+                else:
+                    echouer += 1
+
         context = {
-            'academic_year': academic_year, 
-            'results': results, 
-            'semesters': semesters, 
-            'careers': careers,
+            'academic_year': academic_year,
+            'classrooms':classrooms,
+            'subjects':subjects,
             'total_student': total_student,
-            'admis': admis,
-            'echouer': echouer
+            'results':results,
+            'admis':admis,
+            'echouer':echouer
         }
         return context
     
@@ -67,23 +76,34 @@ class ResultatAcademique(View):
         return render(request, template_name=self.template_name, context=context)
     
     def post(self, request, *args, **kwargs):
-        semester_id = request.POST.get('semester')
-        career_id = request.POST.get('career')
-        try:
-            career = ClassRoom.objects.get(pk=career_id)
-            semester = Series.objects.get(pk=semester_id)
-        except (ClassRoom.DoesNotExist, Series.DoesNotExist):
-            raise Http404("Selected semester or career does not exist.")
-        
+        classroom_id = request.POST['classroom']
         context = self.get_context_data(request)
-        results = calculate_results(semester_id=semester_id, career_id=career_id, user=request.user)
-        
-        context.update({
-            'career': career,
-            'semester': semester,
-            'results':results
-        })
-        return render(request, template_name=self.template_name, context=context)
+        results = []
+        try:
+            academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
+            classroom = ClassRoom.objects.get(pk=classroom_id)
+            student_classroom = StudentClassroom.objects.filter(classroom=classroom, academic_year=academic_year, is_next=False)
+            for student in student_classroom:
+                if student.classroom.types == 'Primaire':
+                    results.append(calcul_resultat_primaire(
+                        period=request.POST['period'],
+                        classroom=student.classroom,
+                        student=student.student,
+                        academic_year=academic_year
+                    ))
+                else:
+                    pass
+            results = sorted(results, key=lambda x: x['average'], reverse=True)
+            context.update({
+                'classroom': classroom,
+                'results':results,
+                'period': request.POST['period']
+            })
+            return render(request, template_name=self.template_name, context=context)
+        except (ClassRoom.DoesNotExist, AcademicYear.DoesNotExist) as e:
+            return HttpResponse(f"Erreur: {e}")
+    
+
 
 class EditReportCardView(View):
     template = 'manager_dashboard/statistique/editer_bulletin.html'
