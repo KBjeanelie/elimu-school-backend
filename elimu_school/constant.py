@@ -2,8 +2,6 @@ import os
 import qrcode
 from io import BytesIO
 from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-
 from elimu_school import settings
 
 def generate_qr_code_and_save(data, filename):
@@ -151,4 +149,9 @@ do_classes = [
     ('Le matin', 'Le matin'),
     ('Après midi', 'Après midi'),
     ('Plein temps', 'Plein temps'),
+]
+
+types_evaluations = [
+    ('Devoir de classe', 'Devoir de classe'),
+    ('Examen', 'Examen')
 ]

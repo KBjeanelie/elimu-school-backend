@@ -10,7 +10,6 @@ from rest_framework.permissions import IsAuthenticated
 from backend.models.facturation import FinancialCommitment, Invoice
 from itertools import chain
 from backend.models.gestion_ecole import AcademicYear, Schedule, StudentClassroom
-from manager_dashboard.views.gestion_evaluation_view import calculate_results
 
 
 class AssessmentList(generics.ListAPIView):
@@ -99,19 +98,19 @@ class SchedulesList(generics.ListAPIView):
 
 
 
-class StudentSchoolCareer(APIView):
-    permission_classes = [IsAuthenticated]
-    def get(self, request, *args, **kwargs):
-        results = []
-        student = request.user.student
-        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
-        students_career = StudentClassroom.objects.filter(student=student, school=request.user.school)
-        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
+# class StudentSchoolCareer(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def get(self, request, *args, **kwargs):
+#         results = []
+#         student = request.user.student
+#         academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
+#         students_career = StudentClassroom.objects.filter(student=student, school=request.user.school)
+#         student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
         
-        for s in students_career:
-            R = calculate_results(semester_id=s.semester.id, career_id=s.career.id, user=request.user)
-            for r in R:
-                if r['nui'] == student_career.student.registration_number:
-                    results.append(r)
+#         for s in students_career:
+#             R = calculate_results(semester_id=s.semester.id, career_id=s.career.id, user=request.user)
+#             for r in R:
+#                 if r['nui'] == student_career.student.registration_number:
+#                     results.append(r)
 
-        return Response(results)
+#         return Response(results)

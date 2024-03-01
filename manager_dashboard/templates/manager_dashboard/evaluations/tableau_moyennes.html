@@ -24,19 +24,28 @@
                     <form method="post" class="row g-3">
                         {% csrf_token %}
                         <div class="col-auto">
-                            <label class="form-label" for="inputStateSemester">Selectionner le semestre</label>
-                            <select id="inputStateSemester" class="form-control" name="semester" required>
-                                {% for semester in semesters %}
-                                    <option value="{{semester.id}}"> {{semester.title}} </option>
-                                {% endfor %}
+                            <label class="form-label" for="inputStateCareer">Selectionner la période</label>
+                            <select id="inputStateCareer" class="form-control" name="period" required>
+                                <option value="Octobre">Octobre</option>
+                                <option value="Novembre">Novembre</option>
+                                <option value="Décembre">Décembre</option>
+                                <option value="Janvier">Janvier</option>
+                                <option value="Février">Février</option>
+                                <option value="Mars">Mars</option>
+                                <option value="Avril">Avril</option>
+                                <option value="MaiJuin">MaiJuin</option>
+                                <option value="Juin">Juin</option>
+                                <option value="Juillet">Juillet</option>
+                                <option value="Premier trimestre">Premier trimestre</option>
+                                <option value="Deuxième trimestre">Deuxième trimestre</option>
+                                <option value="Troisième trimestre">Troisième trimestre</option>
                             </select> 
                         </div>
                         <div class="col-auto">
-                            <label class="form-label" for="inputStateCareer">Selectionner le parcours</label>
-                            <select id="inputStateCareer" class="form-control" name="career" required>
-                                
-                                {% for career in careers %}
-                                    <option value="{{career.id}}"> {{career.title}} </option>
+                            <label class="form-label" for="inputStateCareer">Selectionner la classe</label>
+                            <select id="inputStateCareer" class="form-control" name="classroom" required>
+                                {% for classroom in classrooms %}
+                                    <option value="{{classroom.id}}"> {{classroom.title}} </option>
                                 {% endfor %}
                             </select> 
                         </div>

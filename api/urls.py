@@ -1,5 +1,5 @@
 from django.urls import path
-from api.views.views import AssessmentList, FinancialCommitmentList, SchedulesList, StudentSchoolCareer, eBookList, InvoiceList, InformationList, EventList
+from api.views.views import AssessmentList, FinancialCommitmentList, SchedulesList, eBookList, InvoiceList, InformationList, EventList
 
 
 urlpatterns = [
@@ -10,5 +10,5 @@ urlpatterns = [
     path('informations/', InformationList.as_view()),
     path('events/', EventList.as_view()),
     path('engagements/', FinancialCommitmentList.as_view()),
-    path('parcours/', StudentSchoolCareer.as_view()),
+    #path('parcours/', StudentSchoolCareer.as_view()),
 ]

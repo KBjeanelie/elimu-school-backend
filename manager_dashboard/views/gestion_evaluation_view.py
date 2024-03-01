@@ -1,6 +1,5 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
 from django.views import View
 from backend.forms.evaluation_forms import AssessmentForm
 from backend.models.evaluations import Assessment
@@ -10,159 +9,88 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
 from elimu_school.constant import generate_qr_code_and_save
 
-def calculate_results(semester_id, career_id, user):
+# Fonction pour calculer la moyenne au primaire
+def moyenne_primaire(notes):
+    somme_notes = sum(notes)
+    nombre_matières = len(notes)
+    moyenne = somme_notes / nombre_matières
+    return moyenne
+
+# Fonction pour calculer la moyenne au collège
+def moyenne_college_lycee(notes, notes_exam, coefficients):
+    somme_notes_ponderees = sum(note + ( note_exam * coeff) for note, note_exam, coeff in zip(notes, notes_exam, coefficients))
+    somme_coefficients = sum(coefficients)
+    moyenne = somme_notes_ponderees / somme_coefficients
+    return moyenne
+
+
+def calcul_resultat_primaire(period, classroom_id, user, student):
     try:
         academic_year = AcademicYear.objects.get(status=True, school=user.school)
-    except (AcademicYear.DoesNotExist):
-        return[]
-    
-    try:
-        semester = Series.objects.get(pk=semester_id)
-        career = ClassRoom.objects.get(pk=career_id)
+        classroom = ClassRoom.objects.get(pk=classroom_id)
+        evaluations = Assessment.objects.filter(
+            period=period, 
+            classroom=classroom, 
+            academic_year=academic_year, 
+            student=student,
+            type_evaluation='Examen'
+        )
 
-        evaluations = Assessment.objects.filter(semester=semester, career=career, academic_year=academic_year).order_by('-note')
-        student_career = StudentClassroom.objects.filter(semester=semester, career=career, academic_year=academic_year, is_next=False)
-    
-        if evaluations.exists():
-            results = []
-            controle_evaluations = evaluations.filter(type_evaluation__title='Contrôle')
-            partiel_evaluations = evaluations.filter(type_evaluation__title='Partiel')
+        # Extraire les notes à partir des évaluations
+        notes = [evaluation.note for evaluation in evaluations]
 
-            for student in student_career:
-                m = []
-                count_coefficient = 0
-
-                for controle_evaluation in controle_evaluations.filter(student=student.student):
-                    count_coefficient += controle_evaluation.subject.coefficient
-                    partiel_evaluation = partiel_evaluations.filter(
-                        student=controle_evaluation.student,
-                        subject=controle_evaluation.subject
-                    ).first()
-
-                    if partiel_evaluation:
-                        total = ((controle_evaluation.note + partiel_evaluation.note) * controle_evaluation.subject.coefficient) / 2
-                        m.append(
-                            {
-                                'id_student':student.id,
-                                'nui': controle_evaluation.student.registration_number,
-                                'lastname': controle_evaluation.student.lastname,
-                                'firstname': controle_evaluation.student.firstname,
-                                'controle': controle_evaluation.note,
-                                'partiel': partiel_evaluation.note,
-                                'semestre':controle_evaluation.semester.title,
-                                'niveau':controle_evaluation.semester.level.label,
-                                'parcours':controle_evaluation.career.title,
-                                'year':controle_evaluation.academic_year.label,
-                                'total': total,
-                            }
-                        )
-
-                if m:
-                    # Calculer la moyenne pondérée
-                    average = round(sum(x['total'] for x in m) / count_coefficient, 2) if count_coefficient != 0 else 0
-
-                    results.append({
-                        'id_student': m[0]['id_student'],
-                        'nui': m[0]['nui'],
-                        'lastname': m[0]['lastname'],
-                        'firstname': m[0]['firstname'],
-                        'semestre': m[0]['semestre'],
-                        'niveau': m[0]['niveau'],
-                        'parcours': m[0]['parcours'],
-                        'year':m[0]['year'],
-                        'average': average,
-                    })
-
-            # Tri des résultats par rapport à 'average'
-            results = sorted(results, key=lambda x: x['average'], reverse=True)
-
-            # Ajout du rang à chaque résultat
-            for i, result in enumerate(results, start=1):
-                result['rang'] = i
-
-            return results
-
-        else:
-            return []
-
-    except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
-        return HttpResponse(f"Erreur: {e}")
-
-
-def get_all_results(user):
-    try:
-        academic_year = AcademicYear.objects.get(status=True, school=user.school)
-    except (AcademicYear.DoesNotExist):
-        return[]
-    
-    semesters = Series.objects.filter(level__school=user.school)
-    results = []
-    
-    for semester in semesters:
-        try:
-            evaluations = Assessment.objects.filter(academic_year=academic_year, semester=semester).order_by('semester__title')
-            student_career = StudentClassroom.objects.filter(academic_year=academic_year, is_valid=False, semester=semester, is_next=False)
-
-            if evaluations.exists():
-                controle_evaluations = evaluations.filter(type_evaluation__title='Contrôle')
-                partiel_evaluations = evaluations.filter(type_evaluation__title='Partiel')
-
-                for student in student_career:
-                    m = []
-                    count_coefficient = 0
-
-                    for controle_evaluation in controle_evaluations.filter(student=student.student):
-                        count_coefficient += controle_evaluation.subject.coefficient
-                        partiel_evaluation = partiel_evaluations.filter(
-                            student=controle_evaluation.student,
-                            subject=controle_evaluation.subject
-                        ).first()
-
-                        if partiel_evaluation:
-                            total = ((controle_evaluation.note + partiel_evaluation.note) * controle_evaluation.subject.coefficient) / 2
-                            m.append(
-                                {
-                                    'id_student':student.id,
-                                    'nui': controle_evaluation.student.registration_number,
-                                    'lastname': controle_evaluation.student.lastname,
-                                    'firstname': controle_evaluation.student.firstname,
-                                    'controle': controle_evaluation.note,
-                                    'partiel': partiel_evaluation.note,
-                                    'semestre':controle_evaluation.semester.title,
-                                    'niveau':controle_evaluation.semester.level.label,
-                                    'parcours':controle_evaluation.career.title,
-                                    'year':controle_evaluation.academic_year.label,
-                                    'total': total,
-                                }
-                            )
-
-                    if m:
-                        # Calculer la moyenne pondérée
-                        average = round(sum(x['total'] for x in m) / count_coefficient, 2) if count_coefficient != 0 else 0
-
-                        results.append({
-                            'id_student': m[0]['id_student'],
-                            'nui': m[0]['nui'],
-                            'lastname': m[0]['lastname'],
-                            'firstname': m[0]['firstname'],
-                            'semestre': m[0]['semestre'],
-                            'niveau': m[0]['niveau'],
-                            'parcours': m[0]['parcours'],
-                            'year':m[0]['year'],
-                            'average': average,
-                        })
-
-                # Tri des résultats par rapport à 'average'
-                results = sorted(results, key=lambda x: x['average'], reverse=True)
-
-                # Ajout du rang à chaque résultat
-                for i, result in enumerate(results, start=1):
-                    result['rang'] = i
-                    
-        except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
-            return HttpResponse(f"Erreur: {e}")
+        average = moyenne_primaire(notes)
+        student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
         
-    return results
+        return {
+            'nui':student_career.student.registration_number,
+            'lastname':student_career.student.lastname,
+            'firstname':student_career.student.firstname,
+            'classroom':student_career.classroom.title,
+            'average':average,
+            'period':period,
+        }
+    except (AcademicYear.DoesNotExist, ClassRoom.DoesNotExist, StudentClassroom.DoesNotExist):
+        return[]
+
+
+def calcul_resultat_college_lycee(period, classroom_id, user, student):
+    try:
+        academic_year = AcademicYear.objects.get(status=True, school=user.school)
+        classroom = ClassRoom.objects.get(pk=classroom_id)
+        evaluations_examens = Assessment.objects.filter(
+            period=period, 
+            classroom=classroom, 
+            academic_year=academic_year, 
+            student=student,
+            type_evaluation='Examen'
+        )
+        
+        evaluations = Assessment.objects.filter(
+            period=period, 
+            classroom=classroom, 
+            academic_year=academic_year, 
+            student=student,
+            type_evaluation='Devoir de classe'
+        )
+
+        # Extraire les notes à partir des évaluations
+        notes = [evaluation.note for evaluation in evaluations]
+        notes_exam = [evaluation.note for evaluation in evaluations_examens]
+        coefficiens = [evaluation.subject.coefficient for evaluation in evaluations]
+
+        average = moyenne_college_lycee(notes, notes_exam, coefficiens)
+        student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
+        
+        return {
+            'nui':student_career.student.registration_number,
+            'lastname':student_career.student.lastname,
+            'firstname':student_career.student.firstname,
+            'classroom':student_career.classroom.title,
+            'average':average,
+        }
+    except (AcademicYear.DoesNotExist, ClassRoom.DoesNotExist, StudentClassroom.DoesNotExist):
+        return[]
 
 class EditAssessmentView(View):
     template = 'manager_dashboard/evaluations/editer_evaluation.html'
@@ -305,30 +233,25 @@ class NoteTableView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        semesters = Series.objects.filter(level__school=request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=request.user.school)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
         context = {
-            'semesters':semesters,
-            'careers':careers,
+            'classrooms':classrooms,
             'subjects':subjects
         }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
-        semester_id = request.POST['semester']
-        career_id = request.POST['career']
+        classroom_id = request.POST['classroom']
         subject_id = request.POST['subject']
         
         try:
-            semester = Series.objects.get(pk=semester_id)
-            career = ClassRoom.objects.get(pk=career_id)
+            classroom = ClassRoom.objects.get(pk=classroom_id)
             subject = Subject.objects.get(pk=subject_id)
 
-            evaluations = Assessment.objects.filter(semester=semester, career=career, subject=subject).order_by('-note')
+            evaluations = Assessment.objects.filter(classroom=classroom, subject=subject, period=request.POST['period']).order_by('-note')
 
-            semesters = Series.objects.filter(level__school=request.user.school)
-            careers = ClassRoom.objects.filter(sector__school=request.user.school)
+            classrooms = ClassRoom.objects.filter(level__school=request.user.school)
             subjects = Subject.objects.filter(level__school=request.user.school)
             
             if evaluations.exists():
@@ -340,8 +263,7 @@ class NoteTableView(View):
 
                 
                 context = {
-                    'semesters':semesters,
-                    'careers':careers,
+                    'classrooms':classrooms,
                     'subjects':subjects,
                     'evaluations':evaluations,
                     'max_note':max_note,
@@ -351,8 +273,8 @@ class NoteTableView(View):
                 return render(request, template_name=self.template, context=context)
             else:
                 context = {
-                    'semesters':semesters,
-                    'careers':careers,
+                    'classrooms':classrooms,
+                    'subjects':subjects,
                     'subjects':subjects,
                 }
                 return render(request, template_name=self.template, context=context)
@@ -379,84 +301,14 @@ class AverageTableView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        semesters = Series.objects.filter(level__school=request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=request.user.school)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
-        
         context = {
-            'semesters':semesters,
-            'careers':careers,
+            'classrooms':classrooms,
             'subjects':subjects
         }
         return render(request, template_name=self.template, context=context)
     
-    def post(self, request, *args, **kwargs):
-        semester_id = request.POST['semester']
-        career_id = request.POST['career']
-        subject_id = request.POST['subject']
-        
-        try:
-            semester = Series.objects.get(pk=semester_id)
-            career = ClassRoom.objects.get(pk=career_id)
-            subject = Subject.objects.get(pk=subject_id)
-
-            evaluations = Assessment.objects.filter(semester=semester, career=career, subject=subject).order_by('-note')
-
-            semesters = Series.objects.filter(level__school=request.user.school)
-            careers = ClassRoom.objects.filter(sector__school=request.user.school)
-            subjects = Subject.objects.filter(level__school=request.user.school)
-            
-            if evaluations.exists():
-                results = []
-                controle_evaluations = evaluations.filter(type_evaluation__title='Contrôle')
-
-                for controle_evaluation in controle_evaluations:
-                    partiel_evaluation = evaluations.filter(
-                        student=controle_evaluation.student,
-                        type_evaluation__title='Partiel'
-                    ).first()
-
-                    if partiel_evaluation:
-                        results.append(
-                            {
-                                'nui': controle_evaluation.student.registration_number,
-                                'lastname': controle_evaluation.student.lastname,
-                                'firstname': controle_evaluation.student.firstname,
-                                'controle': controle_evaluation.note,
-                                'partiel': partiel_evaluation.note,
-                                'total': (
-                                    (controle_evaluation.note+partiel_evaluation.note)* controle_evaluation.subject.coefficient
-                                    ) / 2
-                            }
-                        )
-                results = sorted(results, key=lambda x: x['controle'] + x['partiel'], reverse=True)
-                
-                if results:
-                    average= round(sum(x['total'] for x in results) / len(results), 3)
-                
-                
-                context = {
-                    'semesters': semesters,
-                    'careers': careers,
-                    'subjects':subjects,
-                    'results': results,
-                    'max': results[0]['total'],
-                    'last': results[-1]['total'],
-                    'average':average
-                }
-                return render(request, template_name=self.template, context=context)
-# ...
-
-            else:
-                context = {
-                    'semesters':semesters,
-                    'careers':careers,
-                    'subjects':subjects,
-                }
-                return render(request, template_name=self.template, context=context)
-
-        except (Series.DoesNotExist, ClassRoom.DoesNotExist, Subject.DoesNotExist) as e:
-            return HttpResponse(f"Erreur: {e}")
 
 class BulletinDetailView(View):
     template_name = 'manager_dashboard/evaluations/bulletin_detail.html'

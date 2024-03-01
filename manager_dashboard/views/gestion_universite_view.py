@@ -2,7 +2,6 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from manager_dashboard.views.gestion_evaluation_view import calculate_results
 from backend.models.evaluations import Assessment
 from django.db.models import Sum
 from backend.models.facturation import FinancialCommitment, Invoice

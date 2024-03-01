@@ -2,7 +2,6 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.evaluation_forms import ReportCardForm
 from backend.models.evaluations import ReportCard
-from manager_dashboard.views.gestion_evaluation_view import calculate_results, get_all_results
 from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, StudentClassroom
 from django.http import Http404, JsonResponse
 from django.contrib import messages
