@@ -24,8 +24,56 @@ class Etablishment(models.Model):
 
 #=============================================================================================================================
 #=================================== CE SONT LES MODEL REPRÉSENTANT CHAQUE PROFIL UTILISATEUR DE L'APP =======================
-# Represent an objet of Student and his profil info
 
+class Parent(models.Model):
+
+    lastname_one = models.CharField(max_length=50)
+    
+    firstname_one = models.CharField(max_length=50)
+    
+    address_one = models.CharField(max_length=50)
+    
+    email_one = models.CharField(max_length=120)
+    
+    tel_one = models.CharField(max_length=20)
+    
+    picture_one = models.ImageField(upload_to="parents_images")
+    
+    lastname_seconde = models.CharField(max_length=50, blank=True, null=True)
+    
+    firstname_seconde = models.CharField(max_length=50, blank=True, null=True)
+    
+    address_seconde = models.CharField(max_length=50, blank=True, null=True)
+    
+    email_seconde = models.CharField(max_length=120, blank=True, null=True)
+    
+    tel_seconde = models.CharField(max_length=20, blank=True, null=True)
+    
+    picture_seconde = models.ImageField(upload_to="parents_images", blank=True, null=True)
+    
+    def file_exist_one(self):
+        if self.picture_one:
+            return os.path.exists(settings.MEDIA_ROOT / str(self.picture_one))
+        return False
+    
+    def file_exist_seconde(self):
+        if self.picture_seconde:
+            return os.path.exists(settings.MEDIA_ROOT / str(self.picture_seconde))
+        return False
+    
+    def delete(self, *args, **kwargs):
+        # Supprimer le fichier associé s'il existe
+        if self.picture_one and os.path.exists(os.path.join(settings.MEDIA_ROOT, str(self.picture_one))):
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(self.picture_one)))
+            
+        if self.picture_seconde and os.path.exists(os.path.join(settings.MEDIA_ROOT, str(self.picture_seconde))):
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(self.picture_seconde)))
+        
+        # Supprimer l'objet
+        super(Parent, self).delete(*args, **kwargs)
+
+
+# Represent an objet of Student and his profil info
 class ShortUUID4Field(models.CharField):
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('max_length', 10)
