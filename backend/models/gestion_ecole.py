@@ -438,7 +438,6 @@ class TeacherDocument(models.Model):
         # Supprimer l'objet
         super(TeacherDocument, self).delete(*args, **kwargs)
 
-
 class ParentDocument(models.Model):
     title = models.CharField(max_length=50)
     document_type = models.ForeignKey(DocumentType, on_delete=models.SET_NULL, blank=True, null=True)

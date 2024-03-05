@@ -826,7 +826,7 @@ class TeacherDetailView(View):
         teacher = get_object_or_404(Teacher, pk=pk)
         subjects_taught_by_teacher = Subject.objects.filter(teacher_in_charge=teacher)
         schedules_for_subject = Schedule.objects.filter(subject__in=subjects_taught_by_teacher)
-        documents = TeacherDocument.objects.filter(teacher=teacher, school=request.user.school)
+        documents = TeacherDocument.objects.filter(teacher=teacher, document_type__school=request.user.school)
         #account = get_object_or_404(User, teacher=teacher)
         form = TeacherDocumentForm(request.user)
         context = {'teacher':teacher, 'schedules_for_subject':schedules_for_subject, 'form':form, 'documents':documents}
@@ -837,14 +837,13 @@ class TeacherDetailView(View):
         mutable_data = request.POST.copy()
         mutable_file = request.FILES.copy()
         mutable_data['teacher'] = teacher
-        mutable_data['school'] = request.user.school
         form = TeacherDocumentForm(request.user, mutable_data, mutable_file)
         if form.is_valid():
             form.save()
         
         subjects_taught_by_teacher = Subject.objects.filter(teacher_in_charge=teacher)
         schedules_for_subject = Schedule.objects.filter(subject__in=subjects_taught_by_teacher)
-        documents = TeacherDocument.objects.filter(school=request.user.school, teacher=teacher)
+        documents = TeacherDocument.objects.filter(teacher=teacher, document_type__school=request.user.school)
         #account = get_object_or_404(User, teacher=teacher)
         context = {'teacher':teacher, 'schedules_for_subject':schedules_for_subject, 'form':form, 'documents':documents}
         return render(request, template_name=self.template, context=context)
@@ -1220,7 +1219,6 @@ class ParentDetailView(View):
         mutable_data = request.POST.copy()
         mutable_file = request.FILES.copy()
         mutable_data['parent'] = parent
-        mutable_data['school'] = request.user.school
         form = ParentDocumentForm(request.user, mutable_data, mutable_file)
         if form.is_valid():
             form.save()
