@@ -438,6 +438,25 @@ class TeacherDocument(models.Model):
         # Supprimer l'objet
         super(TeacherDocument, self).delete(*args, **kwargs)
 
+
+class ParentDocument(models.Model):
+    title = models.CharField(max_length=50)
+    document_type = models.ForeignKey(DocumentType, on_delete=models.SET_NULL, blank=True, null=True)
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='famille_documents')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return f"Document: {self.title}"
+    
+    def delete(self, *args, **kwargs):
+        # Supprimer le fichier associé s'il existe
+        if self.file and os.path.exists(os.path.join(settings.MEDIA_ROOT, str(self.file))):
+            os.remove(os.path.join(settings.MEDIA_ROOT, str(self.file)))
+        
+        # Supprimer l'objet
+        super(ParentDocument, self).delete(*args, **kwargs)
+
 # Class representing Sanction Appreciation (Student Discipline)
 class SanctionAppreciation(models.Model):
     comment = models.TextField(blank=True)

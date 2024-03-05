@@ -10,6 +10,7 @@ from backend.forms.gestion_ecole_forms import (
     ClassRoomForm,
     GroupSubjectForm, 
     LevelForm,
+    ParentDocumentForm,
     ParentForm, 
     ProgramForm, 
     SanctionAppreciationForm,
@@ -1208,31 +1209,29 @@ class ParentDetailView(View):
 
     def get(self, request, pk, *args, **kwargs):
         parent = get_object_or_404(Parent, pk=pk)
-        #documents = TeacherDocument.objects.filter(teacher=teacher, school=request.user.school)
+        documents = ParentDocument.objects.filter(document_type__school=request.user.school, parent=parent)
         #account = get_object_or_404(User, teacher=teacher)
-        form = TeacherDocumentForm(request.user)
-        context = {'parent':parent}
+        form = ParentDocumentForm(request.user)
+        context = {'parent':parent, 'documents':documents, 'form':form}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request,pk, *args, **kwargs):
-        teacher = get_object_or_404(Teacher, pk=pk)
+        parent = get_object_or_404(Parent, pk=pk)
         mutable_data = request.POST.copy()
         mutable_file = request.FILES.copy()
-        mutable_data['teacher'] = teacher
+        mutable_data['parent'] = parent
         mutable_data['school'] = request.user.school
-        form = TeacherDocumentForm(request.user, mutable_data, mutable_file)
+        form = ParentDocumentForm(request.user, mutable_data, mutable_file)
         if form.is_valid():
             form.save()
         
-        subjects_taught_by_teacher = Subject.objects.filter(teacher_in_charge=teacher)
-        schedules_for_subject = Schedule.objects.filter(subject__in=subjects_taught_by_teacher)
-        documents = TeacherDocument.objects.filter(school=request.user.school, teacher=teacher)
+        documents = ParentDocument.objects.filter(document_type__school=request.user.school, parent=parent)
         #account = get_object_or_404(User, teacher=teacher)
-        context = {'teacher':teacher, 'schedules_for_subject':schedules_for_subject, 'form':form, 'documents':documents}
+        context = {'parent':parent,  'form':form, 'documents':documents}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
-        document = get_object_or_404(TeacherDocument, pk=pk)
+        document = get_object_or_404(ParentDocument, pk=pk)
         document.delete()
         return JsonResponse({'message': 'Document supprimé avec succès'})
 #===END

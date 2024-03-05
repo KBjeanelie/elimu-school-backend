@@ -901,3 +901,45 @@ class TeacherDocumentForm(forms.ModelForm):
                 }
             ),
         }
+
+class ParentDocumentForm(forms.ModelForm):
+    
+    def __init__(self, user, *args, **kwargs):
+        super(ParentDocumentForm, self).__init__(*args, **kwargs)
+        # Filtrer les niveaux en fonction de l'utilisateur connecté
+        self.fields['document_type'].queryset = DocumentType.objects.filter(school=user.school)
+        
+    class Meta:
+        model = ParentDocument
+        fields = '__all__'
+        widgets = {
+            'title' : forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'id': 'title',
+                    'class': 'form-control',
+                    'name': 'title',
+                    'maxLength':'50',
+                    'placeholder': 'Titre du document',
+                    'required': True
+                }
+            ),
+            'document_type': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'required': True,
+                }
+            ),
+            'parent': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                    'required': True,
+                }
+            ),
+            'file': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                    'required': True,
+                }
+            ),
+        }
