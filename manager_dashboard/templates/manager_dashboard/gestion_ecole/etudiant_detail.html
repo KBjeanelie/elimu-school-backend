@@ -38,10 +38,10 @@
                                     <p class="mb-1">Etudiant</p>
                                     <div class="custom-border mb-3"></div>
                                     <h3 class="pro-title"> {{student.firstname}} {{student.lastname|upper}} </h3><br>
-                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Parcours : {{student_career.career.title}} </h6>
-                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Filière : {{student_career.career.sector.title}} </h6>
-                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Semestre actuelle : {{student_career.semester.title}} </h6>
-                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Niveau : {{student_career.semester.level.label}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Genre : {{student.sex}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Date de naissance : {{student.bithday}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Classe : {{student_career.classroom.title}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.level.label}} </h6>
                                     {% if not user.is_admin %}
                                     <div class="quantity mt-3">
                                         <a href='{% url "manager_dashboard:edit_student" student.id %}' class="btn bg-dark text-white px-4 d-inline-block "><i class="fa fa-edit me-2"></i>Modifier</a>
@@ -65,9 +65,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Information Personnelle</a>
                                 </li>
-                                <!--<li class="nav-item">
+                                <li class="nav-item">
                                     <a class="nav-link" id="parents-tab" data-bs-toggle="tab" href="#parents" role="tab" aria-controls="parents" aria-selected="false">Parents</a>
-                                </li>-->
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="schedule-tab" data-bs-toggle="tab" href="#schedule" role="tab" aria-controls="schedule" aria-selected="false">Emplois du temps</a>
                                 </li>
@@ -109,9 +109,8 @@
                                             <h6>Prénom : {{student.firstname}} </h6><br>
                                             <h6>Date de naissance : {{student.bithday}} </h6><br>
                                             <h6>Genre : {{student.sex}} </h6><br>
-                                            <h6>Parcours : {{student_career.career.title}} </h6><br>
-                                            <h6>Filière : {{student_career.career.sector.title}} </h6><br>
-                                            <h6>Niveau : {{student_career.semester.level.label}} </h6><br>
+                                            <h6>Salle de classe : {{student_career.classroom.title}} </h6><br>
+                                            <h6>Niveau : {{student_career.classroom.level.label}} </h6><br>
                                             <h6>Année académique : {{student_career.academic_year.label}} </h6><br>
                                         </div>
                                         <div class="col-md-4">
@@ -136,36 +135,28 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
+                            <div class="tab-pane fade" id="parents" role="tabpanel" aria-labelledby="parents-tab">
                                 <div class="builder_select">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <h4 class="text-center">Responsable 1</h4><hr>
-                                            <h6>Nom : </h6><br>
-                                            <h6>Prénom : </h6><br>
-                                            <h6>Genre : </h6><br>
-                                            <h6>Adresse de résidence : </h6><br>
-                                            <h6>Numéro de téléphone : </h6><br>
-                                            <h6>Adresse email : </h6><br>
-                                            <h6>Ville : </h6><br>
-                                            <h6>Pays : </h6><br>
-                                            <h6>Profession : </h6><br>
+                                            <h6>Nom : {{ student.parent.lastname_one}} </h6><br>
+                                            <h6>Prénom : {{ student.parent.firstname_one}} </h6><br>
+                                            <h6>Adresse de résidence : {{ student.parent.address_one}} </h6><br>
+                                            <h6>Numéro de téléphone : {{ student.parent.tel_one}} </h6><br>
+                                            <h6>Adresse email : {{ student.parent.email_one}} </h6><br>
                                         </div>
                                         <div class="col-md-6">
                                             <h4 class="text-center">Responsable 2</h4><hr>
-                                            <h6>Nom : </h6><br>
-                                            <h6>Prénom : </h6><br>
-                                            <h6>Genre : </h6><br>
-                                            <h6>Adresse de résidence : </h6><br>
-                                            <h6>Numéro de téléphone : </h6><br>
-                                            <h6>Adresse email : </h6><br>
-                                            <h6>Ville : </h6><br>
-                                            <h6>Pays : </h6><br>
-                                            <h6>Profession : </h6><br>
+                                            <h6>Nom : {{ student.parent.lastname_seconde}} </h6><br>
+                                            <h6>Prénom : {{ student.parent.firstname_seconde}} </h6><br>
+                                            <h6>Adresse de résidence : {{ student.parent.address_seconde}} </h6><br>
+                                            <h6>Numéro de téléphone : {{ student.parent.tel_seconde}} </h6><br>
+                                            <h6>Adresse email : {{ student.parent.email_seconde}} </h6><br>
                                         </div>
                                     </div>
                                 </div>
-                            </div>-->
+                            </div>
                             <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
                                 <div class="builder_select">
                                     <div class="row">
@@ -353,7 +344,7 @@
                                                         {% for sanction in sanctions_student %}
                                                             <tr>
                                                                 <td> <h6> {{sanction.subject.label}} </h6> </td>
-                                                                <td> <h6> {{sanction.sanction_date}} </h6> </td>
+                                                                <td> <h6> {{sanction.created_at}} </h6> </td>
                                                                 <td><h6> {{sanction.type.title}} </h6></td>
                                                                 <td><h6> {{sanction.comment}} </h6></td>
                                                             </tr>
@@ -376,8 +367,8 @@
                                                         <tr>
                                                             <th scope="col">Matière</th>
                                                             <th scope="col">Note</th>
-                                                            <th scope="col">Parcours</th>
-                                                            <th scope="col">Semestre</th>
+                                                            <th scope="col">Classe</th>
+                                                            <th scope="col">Période</th>
                                                             <th scope="col">Type d'évaluation</th>
                                                             <!--<th scope="col">Est public ?</th>-->
                                                         </tr>
@@ -387,8 +378,8 @@
                                                             <tr>
                                                                 <td><h6> {{evaluation.subject.label}} </h6></td>
                                                                 <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
-                                                                <td><h6>{{evaluation.career.title}}</h6></td>
-                                                                <td><h6>{{evaluation.semester.title}}</h6></td>
+                                                                <td><h6>{{evaluation.classroom.title}}</h6></td>
+                                                                <td><h6>{{evaluation.period}}</h6></td>
                                                                 <td><h6> {{evaluation.type_evaluation.title}} </h6></td>
                                                                 <!--<td><h6> <a class="status_btn">Active</a> </h6></td>-->
                                                             </tr>
@@ -405,8 +396,8 @@
                                                         <tr>
                                                             <th scope="col">Matière</th>
                                                             <th scope="col">Note</th>
-                                                            <th scope="col">Parcours</th>
-                                                            <th scope="col">Semestre</th>
+                                                            <th scope="col">Classe</th>
+                                                            <th scope="col">Periode</th>
                                                             <th scope="col">Type d'évaluation</th>
                                                             <!--<th scope="col">Est public ?</th>-->
                                                         </tr>
@@ -416,8 +407,8 @@
                                                             <tr>
                                                                 <td><h6> {{evaluation.subject.label}} </h6></td>
                                                                 <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
-                                                                <td><h6>{{evaluation.career.title}}</h6></td>
-                                                                <td><h6>{{evaluation.semester.title}}</h6></td>
+                                                                <td><h6>{{evaluation.classroom.title}}</h6></td>
+                                                                <td><h6>{{evaluation.period}}</h6></td>
                                                                 <td><h6> {{evaluation.type_evaluation.title}} </h6></td>
                                                                 <!--<td><h6> <a class="status_btn">Active</a> </h6></td>-->
                                                             </tr>

@@ -132,6 +132,8 @@ class Student(models.Model):
     
     picture = models.ImageField(upload_to="student_images", blank=True, null=True)
     
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE, blank=True, null=True)
+    
     status = models.BooleanField(default=False)
     
     is_valid = models.BooleanField(default=False)
@@ -158,7 +160,6 @@ class Student(models.Model):
         
         # Supprimer l'objet
         super(Student, self).delete(*args, **kwargs)
-
 
 # Represent an objet of Teacher and his profil info
 class Teacher(models.Model):
@@ -217,8 +218,6 @@ class Teacher(models.Model):
         
         # Supprimer l'objet
         super(Teacher, self).delete(*args, **kwargs)
-
-
 
 # Represent an objet of team manager and his profil info
 class ManagementProfil(models.Model):

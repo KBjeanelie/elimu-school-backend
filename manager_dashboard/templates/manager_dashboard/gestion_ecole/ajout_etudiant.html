@@ -72,6 +72,14 @@
                                         {% for level in levels %}
                                             <option value="{{level.id}}"> {{level.title}} </option>
                                         {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-3 col-md-4">
+                                    <label class="form-label" for="libelle">Parent</label>
+                                    <select name="parent" class="form-control" required id="parent">
+                                        {% for parent in parents %}
+                                            <option value="{{parent.id}}"> {{parent.firstname_one}} {{parent.lastname_one}} </option>
+                                        {% endfor %}
                                     
                                     </select>
                                 </div>

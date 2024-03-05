@@ -24,6 +24,8 @@ from backend.forms.gestion_ecole_forms import (
 from backend.models.gestion_ecole import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from manager_dashboard.views.gestion_evaluation_view import calcul_resultat_primaire
+
 def convertir_en_hexadecimal(nombre):
     # Utiliser la fonction hex() pour convertir le nombre en hexadécimal
     nombre_hexadecimal = hex(nombre)
@@ -898,7 +900,6 @@ class EditStudentView(View):
         context = {'form':form, 'student': student}
         return render(request, template_name=self.template, context=context)
 
-
 class AddStudentView(View):
     template = "manager_dashboard/gestion_ecole/ajout_etudiant.html"
     
@@ -918,8 +919,9 @@ class AddStudentView(View):
 
     def get(self, request, *args, **kwargs):
         levels = ClassRoom.objects.filter(level__school=self.request.user.school)
+        parents = Parent.objects.filter(school=self.request.user.school)
         type_documents = DocumentType.objects.filter(status=True, school=request.user.school)
-        context = {'levels':levels, 'type_documents':type_documents,}
+        context = {'levels':levels, 'type_documents':type_documents, 'parents':parents}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -931,6 +933,8 @@ class AddStudentView(View):
             sex=request.POST['sex'],
             picture=request.FILES['picture']
         )
+        parent = get_object_or_404(Parent, id=request.POST['parent'])
+        new_student.parent = parent
         new_student.save()
 
         classroom = get_object_or_404(ClassRoom, id=request.POST['classroom'])
@@ -979,7 +983,6 @@ class StudentsView(View):
             # Exécuter du code alternatif si l'objet AcademicYear n'existe pas
            return render(request, template_name=self.template)
 
-
 class StudentDetailView(View):
     template = "manager_dashboard/gestion_ecole/etudiant_detail.html"
     
@@ -991,31 +994,34 @@ class StudentDetailView(View):
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('backend:logout')
-
-    def get(self, request, pk, *args, **kwargs):
+    
+    def get_context_data(self, request, pk, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
         student = get_object_or_404(Student, pk=pk)
-        documents = StudentDocument.objects.filter(student=student, school=request.user.school)
-        sanctions_student = SanctionAppreciation.objects.filter(student=student)
-        invoices_student = Invoice.objects.filter(student=student, academic_year=academic_year)
-        controle_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Contrôle')
-        partiel_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Partiel')
-        students_career = StudentClassroom.objects.filter(student=student, school=request.user.school)
-        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
-        regulations = Invoice.objects.filter(academic_year=academic_year, invoice_status='Entièrement payé', student=student).order_by('-created_at')
-        results = []
-        monday_schedule = Schedule.objects.filter(career=student_career.career, day='lundi').order_by('start_hours')
-        tueday_schedule = Schedule.objects.filter(career=student_career.career, day='mardi').order_by('start_hours')
-        wednesday_schedule = Schedule.objects.filter(career=student_career.career, day='mercredi').order_by('start_hours')
-        thursday_schedule = Schedule.objects.filter(career=student_career.career, day='jeudi').order_by('start_hours')
-        friday_schedule = Schedule.objects.filter(career=student_career.career, day='vendredi').order_by('start_hours')
-        saturday_schedule = Schedule.objects.filter(career=student_career.career, day='samedi').order_by('start_hours')
         
-        for s in students_career:
-            R = calculate_results(semester_id=s.semester.id, career_id=s.career.id, user=request.user)
-            for r in R:
-                if r['nui'] == student_career.student.registration_number:
-                    results.append(r)
+        documents = StudentDocument.objects.filter(student=student, document_type__school=request.user.school)
+        sanctions_student = SanctionAppreciation.objects.filter(student=student,type__school=request.user.school)
+        invoices_student = Invoice.objects.filter(student=student, academic_year=academic_year)
+        
+        controle_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation='Devoir de classe')
+        partiel_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation='Examen')
+        
+        students_career = StudentClassroom.objects.filter(student=student, academic_year=academic_year)
+        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
+        
+        regulations = Invoice.objects.filter(academic_year=academic_year, invoice_status='Entièrement payé', student=student).order_by('-created_at')
+        
+        monday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='lundi').order_by('start_hours')
+        tueday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='mardi').order_by('start_hours')
+        wednesday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='mercredi').order_by('start_hours')
+        thursday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='jeudi').order_by('start_hours')
+        friday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='vendredi').order_by('start_hours')
+        saturday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='samedi').order_by('start_hours')
+        
+        results = []
+        # for s in students_career:
+        #     if s.classroom.types == 'Primaire':
+        #         results.append(calcul_resultat_primaire(s.p))
 
         form = StudentDocumentForm(request.user)
         
@@ -1030,7 +1036,7 @@ class StudentDetailView(View):
         # Récupérer tous les engagements financiers
         engagements = FinancialCommitment.objects.get(student=student_career.student, academic_year=academic_year)
         total_engagements = engagements.school_fees
-         # Calcul du montant impayé
+        # Calcul du montant impayé
         not_payed = total_engagements - amount_payed
         context = {
             'not_payed':not_payed,
@@ -1055,6 +1061,11 @@ class StudentDetailView(View):
             'friday_schedule':friday_schedule,
             'saturday_schedule':saturday_schedule,
         }
+        
+        return context
+
+    def get(self, request, pk, *args, **kwargs):
+        context = self.get_context_data(request, pk=pk)
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
@@ -1062,32 +1073,10 @@ class StudentDetailView(View):
         mutable_data = request.POST.copy()
         mutable_file = request.FILES.copy()
         mutable_data['student'] = student
-        mutable_data['school'] = request.user.school
-        form = StudentDocumentForm(mutable_data, mutable_file)
+        form = StudentDocumentForm(request.user, mutable_data, mutable_file)
         if form.is_valid():
             form.save()
-        
-        academic_year = AcademicYear.objects.get(status=True)
-        student = get_object_or_404(Student, pk=pk)
-        documents = StudentDocument.objects.filter(student=student)
-        sanctions_student = SanctionAppreciation.objects.filter(student=student)
-        invoices_student = Invoice.objects.filter(student=student)
-        controle_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Contrôle')
-        partiel_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation__title='Partiel')
-        student_carreer = get_object_or_404(StudentClassroom, student=student)
-        form = StudentDocumentForm()
-        
-        
-        context = {
-            'student':student,
-            'student_career':student_carreer,
-            'documents':documents,
-            'sanctions_student':sanctions_student,
-            'invoices_student':invoices_student,
-            'controle_evaluations':controle_evaluations,
-            'partiel_evaluations': partiel_evaluations,
-            'form':form
-        }
+        context = self.get_context_data(request, pk=pk)
         return render(request, template_name=self.template, context=context)
     
     

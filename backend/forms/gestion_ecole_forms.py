@@ -193,7 +193,7 @@ class ParentForm(forms.ModelForm):
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = ['lastname', 'firstname', 'status', 'blood_type', 'birthday_place', 'allergy', 'address', 'tel', 'city', 'sex', 'email', 'bithday', 'nationality', 'picture']
+        fields = '__all__'
         widgets = {
             'lastname': forms.TextInput(
                 attrs={
@@ -255,6 +255,11 @@ class StudentForm(forms.ModelForm):
                 }
             ),
             'city': forms.Select(
+                attrs={
+                    'class': 'form-control',
+                }
+            ),
+            'parent': forms.Select(
                 attrs={
                     'class': 'form-control',
                 }
