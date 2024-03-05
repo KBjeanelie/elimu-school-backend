@@ -1195,7 +1195,7 @@ class ParentView(View):
         return render(request, template_name=self.template, context=context)
 
 class ParentDetailView(View):
-    template = "manager_dashboard/gestion_ecole/enseignant_detail.html"
+    template = "manager_dashboard/gestion_ecole/parent_detail.html"
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -1207,13 +1207,11 @@ class ParentDetailView(View):
         return redirect('backend:logout')
 
     def get(self, request, pk, *args, **kwargs):
-        teacher = get_object_or_404(Teacher, pk=pk)
-        subjects_taught_by_teacher = Subject.objects.filter(teacher_in_charge=teacher)
-        schedules_for_subject = Schedule.objects.filter(subject__in=subjects_taught_by_teacher)
-        documents = TeacherDocument.objects.filter(teacher=teacher, school=request.user.school)
+        parent = get_object_or_404(Parent, pk=pk)
+        #documents = TeacherDocument.objects.filter(teacher=teacher, school=request.user.school)
         #account = get_object_or_404(User, teacher=teacher)
         form = TeacherDocumentForm(request.user)
-        context = {'teacher':teacher, 'schedules_for_subject':schedules_for_subject, 'form':form, 'documents':documents}
+        context = {'parent':parent}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request,pk, *args, **kwargs):

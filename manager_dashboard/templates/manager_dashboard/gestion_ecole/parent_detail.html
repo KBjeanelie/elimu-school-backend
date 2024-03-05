@@ -1,0 +1,189 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Parents</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:parents" %}'>Parents</a></li>
+                            <li class="breadcrumb-item"><a> {{ parent.fullname }} </a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="white_card position-relative mb_20">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 align-self-center">
+                                {% if parent.file_exist_one %}
+                                    <img src="{{ parent.picture_one.url }}" alt class="mx-auto d-block" height="300" />
+                                {% else %}
+                                <img src="{% static 'img/staf/teacher.png' %}" alt class="mx-auto d-block" height="300" />
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-6 align-self-center">
+                                <div class="single-pro-detail">
+                                    <p class="mb-1">Parent Principal</p>
+                                    <div class="custom-border mb-3"></div>
+                                    <h3 class="pro-title"> {{ parent.firstname_one}} {{ parent.lastname_one | upper}} </h3><br>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Email :  {{ parent.email_one}} </h6>
+                                    <h6 class="text-muted font_s_13 mt-2 mb-1">Téléphone : +242 {{ parent.tel_one }} </h6>
+                                    {% if not user.is_admin %}
+                                    <div class="quantity mt-3">
+                                        <a href='{% url "manager_dashboard:edit_parent" parent.id %}' class="btn btn-dark text-white px-4 d-inline-block "><i class="fa fa-edit me-2"></i>Modifier</a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ">
+            <div class="col-12">
+                <div class="white_card mb_30 ">
+                    <div class="white_card_header">
+                        <div class="bulder_tab_wrapper">
+                            <ul class="nav" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="info-tab" data-bs-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="true">Information Personnelle</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="documents-tab" data-bs-toggle="tab" href="#documents" role="tab" aria-controls="documents" aria-selected="false">Documents</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="white_card_body">
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h4 class="text-center">Responsable 1</h4><hr>
+                                            <h6>Nom : {{parent.lastname_one}} </h6><br>
+                                            <h6>Prénom : {{parent.firstname_one}} </h6><br>
+                                            <h6>Adresse de résidence : {{parent.address_one}} </h6><br>
+                                            <h6>Numéro de téléphone : {{parent.tel_one}} </h6><br>
+                                            <h6>Adresse email : {{parent.email_one}} </h6><br>
+                                            <!--<h6>Genre : </h6><br>
+                                            <h6>Ville : </h6><br>
+                                            <h6>Pays : </h6><br>
+                                            <h6>Profession : </h6><br>-->
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h4 class="text-center">Responsable 2</h4><hr>
+                                            <h6>Nom : {{parent.lastname_seconde}} </h6><br>
+                                            <h6>Prénom : {{parent.firstname_seconde}} </h6><br>
+                                            <h6>Adresse de résidence : {{parent.address_seconde}} </h6><br>
+                                            <h6>Numéro de téléphone : {{parent.tel_seconde}} </h6><br>
+                                            <h6>Adresse email : {{parent.email_seconde}} </h6><br>
+                                            <!--<h6>Genre : </h6><br>
+                                            <h6>Ville : </h6><br>
+                                            <h6>Pays : </h6><br>
+                                            <h6>Profession : </h6><br> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="schedule" role="tabpanel" aria-labelledby="schedule-tab">
+                                <div class="builder_select">
+                                    <div class="row">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Ajouter une Facture</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Titre du document</label>
+                        {{form.title}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="level">Type de document</label>
+                        {{form.document_type}}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="libelle">Fichier</label>
+                        {{form.file}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="ti-close"></i> Close</button>
+                    <button type="submit" class="btn btn-success"><i class="ti-save"></i> Save changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+
+    // Supprimer un élément
+    function deleteDocument(id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+        var url = document.getElementById('delete-document').dataset.url
+        $.ajax({
+            url: url,
+            type: 'DELETE',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+            },
+            success: function(response) {
+                $('#elementList').find(`tr[data-id="${id}"]`).remove();
+                console.log('Élément supprimé avec succès');
+            },
+            error: function(error) {
+                console.error('Erreur lors de la suppression de l\'élément', error);
+            }
+        });
+    }
+    
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+</script>
+{% endblock content %}
