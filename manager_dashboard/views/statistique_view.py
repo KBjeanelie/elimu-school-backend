@@ -204,39 +204,13 @@ class ReportCardView(View):
     def get(self, request, *args, **kwargs):
         year = AcademicYear.objects.get(status=True, school=request.user.school)
         results = ReportCard.objects.filter(academic_year=year).order_by('-created_at')
-        semesters = Series.objects.filter(level__school=request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=request.user.school)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         
         context = {
-            'semesters': semesters,
-            'careers': careers,
+            'classrooms': classrooms,
             'results': results
         }
         
-        return render(request, template_name=self.template, context=context)
-    
-    def post(self, request, *args, **kwargs):
-        year = AcademicYear.objects.get(status=True, school=request.user.school)
-        semester_id = request.POST['semester']
-        career_id = request.POST['career']
-
-        results = ReportCard.objects.filter(semester__id=semester_id, career__id=career_id, academic_year=year)
-        
-        semesters = Series.objects.filter(level__school=request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=request.user.school)
-        
-        if results:
-            context = {
-                'semesters': semesters,
-                'careers': careers,
-                'results': results,
-            }
-        else:
-            context = {
-                'semesters': semesters,
-                'careers': careers,
-            }
-
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
@@ -262,16 +236,14 @@ class NextLevelView(View):
         return redirect('backend:logout')
     
     def get_context_data(self, request, **kwargs):
-        semesters = Series.objects.filter(level__school=self.request.user.school)
-        careers = ClassRoom.objects.filter(sector__school=self.request.user.school)
+        classrooms = ClassRoom.objects.filter(level__school=self.request.user.school)
         academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
         
         student_validated = StudentClassroom.objects.filter(is_valid=True, is_registered=True, is_next=False, academic_year=academic_year)
         context = {
             'academic_year': academic_year, 
-            'student_validated': student_validated, 
-            'semesters': semesters, 
-            'careers': careers,
+            'student_validated': student_validated,
+            'classrooms': classrooms,
         }
         return context
     

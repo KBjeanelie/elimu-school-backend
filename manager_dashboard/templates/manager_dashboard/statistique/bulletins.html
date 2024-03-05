@@ -26,38 +26,7 @@
             </div>
         </div>
 
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col-12">
-                    <form method="post" class="row g-3">
-                        {% csrf_token %}
-                        <div class="col-auto">
-                            <label class="form-label" for="inputStateSemester">Selectionner le semestre</label>
-                            <select id="inputStateSemester" class="form-control" name="semester" required>
-                                {% for semester in semesters %}
-                                    <option value="{{semester.id}}"> {{semester.title}} </option>
-                                {% endfor %}
-                            </select> 
-                        </div>
-                        <div class="col-auto">
-                            <label class="form-label" for="inputStateCareer">Selectionner le parcours</label>
-                            <select id="inputStateCareer" class="form-control" name="career" required>
-                                
-                                {% for career in careers %}
-                                    <option value="{{career.id}}"> {{career.title}} </option>
-                                {% endfor %}
-                            </select> 
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mt-4">Rechercher</button>
-                        </div>
-                    </form>
-                    
-                </div>
-            </div>
-        </div>
         
-
         <div class="row mt-5">
             <div class="col-lg-12">
                 <div class="white_card card_height_100 mb_30 pt-4">
@@ -89,7 +58,7 @@
                                             <th scope="col">Nom complet</th>
                                             <th scope="col">Moyenne</th>
                                             <th scope="col">Session</th>
-                                            <th scope="col">Niveau</th>
+                                            <th scope="col">Classe</th>
                                             <th scope="col">Appreciation</th>
                                             <th scope="col"></th>
                                         </tr>

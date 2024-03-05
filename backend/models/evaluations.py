@@ -3,7 +3,7 @@ from django.db import models
 from backend.models.gestion_ecole import AcademicYear, ClassRoom, Etablishment, Series, Subject
 from backend.models.user_account import Student
 from elimu_school import settings
-from elimu_school.constant import periode_of_exam, types_evaluations
+from elimu_school.constant import periode_of_exam, types_evaluations, types_of_classroom
 
 
 class TypeOfEvaluation(models.Model):
@@ -35,8 +35,8 @@ class ReportCard(models.Model):
     average = models.FloatField(default=10)
     file = models.FileField(upload_to='releves_notes')
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    career = models.ForeignKey(ClassRoom, on_delete=models.DO_NOTHING)
-    semester = models.ForeignKey(Series, on_delete=models.DO_NOTHING)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.DO_NOTHING)
+    type = models.CharField(choices=types_of_classroom, max_length=11)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
