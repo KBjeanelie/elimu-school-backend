@@ -134,3 +134,49 @@ class UserStudentForm(forms.ModelForm):
             ),
         }
 
+
+class UserParentForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'parent', 'is_active', 'is_parent', 'password']
+        
+        widgets = {
+            'parent': forms.Select(
+                attrs={
+                    "class": "form-control",
+                    "required": True
+                }
+            ),
+            'username': forms.TextInput(
+                attrs={
+                    'type': 'text',
+                    'id': 'username',
+                    'class': 'form-control',
+                    'name': 'username',
+                    'placeholder': 'kbjeanelie',
+                    'required': True
+
+                }
+            ),
+            'password': forms.PasswordInput(
+                attrs={
+                    'type': 'password',
+                    'id': 'password',
+                    'class': 'form-control',
+                    'name': 'password',
+                    'placeholder': '************',
+                    'required': True
+
+                }
+            ),
+            'is_active': forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            'is_parent': forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+        }

@@ -2,7 +2,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
-from backend.forms.user_account_forms import UserStudentForm, UserTeacherForm
+from backend.forms.user_account_forms import UserParentForm, UserStudentForm, UserTeacherForm
 from backend.models.user_account import ManagementProfil, User
 
 
@@ -278,3 +278,93 @@ class ListAllStudentAccount(View):
         instance = get_object_or_404(User, pk=pk)
         instance.delete()
         return JsonResponse({'message': 'Élément supprimé avec succès'})
+
+#===END
+
+
+
+#========================== PARTIE CONCERNANT LA GESTION DE COMPTE Parents
+class EditParentAccountView(View):
+    template = "manager_dashboard/comptes/editer_compte_parent.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(User, pk=pk)
+        print(user.password)
+        form = UserParentForm(instance=user)
+        context = {'form':form, 'account':user}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(User, pk=pk)
+        form = UserParentForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            user.set_password(form.cleaned_data['password'])
+            user.is_parent = True
+            user.school = request.user.school
+            user.save()
+            return redirect('manager_dashboard:parents_account')
+        
+        context = {'form': form, 'user': user}
+        return render(request, template_name=self.template, context=context)
+    
+class AddParentAccount(View):
+    template = "manager_dashboard/comptes/ajout_compte_parent.html"
+    form = UserParentForm()
+    context_object = {'form': form}
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, template_name=self.template, context=self.context_object)
+    
+    def post(self, request, *args, **kwargs):
+        form = UserParentForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_parent_user(
+                form.cleaned_data['username'],
+                form.cleaned_data['parent'],
+                form.cleaned_data['password'],
+            )
+            new_user.school = request.user.school
+            new_user.save()
+        return redirect('manager_dashboard:parents_account')
+
+class ListAllParentAccount(View):
+    template = "manager_dashboard/comptes/compte_parents.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+        
+    def get(self, request, *args, **kwargs):
+        parents_account = User.objects.filter(is_parent=True, school=request.user.school)
+        context_object = {'parents_account': parents_account}
+        return render(request, template_name=self.template, context=context_object)
+
+    def delete(self, request, pk, *args, **kwargs):
+        instance = get_object_or_404(User, pk=pk)
+        instance.delete()
+        return JsonResponse({'message': 'Élément supprimé avec succès'})
+#===END

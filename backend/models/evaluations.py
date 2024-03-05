@@ -34,9 +34,9 @@ class Assessment(models.Model):
 class ReportCard(models.Model):
     average = models.FloatField(default=10)
     file = models.FileField(upload_to='releves_notes')
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    classroom = models.ForeignKey(ClassRoom, on_delete=models.DO_NOTHING)
-    type = models.CharField(choices=types_of_classroom, max_length=11)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.DO_NOTHING, blank=True, null=True)
+    type = models.CharField(choices=types_of_classroom, max_length=11, null=True)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.DO_NOTHING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

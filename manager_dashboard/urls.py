@@ -4,7 +4,7 @@ from django.urls import path
 from elimu_school import settings
 from manager_dashboard.views.administration_view import EditProfileView, ProfileAppView, TypeDocumentDeleteView, TypeDocumentView, TypeEvaluationDeleteView, TypeEvaluationView, TypeSanctionDeleteView, TypeSanctionView, SettingAppView, get_last_document_type, get_last_sanction_type
 from manager_dashboard.views.communication_view import AddEventView, AddInformationView, EditEventView, EditInformationView, EventDetail, EventView,  InformationDetail, InformationView
-from manager_dashboard.views.comptes_view import AddDirectionAccount, AddStudentAccount, AddTeacherAccount, EditDirectionAccountView, EditStudentAccountView, EditTeacherAccountView, ListAllDirectionAccount, ListAllStudentAccount, ListAllTeacherAccount
+from manager_dashboard.views.comptes_view import AddDirectionAccount, AddParentAccount, AddStudentAccount, AddTeacherAccount, EditDirectionAccountView, EditParentAccountView, EditStudentAccountView, EditTeacherAccountView, ListAllDirectionAccount, ListAllParentAccount, ListAllStudentAccount, ListAllTeacherAccount
 from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook, eBookView
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
 from manager_dashboard.views.gestion_temps_view import AddScheduleView, ScheduleView
@@ -127,6 +127,11 @@ urlpatterns = [
     path(route='comptes/compte_etudiants/ajouter/', view=AddStudentAccount.as_view(), name='add_student_account'),
     path(route='comptes/compte_etudiants/<int:pk>/delete/', view=ListAllStudentAccount.as_view(), name='delete_student_account'),
     path(route='comptes/compte_etudiants/<int:pk>/edit/', view=EditStudentAccountView.as_view(), name='edit_student_account'),
+    
+    path(route='comptes/compte_parents/', view=ListAllParentAccount.as_view(), name='parents_account'),
+    path(route='comptes/compte_parents/ajouter/', view=AddParentAccount.as_view(), name='add_parent_account'),
+    path(route='comptes/compte_parents/<int:pk>/delete/', view=ListAllParentAccount.as_view(), name='delete_parent_account'),
+    path(route='comptes/compte_parents/<int:pk>/edit/', view=EditParentAccountView.as_view(), name='edit_parent_account'),
     #===END
     
     #=================== THIS ROUTE IS FOR ADMINISTRATION MODULE ========================

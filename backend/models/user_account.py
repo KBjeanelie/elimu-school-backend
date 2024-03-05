@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from backend.models.gestion_ecole import ManagementProfil, Student, Teacher, Etablishment
+from backend.models.gestion_ecole import ManagementProfil, Parent, Student, Teacher, Etablishment
 
 class UserManager(BaseUserManager):
     def create_user(self, username, password=None,):
@@ -32,6 +32,17 @@ class UserManager(BaseUserManager):
 
         user.set_password(password)
         user.is_teacher = True
+        user.save(using=self._db)
+        return user
+    
+    def create_parent_user(self, username, parent, password=None,):
+        """
+        Creates and saves a User with the given username, password.
+        """
+        user = self.model(username=username, parent=parent)
+
+        user.set_password(password)
+        user.is_parent = True
         user.save(using=self._db)
         return user
     
@@ -81,6 +92,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     teacher = models.OneToOneField(Teacher, unique=True, on_delete=models.SET_NULL, null=True, blank=True)
     
+    parent = models.OneToOneField(Parent, unique=True, on_delete=models.SET_NULL, null=True, blank=True)
+    
     management_profil = models.OneToOneField(ManagementProfil, unique=True, on_delete=models.CASCADE, null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
@@ -96,6 +109,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_student = models.BooleanField(default=False)
     
     is_teacher = models.BooleanField(default=False)
+    
+    is_parent = models.BooleanField(default=False)
     
     created_at = models.DateTimeField(auto_now_add=True)
     
