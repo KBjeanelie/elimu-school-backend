@@ -9,7 +9,8 @@ from backend.forms.gestion_ecole_forms import (
     AcademicYearForm,
     ClassRoomForm,
     GroupSubjectForm, 
-    LevelForm, 
+    LevelForm,
+    ParentForm, 
     ProgramForm, 
     SanctionAppreciationForm,
     SeriesForm, 
@@ -1093,3 +1094,147 @@ class StudentDetailView(View):
         document = get_object_or_404(StudentDocument, pk=pk)
         document.delete()
         return JsonResponse({'message': 'Document supprimé avec succès'})
+
+
+
+#=============================== PARTIE CONCERNANT LES VUES DES PARENT ==========================
+class EditParentView(View):
+    template = "manager_dashboard/gestion_ecole/editer_parent.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager or request.user.is_admin_school:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+
+    def get(self, request, pk, *args, **kwargs):
+        parent = get_object_or_404(Parent, pk=pk)
+        form = ParentForm(instance=parent)
+        context = {'form':form, 'parent': parent}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, pk, *args, **kwargs):
+        parent = get_object_or_404(Parent, pk=pk)
+        mutable_data = request.POST.copy()
+        mutable_files = request.FILES.copy()
+        
+        if 'picture_one' not in mutable_files or not mutable_files['picture_one']:
+            mutable_files['picture_one'] = None
+        
+        if 'picture_seconde' not in mutable_files or not mutable_files['picture_seconde']:
+            mutable_files['picture_seconde'] = None
+        
+        mutable_data['school'] = request.user.school
+        form = ParentForm(mutable_data, mutable_files, instance=parent)
+        
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Parent modifier avec succès")
+            return redirect('manager_dashboard:parents')
+        
+        messages.error(request, "ERREUR: Impossible de modifier")
+        context = {'form':form, 'parent': parent}
+        return render(request, template_name=self.template, context=context)
+    
+class AddParentView(View):
+    template = "manager_dashboard/gestion_ecole/ajout_parent.html"
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager or request.user.is_admin_school:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+
+    def get(self, request, *args, **kwargs):
+        form = ParentForm()
+        context = {'form':form}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request, *args, **kwargs):
+        data = request.POST.copy()
+        data['school'] = request.user.school
+        form = ParentForm(data, request.FILES)
+        print(form)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Parent enregistré avec succès !")
+            return redirect("manager_dashboard:parents")
+        
+        messages.error(request, "ERREUR: Impossible d'enregistré :(")
+        context = {'form':form}
+        return render(request, template_name=self.template, context=context)
+
+class ParentView(View):    
+    template = "manager_dashboard/gestion_ecole/parents.html"
+
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager or request.user.is_admin_school:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+
+    def get(self, request, *args, **kwargs):
+        parents = Parent.objects.filter(school=request.user.school).order_by('-created_at')
+        context = {'parents': parents}
+        return render(request, template_name=self.template, context=context)
+    
+    def delete(self, request, pk, *args, **kwargs):
+        instance = get_object_or_404(Parent, pk=pk)
+        instance.delete()
+        
+        parents = Parent.objects.filter(school=request.user.school).order_by('-created_at')
+        context = {'parents': parents}
+        return render(request, template_name=self.template, context=context)
+
+class ParentDetailView(View):
+    template = "manager_dashboard/gestion_ecole/enseignant_detail.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager or request.user.is_admin_school:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+
+    def get(self, request, pk, *args, **kwargs):
+        teacher = get_object_or_404(Teacher, pk=pk)
+        subjects_taught_by_teacher = Subject.objects.filter(teacher_in_charge=teacher)
+        schedules_for_subject = Schedule.objects.filter(subject__in=subjects_taught_by_teacher)
+        documents = TeacherDocument.objects.filter(teacher=teacher, school=request.user.school)
+        #account = get_object_or_404(User, teacher=teacher)
+        form = TeacherDocumentForm(request.user)
+        context = {'teacher':teacher, 'schedules_for_subject':schedules_for_subject, 'form':form, 'documents':documents}
+        return render(request, template_name=self.template, context=context)
+    
+    def post(self, request,pk, *args, **kwargs):
+        teacher = get_object_or_404(Teacher, pk=pk)
+        mutable_data = request.POST.copy()
+        mutable_file = request.FILES.copy()
+        mutable_data['teacher'] = teacher
+        mutable_data['school'] = request.user.school
+        form = TeacherDocumentForm(request.user, mutable_data, mutable_file)
+        if form.is_valid():
+            form.save()
+        
+        subjects_taught_by_teacher = Subject.objects.filter(teacher_in_charge=teacher)
+        schedules_for_subject = Schedule.objects.filter(subject__in=subjects_taught_by_teacher)
+        documents = TeacherDocument.objects.filter(school=request.user.school, teacher=teacher)
+        #account = get_object_or_404(User, teacher=teacher)
+        context = {'teacher':teacher, 'schedules_for_subject':schedules_for_subject, 'form':form, 'documents':documents}
+        return render(request, template_name=self.template, context=context)
+    
+    def delete(self, request, pk, *args, **kwargs):
+        document = get_object_or_404(TeacherDocument, pk=pk)
+        document.delete()
+        return JsonResponse({'message': 'Document supprimé avec succès'})
+#===END

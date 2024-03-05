@@ -8,7 +8,7 @@ from manager_dashboard.views.comptes_view import AddDirectionAccount, AddParentA
 from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook, eBookView
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
 from manager_dashboard.views.gestion_temps_view import AddScheduleView, ScheduleView
-from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
+from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddParentView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditParentView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ParentDetailView, ParentView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
 from manager_dashboard.views.home_view import ManagerIndexView, NotAcademicYearFound
 from manager_dashboard.views.statistique_view import AddNextLevelView, CloseAcademicYear, NextLevelView, ResultatAcademique, ReportCardView, AddReportCardView, EditReportCardView
 
@@ -69,6 +69,13 @@ urlpatterns = [
     path(route='gestion_ecole/teachers/<int:pk>/delete/', view=TeacherView.as_view(), name='delete_teacher'),
     path(route='gestion_ecole/teachers/<int:pk>/detail/', view=TeacherDetailView.as_view(), name='teacher_detail'),
     path(route='gestion_ecole/teachers/<int:pk>/delete-document/', view=TeacherDetailView.as_view(), name='teacher_delete_document'),
+    
+    path(route='gestion_ecole/parents-elèves/', view=ParentView.as_view(), name='parents'),
+    path(route='gestion_ecole/parents-elèves/ajouter/', view=AddParentView.as_view(), name='add_parent'),
+    path(route='gestion_ecole/parents-elèves/<int:pk>/editer/', view=EditParentView.as_view(), name='edit_parent'),
+    path(route='gestion_ecole/parents-elèves/<int:pk>/delete/', view=ParentView.as_view(), name='delete_parent'),
+    path(route='gestion_ecole/parents-elèves/<int:pk>/detail/', view=ParentDetailView.as_view(), name='parent_detail'),
+    #path(route='gestion_ecole/parents-elèves/<int:pk>/delete-document/', view=TeacherDetailView.as_view(), name='parent_delete_document'),
     
     #===END
     

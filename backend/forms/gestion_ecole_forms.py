@@ -97,6 +97,98 @@ class EtablishmentForm(forms.ModelForm):
             
         }
 
+class ParentForm(forms.ModelForm):
+    class Meta:
+        model = Parent
+        fields = '__all__'
+        widgets = {
+            'lastname_one': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'Nom',
+                    'required': True
+                }
+            ),
+            'firstname_one': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'Prenom',
+                    'required': True
+                }
+            ),
+            'address_one': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'adresse',
+                    'required': True
+                }
+            ),
+            'tel_one': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'Numéro de téléphone',
+                    'required': True
+                }
+            ),
+            'email_one': forms.EmailInput(
+                attrs={
+                    'type':'email',
+                    'class': 'form-control',
+                    'placeholder': 'email',
+                }
+            ),
+            'picture_one': forms.FileInput(
+                attrs={
+                    'type':'file',
+                    "class": "form-control",
+                }
+            ),
+            'lastname_seconde': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'Nom',
+                }
+            ),
+            'firstname_seconde': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'Prenom',
+                }
+            ),
+            'address_seconde': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'adresse',
+                }
+            ),
+            'tel_seconde': forms.TextInput(
+                attrs={
+                    'type':'text',
+                    'class': 'form-control',
+                    'placeholder': 'Numéro de téléphone',
+                }
+            ),
+            'email_seconde': forms.EmailInput(
+                attrs={
+                    'type':'email',
+                    'class': 'form-control',
+                    'placeholder': 'email',
+                }
+            ),
+            'picture_seconde': forms.FileInput(
+                attrs={
+                    'type':'file',
+                    "class": "form-control",
+                }
+            ),
+        }
 
 class StudentForm(forms.ModelForm):
     class Meta:

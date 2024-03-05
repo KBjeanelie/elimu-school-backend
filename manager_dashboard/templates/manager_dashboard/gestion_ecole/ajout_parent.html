@@ -1,0 +1,102 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block content %}
+<div class="main_content_iner overly_inner ">
+    <div class="container-fluid p-0 ">
+        <!-- ================= Entête ====================-->
+        <div class="row">
+            <div class="col-12">
+                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
+                    <div class="page_title_left d-flex align-items-center">
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Parents</h3>
+                        <ol class="breadcrumb page_bradcam mb-0">
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
+                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:parents" %}'>Parents</a></li>
+                            <li class="breadcrumb-item"><a>Ajouter</a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+                    <div class="alert-text">{{ message }}</div>
+                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="row">
+            <div class="col-8">
+                <div class="white_card card_height_100 mb_30">
+                    <div class="white_card_header">
+                        <div class="box_header m-0">
+                            <div class="main-title">
+                                <h3 class="m-0">Ajouter un Parent </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white_card_body">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Nom Responsable 1</label>
+                                {{ form.lastname_one }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Prenom Responsable 1</label>
+                                {{ form.firstname_one }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Adrèsse Responsable 1</label>
+                                {{ form.address_one }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Téléphone Responsable 1</label>
+                                {{ form.tel_one }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Email Responsable 1</label>
+                                {{ form.email_one }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Photo Responsable 1</label>
+                                {{ form.picture_one }}
+                            </div>
+                            <br/><hr/> 
+                            
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Nom Responsable 2</label>
+                                {{ form.lastname_seconde }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Prenom Responsable 2</label>
+                                {{ form.firstname_seconde }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Adrèsse Responsable 2</label>
+                                {{ form.address_seconde }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Téléphone Responsable 2</label>
+                                {{ form.tel_seconde }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Email Responsable 2</label>
+                                {{ form.email_seconde }}
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="libelle">Photo Responsable 2</label>
+                                {{ form.picture_seconde }}
+                            </div>
+                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

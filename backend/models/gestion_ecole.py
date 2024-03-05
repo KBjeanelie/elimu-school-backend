@@ -33,11 +33,11 @@ class Parent(models.Model):
     
     address_one = models.CharField(max_length=50)
     
-    email_one = models.CharField(max_length=120)
+    email_one = models.CharField(max_length=120, blank=True, null=True)
     
     tel_one = models.CharField(max_length=20)
     
-    picture_one = models.ImageField(upload_to="parents_images")
+    picture_one = models.ImageField(upload_to="parents_images", blank=True, null=True)
     
     lastname_seconde = models.CharField(max_length=50, blank=True, null=True)
     
@@ -50,6 +50,15 @@ class Parent(models.Model):
     tel_seconde = models.CharField(max_length=20, blank=True, null=True)
     
     picture_seconde = models.ImageField(upload_to="parents_images", blank=True, null=True)
+    
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+    
+    def __str__(self):
+        return f"{self.lastname_one} - {self.firstname_one}"
     
     def file_exist_one(self):
         if self.picture_one:
