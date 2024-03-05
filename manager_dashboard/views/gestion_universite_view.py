@@ -701,7 +701,8 @@ class TrombinoscopeView(View):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
         students = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=True, is_valid=False).order_by('-created_at')
         teachers = Teacher.objects.filter(school=request.user.school)
-        context = {'students': students, 'teachers':teachers}
+        parents = Parent.objects.filter(school=request.user.school)
+        context = {'students': students, 'teachers':teachers, 'parents':parents}
         return render(request, template_name=self.template, context=context)
 
 

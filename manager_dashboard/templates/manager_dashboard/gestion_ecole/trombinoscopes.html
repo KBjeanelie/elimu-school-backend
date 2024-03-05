@@ -30,9 +30,9 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="teacher-tab" data-bs-toggle="tab" href="#teacher" role="tab" aria-controls="teacher" aria-selected="false">Trombinoscope des enseignants</a>
                                 </li>
-                                {% comment %} <li class="nav-item">
-                                    <a class="nav-link" id="direction-tab" data-bs-toggle="tab" href="#direction" role="tab" aria-controls="direction" aria-selected="false">Trombinoscope de la direction</a>
-                                </li> {% endcomment %}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="parent-tab" data-bs-toggle="tab" href="#parent" role="tab" aria-controls="parent" aria-selected="false">Trombinoscope des parents</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -97,13 +97,34 @@
                                 </div>
                             </div>
 
-                            {% comment %} <div class="tab-pane fade" id="direction" role="tabpanel" aria-labelledby="direction-tab">
+                            <div class="tab-pane fade" id="parent" role="tabpanel" aria-labelledby="parent-tab">
                                 <div class="builder_select">
                                     <div class="row">
-                                        <p>trombinoscopes pour direction ici</p>
+                                        {% for parent in parents %}
+                                            <div class="col-md-4 col-lg-4 col-xl-4 box-col-6">
+                                                <div class="card custom-card">
+                                                    <div class="card-header"><img class="img-fluid" src="{% static 'img/profilebox/2.jpg' %}" alt data-original-title title></div>
+                                                    <div class="card-profile">
+                                                        <a href='{% url "manager_dashboard:parent_detail" parent.id %}'> 
+                                                            {% if parent.file_exist_one %}
+                                                                <img class="rounded-circle" src="{{ parent.picture_one.url }}" alt data-original-title title>
+                                                            {% else %}
+                                                                <img src="{% static 'img/staf/teacher.png' %}" alt height="52" alt="No Picture">
+                                                            {% endif %}
+                                                        </a>
+                                                    </div>
+                                                    <div class="text-center profile-details">
+                                                        <h4> <a href='{% url "manager_dashboard:parent_detail" parent.id %}' >{{ parent.firstname_one }} {{ parent.lastname_one | upper}}</a> </h4>
+                                                        <!--<h6>Date de naissance : {{ teacher.bithday }} </h6>-->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% empty %}
+                                            <p>trombinoscopes pour enseignants ici</p>
+                                        {% endfor %}
                                     </div>
                                 </div>
-                            </div> {% endcomment %}
+                            </div>
                         </div>
                     </div>
                 </div>
