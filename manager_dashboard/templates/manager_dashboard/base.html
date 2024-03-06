@@ -80,11 +80,11 @@
                     </div>
                 </a>
                 <ul>
+                    <li><a href='{% url "manager_dashboard:years" %}'>Années academiques</a></li>
                     <li><a href='{% url "manager_dashboard:trombinoscopes" %}'>Trombinoscopes</a></li>
                     <li><a href='{% url "manager_dashboard:teachers" %}'>Enseignants</a></li>
                     <li><a href='{% url "manager_dashboard:parents" %}'>Parents d'élèves</a></li>
                     <li><a href='{% url "manager_dashboard:students" %}'>Élèves</a></li>
-                    <li><a href='{% url "manager_dashboard:years" %}'>Années academiques</a></li>
                     <li><a href='{% url "manager_dashboard:series" %}'>Series</a></li>
                     <li><a href='{% url "manager_dashboard:levels" %}'>Niveaux</a></li>
                     <li><a href='{% url "manager_dashboard:classrooms" %}'>Salle de classe</a></li>
@@ -107,8 +107,58 @@
                 </a>
                 <ul>
                     <li><a href='{% url "manager_dashboard:times" %}'>Emploi du temps</a></li>
-                    <!-- <li><a href="">Présence des étudiants</a></li> 
-                    <li><a href="">Absences de l'équipe</a></li> -->
+                    <!--<li><a href="">Cahier de liaison</a></li>-->
+                    <!--<li><a href="">Carnet de textes</a></li>-->
+                    <!--<li><a href="">Présences des Élèves</a></li>-->
+                    <!--<li><a href="">Justificatifs d'Absences</a></li>-->
+                    <!--<li><a href="">Absences de l'équipe</a></li>-->
+                </ul>
+            </li>
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="{% static 'img/menu-icon/20.svg' %}" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Evaluations</span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href='{% url "manager_dashboard:evaluations" %}'>Évaluations</a></li>
+                    <li><a href='{% url "manager_dashboard:table_notes" %}'>Tableau des notes</a></li>
+                    <!--<li><a href='{% url "manager_dashboard:averages" %}'>Tableau des moyennes</a></li>-->
+                </ul>
+            </li>
+
+            <!--<li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="{% static 'img/menu-icon/11.svg' %}" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Gestion Cantine</span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href=''>Cantines</a></li>
+                </ul>
+            </li>-->
+
+            <li class>
+                <a class="has-arrow" href="#" aria-expanded="false">
+                    <div class="nav_icon_small">
+                        <img src="{% static 'img/menu-icon/8.svg' %}" alt>
+                    </div>
+                    <div class="nav_title">
+                        <span>Communications </span>
+                    </div>
+                </a>
+                <ul>
+                    <li><a href='{% url "manager_dashboard:informations" %}'>Informations</a></li>
+                    <li><a href='{% url "manager_dashboard:events" %}'>Évenements</a></li>
+                    <!-- <li><a href="communication/messages.html">Messages</a></li>
+                    <li><a href="communication/notifications.html">Notifications</a></li>-->
                 </ul>
             </li>
 
@@ -122,44 +172,9 @@
                     </div>
                 </a>
                 <ul>
-                    <!-- <li><a href="contenue_pedagogique/bibliotheques.html">Bibliothèque</a></li>  -->
-                    
                     <li><a href='{% url "manager_dashboard:ebooks" %}'>Gestion des ebooks</a></li>
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/8.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Communications </span>
-                    </div>
-                </a>
-                <ul>
-                    <!-- <li><a href="communication/messages.html">Messages</a></li>
-                    <li><a href="communication/notifications.html">Notifications</a></li>
-                    -->
-                    <li><a href='{% url "manager_dashboard:informations" %}'>Informations</a></li>
-                    <li><a href='{% url "manager_dashboard:events" %}'>Évenements</a></li>
-                    
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/20.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Evaluations & Bulletins </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:evaluations" %}'>Évaluations</a></li>
-                    <li><a href='{% url "manager_dashboard:averages" %}'>Tableau des moyennes</a></li>
-                    <li><a href='{% url "manager_dashboard:table_notes" %}'>Tableau des notes</a></li>
+                    <!-- <li><a href="">Media</a></li>-->
+                    <!-- <li><a href="">Bibliothèque</a></li>  -->
                 </ul>
             </li>
 
@@ -169,15 +184,15 @@
                         <img src="{% static 'img/menu-icon/21.svg' %}" alt>
                     </div>
                     <div class="nav_title">
-                        <span>Rapport & Statistique </span>
+                        <span>Statistiques </span>
                     </div>
                 </a>
                 <ul>
                     <li><a href='{% url "manager_dashboard:academic_result" %}'>Résultat academique</a></li>
-                    {% if not user.is_admin_school_school %}
+                    <!--{% if not user.is_admin_school_school %}
                         <li><a href='{% url "manager_dashboard:next_level" %}'>Monté en niveau</a></li>
                     {% endif %}
-                    <!--<li><a href=''>Statistique anterieur</a></li> -->
+                    <li><a href=''>Statistique anterieur</a></li> -->
                     
                 </ul>
             </li>
@@ -197,7 +212,7 @@
                     {% else %}
                         <!-- <li><a href="{% url 'manager_dashboard:teachers_account' %}">Comptes enseignants</a></li>-->
                         <li><a href="{% url 'manager_dashboard:parents_account' %}"">Comptes parents</a></li>
-                        <li><a href="{% url 'manager_dashboard:students_account' %}"">Comptes étudiants</a></li>
+                        <li><a href="{% url 'manager_dashboard:students_account' %}"">Comptes Élèves</a></li>
                     {% endif %}
                 </ul>
             </li>
@@ -214,10 +229,9 @@
                 <ul>
                     <li><a href="{% url 'manager_dashboard:type_evaluation' %}">Types d'Évaluations</a></li>
                     <li><a href="{% url 'manager_dashboard:type_documents' %}">Types de documents</a></li>
-                    <!-- <li><a href="">Type de présence</a></li> -->
                     <li><a href="{% url 'manager_dashboard:type_sanctions' %}">Types de sanctions</a></li>
-                    {% comment %} <li><a href="administration/type_comptes.html">Type de comptes</a></li> {% endcomment %}
-                    <!-- <li><a href="administration/types_conges.html">Type de congé</a></li> -->
+                    <!--<li><a href="">Type de congé</a></li>
+                    <li><a href="">Type de présence</a></li>-->
                     {% if user.is_admin_school %}
                     <li><a href="{% url 'manager_dashboard:reglage_general' %}">Réglages généraux</a></li>
                     {% endif %}

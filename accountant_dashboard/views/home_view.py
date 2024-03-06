@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
+from backend.models.communication import Information
 from backend.models.facturation import FinancialCommitment
 from django.db.models import Sum
-from backend.models.gestion_ecole import AcademicYear, StudentClassroom, Teacher
+from backend.models.gestion_ecole import AcademicYear, Parent, StudentClassroom, Teacher
 from backend.models.user_account import Student, User
 from django.contrib import messages
 
@@ -11,7 +12,7 @@ class AccountantIndexView(View):
     template_name = "accountant_dashboard/index.html"
     
     def get(self, request, *args, **kwargs):
-        count_user = User.objects.filter(school=request.user.school).count()
+        count_parent = Parent.objects.filter(school=request.user.school).count()
 
         try:
             academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
@@ -24,12 +25,14 @@ class AccountantIndexView(View):
         
         total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
         count_teacher = Teacher.objects.filter(school=request.user.school).count()
+        information = Information.objects.filter(school=request.user.school).last()
         context = {
-            'count_user':count_user,
+            'count_parent':count_parent,
             'total_engagements':total_engagements,
             'academic_year':academic_year,
             'total_student':total_student,
-            'count_teacher':count_teacher
+            'count_teacher':count_teacher,
+            'information':information
         }
         return render(request, template_name=self.template_name, context=context)
 

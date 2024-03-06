@@ -8,10 +8,10 @@
             <div class="col-12">
                 <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
                     <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Compte étudiants</h3>
+                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Compte Élèvess</h3>
                         <ol class="breadcrumb page_bradcam mb-0">
                             <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a >Comptes Étudiants</a></li>
+                            <li class="breadcrumb-item"><a >Comptes Élèvess</a></li>
                         </ol>
                     </div>
                     <div class="page_title_right">
@@ -38,7 +38,7 @@
                     <div class="white_card_body">
                         <div class="QA_section">
                             <div class="white_box_tittle list_header">
-                                <h4>Comptes Etudiants</h4>
+                                <h4>Comptes Élèves</h4>
                                 <div class="box_right d-flex lms_block">
                                     <div class="serach_field_2">
                                         <div class="search_inner">
@@ -106,7 +106,7 @@
     function deleteStudentAccount(account_id) {
         var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
         $.ajax({
-            url: `/comptes/compte_etudiants/${account_id}/delete/`,
+            url: `${account_id}/delete/`,
             type: 'DELETE',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête

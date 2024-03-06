@@ -1,8 +1,9 @@
 from django.shortcuts import redirect, render
 from django.views import View
 from django.db.models import Sum
+from backend.models.communication import Information
 from backend.models.facturation import FinancialCommitment
-from backend.models.gestion_ecole import AcademicYear, StudentClassroom, Teacher
+from backend.models.gestion_ecole import AcademicYear, Parent, StudentClassroom, Teacher
 from backend.models.user_account import User
 
 class NotAcademicYearFound(View):
@@ -33,14 +34,16 @@ class ManagerIndexView(View):
             engagements = FinancialCommitment.objects.filter(academic_year=academic_year)
             total_engagements = engagements.aggregate(total=Sum('school_fees'))['total'] or 0
         
-        count_user = User.objects.filter(school=request.user.school).count()
+        count_parent = Parent.objects.filter(school=request.user.school).count()
         
         count_teacher = Teacher.objects.filter(school=request.user.school).count()
+        information = Information.objects.filter(school=request.user.school).last()
         context = {
             'total_student':total_student,
             'total_engagements':total_engagements,
-            'count_user':count_user,
-            'count_teacher':count_teacher
+            'count_parent':count_parent,
+            'count_teacher':count_teacher,
+            'information':information
         }
         
         return render(request, template_name=self.template_name, context=context)
