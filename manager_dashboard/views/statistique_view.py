@@ -6,7 +6,7 @@ from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, Studen
 from django.http import Http404, HttpResponse, JsonResponse
 from django.contrib import messages
 
-from manager_dashboard.views.gestion_evaluation_view import calcul_resultat_primaire, get_all_results
+from manager_dashboard.views.gestion_evaluation_view import calcul_resultat_primaire, get_all_results, calcul_resultat_college
 
 class NotAcademicYearFound(View):
     template_name = "manager_dashboard/statistique/no_academique.html"
@@ -92,8 +92,15 @@ class ResultatAcademique(View):
                         academic_year=academic_year
                     ))
                 else:
-                    pass
+                    results.append(calcul_resultat_college(
+                        period=request.POST['period'],
+                        classroom=student.classroom,
+                        student=student.student,
+                        academic_year=academic_year
+                    ))
+
             results = sorted(results, key=lambda x: x['average'], reverse=True)
+            
             context.update({
                 'classroom': classroom,
                 'results':results,

@@ -17,8 +17,8 @@ class TypeOfEvaluation(models.Model):
 
 class Assessment(models.Model):
     note = models.IntegerField(default=0)
+    note_exam = models.IntegerField(default=0)
     is_publish = models.BooleanField(default=False)
-    type_evaluation = models.CharField(choices=types_evaluations, max_length=20, null=True)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, null=True)
     classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, null=True)

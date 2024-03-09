@@ -70,10 +70,10 @@
                                             <span style="font-size: small;" >Unité - Travail - Progrès</span>
                                         </p>
                                         <p class="text-dark text-center mt-1">
-                                            <strong>ANNEE ACADEMIQUE : </strong> {{year.label}}
+                                            <strong>ANNEE ACADEMIQUE : </strong> 
                                         </p>
                                         <p class="text-dark text-center mt-1">
-                                            <strong>SEMESTRE : </strong> {{student_career.semester.title}}
+                                            <strong>SEMESTRE : </strong> 
                                         </p>
                                     </div>
                                     <div class="col-sm-12">
@@ -82,14 +82,14 @@
                                         </h4>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-dark"><strong>Matricule : {{student_career.student.registration_number |upper}} </strong> <br></p>
-                                        <p class="text-dark"><strong>Nom : {{student_career.student.lastname |upper}} </strong>  <br></p>
-                                        <p class="mt-2 text-dark"><strong>Filère : {{student_career.career.sector.title |upper}}</strong> <br></p>
-                                        <p class="text-dark"><strong>Parcours : {{student_career.career.title |upper}}</strong> <br></p>
+                                        <p class="text-dark"><strong>Matricule :  </strong> <br></p>
+                                        <p class="text-dark"><strong>Nom :  </strong>  <br></p>
+                                        <p class="mt-2 text-dark"><strong>Filère : </strong> <br></p>
+                                        <p class="text-dark"><strong>Parcours : </strong> <br></p>
                                     </div>
                                     <div class="col-sm-6">
-                                        <p class="text-dark"><strong>Prénom : </strong> {{student_career.student.firstname |capfirst}} <br></p>
-                                        <p class="text-dark mt-2"><strong>Niveau : {{student_career.semester.level.label}}</strong></p>
+                                        <p class="text-dark"><strong>Prénom : </strong>  <br></p>
+                                        <p class="text-dark mt-2"><strong>Niveau : </strong></p>
                                     </div>
                                 </div>
                                 <div class="table-responsive-sm">
@@ -118,12 +118,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-4 mt-2">
-                                        <p class="text-dark"><strong>TOTAL DES COEFFICIENTS :</strong> {{result.count_coefficient}} </p>
-                                        <p class="text-dark"><strong>MOYENNE SEMESTRIELLE :</strong> {{result.average}} </p>
+                                        <p class="text-dark"><strong>TOTAL DES COEFFICIENTS :</strong>  </p>
+                                        <p class="text-dark"><strong>MOYENNE SEMESTRIELLE :</strong>  </p>
                                     </div>
                                     <div class="col-sm-4"></div>
                                     <div class="col-sm-4 mt-2">
-                                        <p class="text-dark"><strong>TOTAL GENERAL :</strong> {{result.total_general}}</p>
+                                        <p class="text-dark"><strong>TOTAL GENERAL :</strong> </p>
                                         <p class="text-dark"><strong>CLASSEMENT :</strong> 4</p>
                                         <p class="text-dark"><strong>DECISION:
                                             {% if result.average >= 10 %}

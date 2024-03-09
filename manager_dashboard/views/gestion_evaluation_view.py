@@ -16,12 +16,22 @@ def moyenne_primaire(notes):
     moyenne = somme_notes / nombre_matières
     return moyenne
 
-# Fonction pour calculer la moyenne au collège
-def moyenne_college_lycee(notes, notes_exam, coefficients):
-    somme_notes_ponderees = sum(note + ( note_exam * coeff) for note, note_exam, coeff in zip(notes, notes_exam, coefficients))
-    somme_coefficients = sum(coefficients)
-    moyenne = somme_notes_ponderees / somme_coefficients
-    return moyenne
+def calcul_moyenne_college(notes_devoirs, notes_compos):
+    # Vérification si les listes des notes de devoirs et de compositions ont la même longueur
+    if len(notes_devoirs) != len(notes_compos):
+        raise ValueError("Les listes des notes de devoirs et de compositions doivent avoir la même longueur")
+    
+    # Calcul de la moyenne de chaque matière
+    moyennes_matieres = []
+    for note_devoir, note_compo in zip(notes_devoirs, notes_compos):
+        moyenne_matiere = round((note_devoir + note_compo) / 2, 2)
+        print(moyenne_matiere)
+        moyennes_matieres.append(moyenne_matiere)
+    
+    # Calcul de la moyenne du trimestre (moyenne générale de toutes les matières)
+    moyenne_trimestre = round(sum(moyennes_matieres) / len(moyennes_matieres), 2)
+    
+    return moyenne_trimestre
 
 
 def calcul_resultat_primaire(period, classroom, student, academic_year):
@@ -30,11 +40,10 @@ def calcul_resultat_primaire(period, classroom, student, academic_year):
         classroom=classroom, 
         academic_year=academic_year, 
         student=student,
-        type_evaluation='Examen'
     )
 
     # Extraire les notes à partir des évaluations
-    notes = [evaluation.note for evaluation in evaluations]
+    notes = [evaluation.note_exam for evaluation in evaluations]
 
     average = moyenne_primaire(notes)
     student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
@@ -51,42 +60,36 @@ def calcul_resultat_primaire(period, classroom, student, academic_year):
     }
 
 
-def calcul_resultat_college_lycee(period, classroom_id, user, student):
+def calcul_resultat_college(period, classroom, student, academic_year):
     try:
-        academic_year = AcademicYear.objects.get(status=True, school=user.school)
-        classroom = ClassRoom.objects.get(pk=classroom_id)
-        evaluations_examens = Assessment.objects.filter(
-            period=period, 
-            classroom=classroom, 
-            academic_year=academic_year, 
-            student=student,
-            type_evaluation='Examen'
-        )
-        
         evaluations = Assessment.objects.filter(
             period=period, 
             classroom=classroom, 
             academic_year=academic_year, 
             student=student,
-            type_evaluation='Devoir de classe'
         )
 
-        # Extraire les notes à partir des évaluations
-        notes = [evaluation.note for evaluation in evaluations]
-        notes_exam = [evaluation.note for evaluation in evaluations_examens]
-        coefficiens = [evaluation.subject.coefficient for evaluation in evaluations]
-
-        average = moyenne_college_lycee(notes, notes_exam, coefficiens)
+        moyennes_matieres = []
+        for evaluation in evaluations:
+            moyenne_matiere = round((evaluation.note + evaluation.note_exam) / 2, 2)
+            print(moyenne_matiere)
+            moyennes_matieres.append(moyenne_matiere)
+            
+        average = round(sum(moyennes_matieres) / len(moyennes_matieres), 2)
+        
         student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
         
         return {
+            'id_student':student_career.student.id,
             'nui':student_career.student.registration_number,
             'lastname':student_career.student.lastname,
             'firstname':student_career.student.firstname,
             'classroom':student_career.classroom.title,
+            'type':student_career.classroom.types,
             'average':average,
+            'period':period,
         }
-    except (AcademicYear.DoesNotExist, ClassRoom.DoesNotExist, StudentClassroom.DoesNotExist):
+    except (Assessment.DoesNotExist, StudentClassroom.DoesNotExist):
         return[]
 
 
@@ -348,60 +351,26 @@ class BulletinDetailView(View):
     
     def get_context_data(self, request, pk, *args, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
-        student_career = StudentClassroom.objects.get(pk=pk, academic_year=academic_year)
-        total_student = StudentClassroom.objects.filter(semester=student_career.semester, career=student_career.career, academic_year=academic_year).count()
-        evaluations = Assessment.objects.filter(semester=student_career.semester, career=student_career.career, academic_year=academic_year).order_by('subject__label')
+        student_career = StudentClassroom.objects.get(academic_year=academic_year)
+        total_student = StudentClassroom.objects.filter(academic_year=academic_year).count()
+        evaluations = Assessment.objects.filter(academic_year=academic_year).order_by('subject__label')
         subjects = []
         result = {}
         
-        if evaluations.exists():
-            controle_evaluations = evaluations.filter(type_evaluation__title='Contrôle')
-            partiel_evaluations = evaluations.filter(type_evaluation__title='Partiel')
-            count_coefficient = 0
+        
 
-            for controle_evaluation in controle_evaluations.filter(student=student_career.student):
-                count_coefficient += controle_evaluation.subject.coefficient
-                partiel_evaluation = partiel_evaluations.filter(
-                    student=controle_evaluation.student,
-                    subject=controle_evaluation.subject
-                ).first()
-
-                if partiel_evaluation:
-                    total = ((controle_evaluation.note + partiel_evaluation.note) * controle_evaluation.subject.coefficient) / 2
-                    subjects.append(
-                        {
-                            'nui': controle_evaluation.student.registration_number,
-                            'controle': controle_evaluation.note,
-                            'partiel': partiel_evaluation.note,
-                            'label': controle_evaluation.subject.label,
-                            'coefficient': controle_evaluation.subject.coefficient,
-                            'total': total,
-                        }
-                    )
-
-            # Calculer la moyenne pondérée
-            average = round(sum(x['total'] for x in subjects) / count_coefficient, 2) if count_coefficient != 0 else 0
-            total_general = round(sum(x['total'] for x in subjects), 2)
-
-            result = {
-                'nui': subjects[0]['nui'] if subjects else '',
-                'average': average,
-                'count_coefficient': count_coefficient,
-                'total_general': total_general
-            }
-
-        qr_code_data = f"Matricule:{student_career.student.registration_number}\nParcours:{student_career.career.title}\Semestre:{student_career.semester.title}\\Niveau:{student_career.semester.level.label}\\Moyenne:{result['average']}\\Annee-academique:{academic_year.label}\nEtablissement:"
+        #qr_code_data = f"Matricule:{student_career.student.registration_number}\nParcours:{student_career.career.title}\Semestre:{student_career.semester.title}\\Niveau:{student_career.semester.level.label}\\Moyenne:{result['average']}\\Annee-academique:{academic_year.label}\nEtablissement:"
         filename = f"qr_code_{student_career.student.registration_number}.png"  # Nom du fichier pour l'image du code QR
 
         # Générer le code QR et enregistrer l'image
-        qr_code_path = generate_qr_code_and_save(qr_code_data, filename)
+        #qr_code_path = generate_qr_code_and_save(qr_code_data, filename)
         context = {
             'student_career': student_career,
             'year': academic_year,
             'result': result,
             'subjects': subjects,
             'total_student': total_student,
-            'qr_code_path': qr_code_path
+            #'qr_code_path': qr_code_path
         }
         return context
     

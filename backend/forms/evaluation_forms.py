@@ -26,7 +26,6 @@ class AssessmentForm(forms.ModelForm):
         self.fields['academic_year'].queryset = AcademicYear.objects.filter(school=user.school)
         self.fields['classroom'].queryset = ClassRoom.objects.filter(level__school=user.school)
         self.fields['subject'].queryset = Subject.objects.filter(level__school=user.school)
-        self.fields['type_evaluation'].queryset = TypeOfEvaluation.objects.filter(school=user.school)
         student_ids = StudentClassroom.objects.filter(academic_year__school=user.school, academic_year__status=True).values_list('student', flat=True).distinct()
         self.fields['student'].queryset = Student.objects.filter(id__in=student_ids)
         
@@ -40,15 +39,15 @@ class AssessmentForm(forms.ModelForm):
                     'required': True,
                 }
             ),
-            'is_publish':forms.CheckboxInput(
-                attrs={
-                    'class': 'form-check-input',
-                }
-            ),
-            'type_evaluation':forms.Select(
+            'note_exam': forms.NumberInput(
                 attrs={
                     'class': 'form-control',
                     'required': True,
+                }
+            ),
+            'is_publish':forms.CheckboxInput(
+                attrs={
+                    'class': 'form-check-input',
                 }
             ),
             'student':forms.Select(
