@@ -514,7 +514,7 @@ class EditProgramView(View):
     
     def get(self, request, pk, *args, **kwargs):
         program = get_object_or_404(Program, pk=pk)
-        form = ProgramForm(instance=program)
+        form = ProgramForm(request.user, instance=program)
         context = {'form':form, 'program':program}
         return render(request, template_name=self.template, context=context)
     
@@ -528,7 +528,7 @@ class EditProgramView(View):
             mutable_files['file'] = None
             
         mutable_data['school'] = request.user.school
-        form = ProgramForm(mutable_data, mutable_files, instance=program)
+        form = ProgramForm(request.user, mutable_data, mutable_files, instance=program)
         
         if form.is_valid():
             form.save()
@@ -552,14 +552,14 @@ class AddProgramView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = ProgramForm()
+        form = ProgramForm(request.user)
         context = {'form':form}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
         data = request.POST.copy()
         data['school'] = request.user.school
-        form = ProgramForm(data, request.FILES)
+        form = ProgramForm(request.user, data, request.FILES)
         if form.is_valid():
             form.save()
             messages.success(request, "Programme enregistré avec succès !")
@@ -582,7 +582,7 @@ class ProgramView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        programs = Program.objects.all()
+        programs = Program.objects.filter(school=request.user.school)
         context = {'programs':programs}
         return render(request, template_name=self.template, context=context)
     

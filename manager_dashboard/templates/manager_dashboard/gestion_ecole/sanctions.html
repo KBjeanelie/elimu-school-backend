@@ -14,7 +14,7 @@
                             <li class="breadcrumb-item"><a href="">Sanction & Appréciations</a></li>
                         </ol>
                     </div>
-                    {% if not user.is_admin %}
+                    {% if not user.is_admin_school %}
                     <div class="page_title_right">  
                         <div class="page_date_button d-flex align-items-center">
                             <a href='{% url "manager_dashboard:add_sanction" %}' class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter</a>

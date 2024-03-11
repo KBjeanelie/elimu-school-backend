@@ -1,5 +1,5 @@
 from django import forms
-from backend.models.gestion_ecole import Student, StudentClassroom
+from backend.models.gestion_ecole import Parent, Student, StudentClassroom, Teacher
 from backend.models.user_account import User
 
 class LoginForm(forms.ModelForm):
@@ -36,6 +36,11 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'student', 'teacher', 'management_profil', 'is_active', 'is_admin', 'is_manager', 'is_accountant', 'is_student', 'is_teacher']
 
 class UserTeacherForm(forms.ModelForm):
+    
+    def __init__(self, user, *args, **kwargs):
+        super(UserTeacherForm, self).__init__(*args, **kwargs)
+        self.fields['teacher'].queryset = Teacher.objects.filter(school=user.school)
+        
     class Meta:
         model = User
         fields = ['username', 'teacher', 'is_active', 'is_teacher', 'password']
@@ -136,6 +141,11 @@ class UserStudentForm(forms.ModelForm):
 
 
 class UserParentForm(forms.ModelForm):
+    
+    def __init__(self, user, *args, **kwargs):
+        super(UserParentForm, self).__init__(*args, **kwargs)
+        self.fields['parent'].queryset = Parent.objects.filter(school=user.school)
+    
     class Meta:
         model = User
         fields = ['username', 'parent', 'is_active', 'is_parent', 'password']

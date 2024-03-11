@@ -41,8 +41,6 @@ class EditDirectionAccountView(View):
     
 class AddDirectionAccount(View):
     template = "manager_dashboard/comptes/ajout_compte_direction.html"
-    form = UserTeacherForm()
-    context_object = {'form': form}
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -123,13 +121,13 @@ class EditTeacherAccountView(View):
     def get(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
         print(user.password)
-        form = UserTeacherForm(instance=user)
+        form = UserTeacherForm(request.user, instance=user)
         context = {'form':form, 'account':user}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
-        form = UserTeacherForm(request.POST, instance=user)
+        form = UserTeacherForm(request.user, request.POST, instance=user)
         if form.is_valid():
             form.save()
             user.set_password(form.cleaned_data['password'])
@@ -143,8 +141,6 @@ class EditTeacherAccountView(View):
     
 class AddTeacherAccount(View):
     template = "manager_dashboard/comptes/ajout_compte_enseignant.html"
-    form = UserTeacherForm()
-    context_object = {'form': form}
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -159,7 +155,7 @@ class AddTeacherAccount(View):
         return render(request, template_name=self.template, context=self.context_object)
     
     def post(self, request, *args, **kwargs):
-        form = UserTeacherForm(request.POST)
+        form = UserTeacherForm(request.user, request.POST)
         if form.is_valid():
             new_user = User.objects.create_teacher_user(
                 form.cleaned_data['username'],
@@ -299,13 +295,13 @@ class EditParentAccountView(View):
     def get(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
         print(user.password)
-        form = UserParentForm(instance=user)
+        form = UserParentForm(request.user, instance=user)
         context = {'form':form, 'account':user}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
-        form = UserParentForm(request.POST, instance=user)
+        form = UserParentForm(request.user, request.POST, instance=user)
         if form.is_valid():
             form.save()
             user.set_password(form.cleaned_data['password'])
@@ -319,8 +315,6 @@ class EditParentAccountView(View):
     
 class AddParentAccount(View):
     template = "manager_dashboard/comptes/ajout_compte_parent.html"
-    form = UserParentForm()
-    context_object = {'form': form}
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -332,10 +326,12 @@ class AddParentAccount(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        return render(request, template_name=self.template, context=self.context_object)
+        form = UserParentForm(request.user)
+        context_object = {'form': form}
+        return render(request, template_name=self.template, context=context_object)
     
     def post(self, request, *args, **kwargs):
-        form = UserParentForm(request.POST)
+        form = UserParentForm(request.user, request.POST)
         if form.is_valid():
             new_user = User.objects.create_parent_user(
                 form.cleaned_data['username'],

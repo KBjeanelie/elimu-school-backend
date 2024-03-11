@@ -300,7 +300,7 @@ class ClassRoom(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
-        return f"{self.title} | {self.level}"
+        return f"{self.title}"
 
 # Class representing Student Career (Association between students and careers)
 class StudentClassroom(models.Model):
