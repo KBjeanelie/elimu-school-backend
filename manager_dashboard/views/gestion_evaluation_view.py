@@ -271,16 +271,27 @@ class NoteTableView(View):
             classroom = ClassRoom.objects.get(pk=classroom_id)
             subject = Subject.objects.get(pk=subject_id)
 
-            evaluations = Assessment.objects.filter(classroom=classroom, subject=subject, period=request.POST['period']).order_by('-note')
+            evaluations = Assessment.objects.filter(classroom=classroom, subject=subject, period=request.POST['period']).order_by('-note', '-note_exam')
 
             classrooms = ClassRoom.objects.filter(level__school=request.user.school)
             subjects = Subject.objects.filter(level__school=request.user.school)
             
             if evaluations.exists():
-                max_note = evaluations.first().note
-                last_note = evaluations.last().note
+                if evaluations.first().note > evaluations.first().note_exam:
+                    max_note = evaluations.first().note
+                    last_note = evaluations.last().note_exam
+                else:
+                    max_note = evaluations.first().note_exam
+                    last_note = evaluations.last().note
+                
                 count = evaluations.count()
-                sum_notes = evaluations.aggregate(total=Sum('note'))['total']
+                # Calcul de la somme des notes de devoirs et des notes d'examens à partir de la base de données
+                sum_notes_devoirs = evaluations.aggregate(total=Sum('note'))['total']
+                sum_notes_examens = evaluations.aggregate(total=Sum('note_exam'))['total']
+
+                # Calcul de la moyenne en ajoutant les deux sommes et en divisant par 2
+                sum_notes = round((sum_notes_devoirs + sum_notes_examens) / 2, 2)
+                
                 average = sum_notes / count if count > 0 else 0
 
                 

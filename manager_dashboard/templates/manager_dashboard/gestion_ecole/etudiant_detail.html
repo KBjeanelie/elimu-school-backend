@@ -360,7 +360,7 @@
                                 <div class="builder_select">
                                     <div class="row">
                                         <div class="col-xl-12">
-                                            <h3 class="text-center">Tableau de note de Contrôle</h3>
+                                            <h3 class="text-center">Tableau de note de devoir</h3>
                                             <div class="QA_table mb_30">
                                                 <table class="table lms_table_active ">
                                                     <thead>
@@ -374,7 +374,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for evaluation in controle_evaluations %}
+                                                        {% for evaluation in evaluations %}
                                                             <tr>
                                                                 <td><h6> {{evaluation.subject.label}} </h6></td>
                                                                 <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
@@ -389,7 +389,7 @@
                                             </div>
                                         </div>
                                         <div class="col-xl-12">
-                                            <h3 class="text-center">Tableau de note des Partiels</h3>
+                                            <h3 class="text-center">Tableau de note des examens</h3>
                                             <div class="QA_table mb_30">
                                                 <table class="table lms_table_active ">
                                                     <thead>
@@ -403,10 +403,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {% for evaluation in partiel_evaluations %}
+                                                        {% for evaluation in evaluations %}
                                                             <tr>
                                                                 <td><h6> {{evaluation.subject.label}} </h6></td>
-                                                                <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}}/20 </span></h6></td>
+                                                                <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note_exam}}/20 </span></h6></td>
                                                                 <td><h6>{{evaluation.classroom.title}}</h6></td>
                                                                 <td><h6>{{evaluation.period}}</h6></td>
                                                                 <td><h6> {{evaluation.type_evaluation.title}} </h6></td>
@@ -429,7 +429,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">N° Factures</th>
-                                                            <th scope="col">Parcours</th>
+                                                            <th scope="col">Salle de classe</th>
                                                             <th scope="col">Montant</th>
                                                             <th scope="col">Date</th>
                                                             <th scope="col">État</th>
@@ -439,7 +439,7 @@
                                                         {% for invoice in invoices_student %}
                                                             <tr>
                                                                 <td><h6> {{invoice.invoice_number}} </h6></td>
-                                                                <td><h6>{{invoice.career.title}}</h6></td>
+                                                                <td><h6>{{invoice.classroom.title}}</h6></td>
                                                                 <td><h6> {{invoice.amount}} </h6></td>
                                                                 <td><h6>{{invoice.invoice_date}}</h6></td>
                                                                 {% if invoice.invoice_status == 'Entièrement payé' %}
@@ -586,7 +586,7 @@
                                                             <th scope="col">Matricule</th>
                                                             <th scope="col">Moyennes</th>
                                                             <th scope="col">Rang</th>
-                                                            <th scope="col">Parcours</th>
+                                                            <th scope="col">Classe</th>
                                                             <th scope="col">Session</th>
                                                             <th scope="col">Niveau</th>
                                                             <th scope="col">Appréciation</th>

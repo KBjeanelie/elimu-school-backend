@@ -508,6 +508,13 @@ class SeriesForm(forms.ModelForm):
         }
 
 class LevelForm(forms.ModelForm):
+    
+    def __init__(self, user, *args, **kwargs):
+        super(LevelForm, self).__init__(*args, **kwargs)
+        # Filtrer les niveaux en fonction de l'utilisateur connecté
+        self.fields['principal_teacher'].queryset = Teacher.objects.filter(school=user.school)
+        self.fields['serie'].queryset = Series.objects.filter(school=user.school)
+    
     class Meta:
         model = Level
         fields = '__all__'
@@ -548,6 +555,11 @@ class LevelForm(forms.ModelForm):
         }
 
 class ClassRoomForm(forms.ModelForm):
+    
+    def __init__(self, user, *args, **kwargs):
+        super(ClassRoomForm, self).__init__(*args, **kwargs)
+        # Filtrer les niveaux en fonction de l'utilisateur connecté
+        self.fields['level'].queryset = Level.objects.filter(school=user.school)
 
     class Meta:
         model = ClassRoom
@@ -673,7 +685,7 @@ class ScheduleForm(forms.ModelForm):
         super(ScheduleForm, self).__init__(*args, **kwargs)
         # Filtrer les niveaux en fonction de l'utilisateur connecté
         #self.fields['career'].queryset = ClassRoom.objects.filter(sector__school=user.school)
-        #self.fields['subject'].queryset = Subject.objects.filter(sector__school=user.school)
+        self.fields['subject'].queryset = Subject.objects.filter(subject_group__school=user.school)
 
     class Meta:
         model = Schedule

@@ -205,7 +205,7 @@ class EditLevelView(View):
     
     def get(self, request, pk, *args, **kwargs):
         level = get_object_or_404(Level, pk=pk)
-        form = LevelForm(instance=level)
+        form = LevelForm(request.user, instance=level)
         context = {'form':form, 'level':level}
         return render(request, template_name=self.template, context=context)
     
@@ -213,7 +213,7 @@ class EditLevelView(View):
         level = get_object_or_404(Level, pk=pk)
         data = request.POST.copy()
         data['school'] = request.user.school
-        form = LevelForm(data, instance=level)
+        form = LevelForm(request.user, data, instance=level)
         if form.is_valid():
             form.save()
             messages.success(request, "Niveau modifier avec succès !")
@@ -236,14 +236,14 @@ class AddLevelView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = LevelForm()
+        form = LevelForm(request.user)
         context = {'form':form}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
         data = request.POST.copy()
         data['school'] = request.user.school
-        form = LevelForm(data)
+        form = LevelForm(request.user, data)
         if form.is_valid():
             form.save()
             messages.success(request, "Niveau ajouter avec succès !")
@@ -266,7 +266,7 @@ class LevelsView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        levels = Level.objects.all()
+        levels = Level.objects.filter(school=request.user.school)
         context = {'levels': levels}
         return render(request, template_name=self.template, context=context)
     
@@ -292,13 +292,13 @@ class EditClassRoomView(View):
     
     def get(self, request, pk, *args, **kwargs):
         classroom = get_object_or_404(ClassRoom, pk=pk)
-        form = ClassRoomForm(instance=classroom)
+        form = ClassRoomForm(request.user, instance=classroom)
         context = {'form':form, 'classroom':classroom}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
         classroom = get_object_or_404(ClassRoom, pk=pk)
-        form = ClassRoomForm(request.POST, instance=classroom)
+        form = ClassRoomForm(request.user, request.POST, instance=classroom)
         if form.is_valid():
             form.save()
             messages.success(request, "Salle de classe modifier avec succès !")
@@ -321,12 +321,12 @@ class AddClassRoomView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        form = ClassRoomForm()
+        form = ClassRoomForm(request.user)
         context = {'form':form}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
-        form = ClassRoomForm(request.POST)
+        form = ClassRoomForm(request.user, request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Salle de classe ajouter avec succès !")
@@ -349,7 +349,7 @@ class ClassRoomView(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        classrooms = ClassRoom.objects.all()
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         context = {'classrooms': classrooms}
         return render(request, template_name=self.template, context=context)
     
@@ -1007,8 +1007,8 @@ class StudentDetailView(View):
         sanctions_student = SanctionAppreciation.objects.filter(student=student,type__school=request.user.school)
         invoices_student = Invoice.objects.filter(student=student, academic_year=academic_year)
         
-        controle_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation='Devoir de classe')
-        partiel_evaluations = Assessment.objects.filter(student=student, academic_year=academic_year, type_evaluation='Examen')
+        evaluations = Assessment.objects.filter(student=student, academic_year=academic_year)
+        
         
         students_career = StudentClassroom.objects.filter(student=student, academic_year=academic_year)
         student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
@@ -1053,8 +1053,7 @@ class StudentDetailView(View):
             'documents':documents,
             'sanctions_student':sanctions_student,
             'invoices_student':invoices_student,
-            'controle_evaluations':controle_evaluations,
-            'partiel_evaluations': partiel_evaluations,
+            'evaluations':evaluations,
             'form':form,
             'regulations':regulations,
             'results':results,

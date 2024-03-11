@@ -62,7 +62,6 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Libelle</th>
-                                            <th scope="col">Filière</th>
                                             <th scope="col">Responsable</th>
                                             <th scope="col">Niveau</th>
                                             <th scope="col">Type</th>
@@ -74,9 +73,8 @@
                                         {% for subject in subjects %}
                                             <tr data-id="{{ subject.id }}">
                                                 <td><h6> {{ subject.label }} </h6></td>
-                                                <td><h6> {{ subject.sector.title }} </h6></td>
                                                 <td> <h6> {{ subject.teacher_in_charge.fullname }} </h6> </td>
-                                                <td><h6> {{ subject.level.label }} </h6></td>
+                                                <td><h6> {{ subject.level }} </h6></td>
                                                 <td><h6><span class="badge rounded-pill bg-info">{{ subject.type }}</span></h6></td>
                                                 <td><h6><span class="badge rounded-pill bg-primary"> {{ subject.subject_group.title }} </span></h6></td>
                                                 <td>

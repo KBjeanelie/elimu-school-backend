@@ -87,7 +87,8 @@
                                                 <th scope="col">Matricule</th>
                                                 <th scope="col">Nom complet</th>
                                                 <th scope="col">Rang</th>
-                                                <th scope="col">Note</th>
+                                                <th scope="col">Note devoir</th>
+                                                <th scope="col">Note examen</th>
                                                 <th scope="col">Evaluations</th>
                                                 <th scope="col">Coefficient</th>
                                             </tr>
@@ -101,6 +102,7 @@
                                                     <td><h6> {{evaluation.student.firstname}} {{evaluation.student.lastname|upper}}</h6></td>
                                                     <td><h6> {{ forloop.counter }} </h6></td>
                                                     <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}} </span></h6></td>
+                                                    <td><h6><span class="badge rounded-pill bg-primary"> {{evaluation.note_exam}} </span></h6></td>
                                                     <td><h6>{{evaluation.subject.label}}</h6></td>
                                                     <td><h6>{{evaluation.subject.coefficient}}</h6></td>
                                                 </tr>
