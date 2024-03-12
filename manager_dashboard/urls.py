@@ -8,7 +8,7 @@ from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
 from manager_dashboard.views.gestion_temps_view import AddScheduleView, ScheduleView
 from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddParentView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditParentView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ParentDetailView, ParentView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
-from manager_dashboard.views.home_view import LoginView, ManagerIndexView, NotAcademicYearFound
+from manager_dashboard.views.home_view import LoginView, LogoutView, ManagerIndexView, NotAcademicYearFound
 from manager_dashboard.views.statistique_view import AddNextLevelView, CloseAcademicYear, NextLevelView, ResultatAcademique, ReportCardView, AddReportCardView, EditReportCardView
 
 
@@ -17,12 +17,13 @@ urlpatterns = [
     path(route='', view=ManagerIndexView.as_view(), name='index'),
     
     path(route='login/', view=LoginView.as_view(), name='login'),
+    path(route='logout/', view=LogoutView.as_view(), name='logout'),
     
     
-    path(route='gestion_ecole/année-academiques/', view=AcademicYearView.as_view(), name='years'),
-    path(route='gestion_ecole/année-academiques/ajouter/', view=AddAcademicYearView.as_view(), name='add_year'),
-    path(route='gestion_ecole/année-academiques/<int:pk>/editer/', view=EditAcademicYearView.as_view(), name='edit_year'),
-    path(route='gestion_ecole/année-academiques/<int:pk>/delete/', view=AcademicYearView.as_view(), name='delete_year'),
+    path(route='année-academiques/', view=AcademicYearView.as_view(), name='years'),
+    path(route='année-academiques/ajouter/', view=AddAcademicYearView.as_view(), name='add_year'),
+    path(route='année-academiques/<int:pk>/editer/', view=EditAcademicYearView.as_view(), name='edit_year'),
+    path(route='année-academiques/<int:pk>/delete/', view=AcademicYearView.as_view(), name='delete_year'),
     
     path(route='gestion_ecole/series/', view=SeriesView.as_view(), name='series'),
     path(route='gestion_ecole/series/<int:pk>/delete/', view=SeriesView.as_view(), name='delete_series'),

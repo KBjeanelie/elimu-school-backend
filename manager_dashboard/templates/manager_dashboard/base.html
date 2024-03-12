@@ -1,425 +1,271 @@
 <!DOCTYPE html>
+<html lang="en">
 {% load static %}
-<html lang="fr">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>ELIMU Universite</title>
-    <link rel="icon" href="{% static 'img/mini_logo.png' %}" type="image/png">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Star Admin2 </title>
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/feather/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/ti-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/typicons/typicons.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/simple-line-icons/css/simple-line-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/css/vendor.bundle.base.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
+    <!-- endinject -->
 
-    <link rel="stylesheet" href="{% static 'vendors/themefy_icon/themify-icons.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/niceselect/css/nice-select.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/owl_carousel/css/owl.carousel.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/gijgo/gijgo.min.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/font_awesome/css/all.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/tagsinput/tagsinput.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/datepicker/date-picker.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/vectormap-home/vectormap-2.0.2.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/scroll/scrollable.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/datatable/css/jquery.dataTables.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/datatable/css/responsive.dataTables.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/datatable/css/buttons.dataTables.min.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/text_editor/summernote-bs4.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/morris/morris.css' %}">
-
-    <link rel="stylesheet" href="{% static 'vendors/material_icon/material-icons.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'css/metisMenu.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/style1.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/colors/default.css' %}" id="colorSkinCSS">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
-
-
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{% static 'manager_dashboard/css/vertical-layout-light/style.css' %}">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="{% static 'manager_dashboard/images/favicon.png' %}" />
 </head>
 
-<body class="crm_body_bg">
-
-    <nav class="sidebar dark_sidebar">
-        <div class="logo d-flex justify-content-between">
-            <a class="large_logo" href="index-2.html"><img src="{% static 'img/logo_white.png' %}" alt></a>
-            <a class="small_logo" href="index-2.html"><img src="{% static 'img/mini_logo.png' %}" alt></a>
-            <div class="sidebar_close_icon d-lg-none">
-                <i class="ti-close"></i>
+<body class="sidebar-fixed">
+    <div class="container-scroller">
+        <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+                <div class="me-3">
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+                        <span class="icon-menu"></span>
+                    </button>
+                </div>
+                <div>
+                    <a class="navbar-brand brand-logo" href='{% url "manager_dashboard:index" %}'><img src="{% static 'manager_dashboard/images/logo.svg' %}" alt="logo" /></a>
+                    
+                    <a class="navbar-brand brand-logo-mini" href='{% url "manager_dashboard:index" %}'><img src="{% static 'manager_dashboard/images/logo-mini.svg' %}" alt="logo" /></a>
+                </div>
             </div>
-        </div>
-        <ul id="sidebar_menu">
-
-            <li class>
-                <a href='{% url "manager_dashboard:index" %}' aria-expanded="false">
-                    <div class="nav_icon_small">
-                    <img src="{% static 'img/menu-icon/dashboard.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Tableau de bord</span>
-                    </div>
-                </a>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/16.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Gestion écoles </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:years" %}'>Années academiques</a></li>
-                    <li><a href='{% url "manager_dashboard:trombinoscopes" %}'>Trombinoscopes</a></li>
-                    <li><a href='{% url "manager_dashboard:teachers" %}'>Enseignants</a></li>
-                    <li><a href='{% url "manager_dashboard:parents" %}'>Parents d'élèves</a></li>
-                    <li><a href='{% url "manager_dashboard:students" %}'>Élèves</a></li>
-                    <li><a href='{% url "manager_dashboard:series" %}'>Series</a></li>
-                    <li><a href='{% url "manager_dashboard:levels" %}'>Niveaux</a></li>
-                    <li><a href='{% url "manager_dashboard:classrooms" %}'>Salle de classe</a></li>
-                    <li><a href='{% url "manager_dashboard:group_subjects" %}'>Groupes de Matières</a></li>
-                    <li><a href='{% url "manager_dashboard:subjects" %}'>Matières</a></li>
-                    <li><a href='{% url "manager_dashboard:programs" %}'>Programmes</a></li>
-                    <li><a href='{% url "manager_dashboard:sanction_appreciations" %}'>Sanction & Appreciation</a></li>
-                    <!-- <li><a href="gestion_universite/suivis.html">Indicateur & Suivis</a></li> -->
+            <div class="navbar-menu-wrapper d-flex align-items-top">
+                <ul class="navbar-nav">
+                    <li class="nav-item fw-semibold d-none d-lg-block ms-0">
+                        <h1 class="welcome-text">Bonjour, <span class="text-black fw-bold"> {{user.username}} </span></h1>
+                    </li>
                 </ul>
-            </li>
-            
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/15.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Gestion du Temps </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:times" %}'>Emploi du temps</a></li>
-                    <!--<li><a href="">Cahier de liaison</a></li>-->
-                    <!--<li><a href="">Carnet de textes</a></li>-->
-                    <!--<li><a href="">Présences des Élèves</a></li>-->
-                    <!--<li><a href="">Justificatifs d'Absences</a></li>-->
-                    <!--<li><a href="">Absences de l'équipe</a></li>-->
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/20.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Evaluations</span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:evaluations" %}'>Évaluations</a></li>
-                    <li><a href='{% url "manager_dashboard:table_notes" %}'>Tableau des notes</a></li>
-                    <!--<li><a href='{% url "manager_dashboard:averages" %}'>Tableau des moyennes</a></li>-->
-                </ul>
-            </li>
-
-            <!--<li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/11.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Gestion Cantine</span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href=''>Cantines</a></li>
-                </ul>
-            </li>-->
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/8.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Communications </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:informations" %}'>Informations</a></li>
-                    <li><a href='{% url "manager_dashboard:events" %}'>Évenements</a></li>
-                    <!-- <li><a href="communication/messages.html">Messages</a></li>
-                    <li><a href="communication/notifications.html">Notifications</a></li>-->
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/11.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Contenus pédagogiques </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:ebooks" %}'>Gestion des ebooks</a></li>
-                    <!-- <li><a href="">Media</a></li>-->
-                    <!-- <li><a href="">Bibliothèque</a></li>  -->
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/21.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Statistiques </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "manager_dashboard:academic_result" %}'>Résultat academique</a></li>
-                    <!--{% if not user.is_admin_school_school %}
-                        <li><a href='{% url "manager_dashboard:next_level" %}'>Monté en niveau</a></li>
-                    {% endif %}
-                    <li><a href=''>Statistique anterieur</a></li> -->
-                    
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/4.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Gestion Comptes </span>
-                    </div>
-                </a>
-                <ul>
-                    {% if user.is_admin_school %}
-                        <li><a href='{% url "manager_dashboard:directors" %}'>Équipe de direction</a></li>
-                    {% else %}
-                        <!-- <li><a href="{% url 'manager_dashboard:teachers_account' %}">Comptes enseignants</a></li>-->
-                        <li><a href="{% url 'manager_dashboard:parents_account' %}"">Comptes parents</a></li>
-                        <li><a href="{% url 'manager_dashboard:students_account' %}"">Comptes Élèves</a></li>
-                    {% endif %}
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/18.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Administration </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href="{% url 'manager_dashboard:type_evaluation' %}">Types d'Évaluations</a></li>
-                    <li><a href="{% url 'manager_dashboard:type_documents' %}">Types de documents</a></li>
-                    <li><a href="{% url 'manager_dashboard:type_sanctions' %}">Types de sanctions</a></li>
-                    <!--<li><a href="">Type de congé</a></li>
-                    <li><a href="">Type de présence</a></li>-->
-                    {% if user.is_admin_school %}
-                    <li><a href="{% url 'manager_dashboard:reglage_general' %}">Réglages généraux</a></li>
-                    {% endif %}
-                    
-                </ul>
-            </li>
-        </ul>
-    </nav>
-
-    <section class="main_content dashboard_part large_header_bg">
-        <!-- ========================= HEADER ======================= -->
-        <div class="container-fluid g-0">
-            <div class="row">
-                <div class="col-lg-12 p-0 ">
-
-                    <div class="header_iner d-flex justify-content-between align-items-center">
-                        <div class="sidebar_icon d-lg-none"><i class="ti-menu"></i></div>
-                        <div class="line_icon open_miniSide d-none d-lg-block">
-                            <img src="{% static 'img/line_img.png' %}" alt>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item d-none d-lg-block">
+                        <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
+                        <span class="input-group-addon input-group-prepend border-right">
+                            <span class="icon-calendar input-group-text calendar-icon"></span>
+                        </span>
+                        <input type="text" class="form-control">
                         </div>
-                        
-                        <div class="header_right d-flex justify-content-between align-items-center">
-
-                            <div class="header_notification_warp d-flex align-items-center">
-                                <li style="margin-right: 25px;">
-                                    Établissement: <span class="badge rounded-pill bg-warning">{{user.school.name}}</span>
-                                </li>
-                                <li style="margin-right: 25px;">
-                                    Année academique :
-                                    {% if request.session.academic_year %}
-                                        {% with academic_year=request.session.academic_year %}
-                                            <span class="badge rounded-pill bg-primary">{{request.session.academic_year}}</span>
-                                        {% endwith %}
-                                    {% else %}
-                                        <span class="badge rounded-pill bg-danger">Indisponible</span>
-                                    {%endif%}
-                                    
-                                </li>
-                                <!--<li>
-                                    <a class="bell_notification_clicker" href="#"> <img src="{% static 'img/icon/bell.svg' %}" alt><span>2</span></a>
-                                    <div class="Menu_NOtification_Wrap">
-                                        <div class="notification_Header"><h4>Notifications</h4></div>
-                                        <div class="Notification_body">
-                                            <div class="single_notify d-flex align-items-center">
-                                                <div class="notify_thumb">
-                                                    <a href="#"><img src="{% static 'img/staf/2.png' %}" alt></a>
-                                                </div>
-                                                <div class="notify_content">
-                                                <a href="#"><h5>Cool Marketing </h5></a>
-                                                <p>Lorem ipsum dolor sit amet</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="nofity_footer">
-                                            <div class="submit_button text-center pt_20">
-                                                <a href="#" class="btn_1">Voir plus</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>-->
-                            </div>
-
-                            <div class="profile_info">
-                                <img src="{% static 'img/membre.jpg' %}" width="50" height="50" alt="#">
-                                <div class="profile_info_iner">
-                                    <div class="profile_author_name">
-                                        {% if user.is_admin_school %}
-                                            <p>ADMINISTRATEUR</p>
-                                        {% else %}
-                                            <p>GESTIONNAIRE</p>
-                                        {% endif %}
-                                        <h6 class='text-white'>
-                                            {% if user.management_profil %}
-                                            {{user.management_profil.firstname|capfirst}} {{user.management_profil.lastname|upper}}
-                                            {% else %}
-                                                {{user.username | capfirst}}
-                                            {% endif %}
-                                        </h6>
-                                </div>
-                                <div class="profile_info_details">
-                                    <a href='{% url "manager_dashboard:user_profile" %}'>Mon Profile </a>
-                                    <a href='{% url "backend:logout" %}'>Se deconnecter</a>
-                                    </div>
-                                </div>
-                            </div>
+                    </li>
+                    <li class="nav-item">
+                        <form class="search-form" action="#">
+                        <i class="icon-search"></i>
+                        <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+                        </form>
+                    </li>
+                    <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+                        <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="img-xs rounded-circle" src="{% static 'manager_dashboard/images/faces/face8.jpg' %}" alt="Profile image"> </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                        <div class="dropdown-header text-center">
+                            <img class="img-md rounded-circle" src="{% static 'manager_dashboard/images/faces/face8.jpg' %}" alt="Profile image">
+                            <p class="mb-1 mt-3 fw-semibold"> {{user.username}} </p>
+                            <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
                         </div>
+                        <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Mon Profil</a>
+                        <a href='{% url "manager_dashboard:logout" %}' class="dropdown-item"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Déconnexion</a>
+                        </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="container-fluid page-body-wrapper">
+            <div class="theme-setting-wrapper">
+                <div id="settings-trigger"><i class="ti-settings"></i></div>
+                <div id="theme-settings" class="settings-panel">
+                    <i class="settings-close ti-close"></i>
+                    <p class="settings-heading">SIDEBAR SKINS</p>
+                    <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                        <div class="img-ss rounded-circle bg-light border me-3"></div>Light
                     </div>
+                    <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                        <div class="img-ss rounded-circle bg-dark border me-3"></div>Dark
+                    </div>
+                    <p class="settings-heading mt-2">HEADER SKINS</p>
+                    <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
                 </div>
             </div>
         </div>
 
-        <!-- =============== MAIN PAGE =============================-->
-        {% block content %}{% endblock %}
-        <!--======================== FOOTER PAGE ===========================-->
-        <div class="footer_part">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="footer_iner text-center">
-                            <p>{% now "Y" %} © eneo group - conçu par <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Tableau de Bord</a></p>
-                        </div>
+        <!-- MENU DE SIDE BAR -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href='{% url "manager_dashboard:index" %}'>
+                        <i class="mdi mdi-grid-large menu-icon"></i>
+                        <span class="menu-title">Tableau de board</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='{% url "manager_dashboard:years" %}'>
+                        <i class="menu-icon mdi mdi-calendar"></i>
+                        <span class="menu-title">Années Académiques</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href='{% url "manager_dashboard:teachers" %}'>
+                        <i class="menu-icon  mdi mdi-account "></i>
+                        <span class="menu-title">Enseignants</span>
+                    </a>
+                </li>
+                <!-- GESTION ÉLÈVE -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#editors" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon mdi mdi-account-multiple"></i>
+                        <span class="menu-title">Gestions élèves</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="editors">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:parents" %}'>Parents</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:students" %}'>Élèves</a></li>
+                        </ul>
                     </div>
+                </li>
+
+                <!-- GESTION ÉCOLE -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ecole" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon mdi mdi-bank "></i>
+                        <span class="menu-title">Gestion école</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ecole">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href=''>Trombinoscope</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- GESTION TEMPS -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#clock" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon mdi mdi mdi-calendar-clock "></i>
+                        <span class="menu-title">Gestion de temps</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="clock">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <!-- GESTION ÉVALUATION -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#evaluation" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon  mdi mdi-deskphone"></i>
+                        <span class="menu-title">Évaluation</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="evaluation">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- GESTION COMMUNICATION-->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#com" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon mdi mdi-email  "></i>
+                        <span class="menu-title">Communication</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="com">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- CONTENUE PEDAGOGIQUE-->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#book" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon mdi mdi-library   "></i>
+                        <span class="menu-title">Contenue <br> pédagogique</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="book">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- ADMINISTRATION -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon  mdi mdi-tune "></i>
+                        <span class="menu-title">Administration</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="setting">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
+                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- partial -->
+        <div class="main-panel">
+            <div class="content-wrapper"></div>
+
+            <footer class="footer">
+                <div class="d-sm-flex justify-content-center">
+                    <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {% now "Y" %}. Tout droit réservé.</span>
                 </div>
-            </div>
+            </footer>
+            <!-- partial -->
         </div>
-
-    </section>
-
-
-
-    <div id="back-top" style="display: none;">
-        <a title="Go to Top" href="#"><i class="ti-angle-up"></i></a>
     </div>
+    <!-- page-body-wrapper ends -->
+  
+    <!-- plugins:js -->
+    <script src="{% static 'manager_dashboard/vendors/js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- endinject -->
+    
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
 
-    <script>
-        $(document).ready(function(){
-            $('#searchInput').keyup(function(){
-                var searchText = $(this).val().toLowerCase();
-                $('#dataTable tbody tr').each(function(){
-                    var currentRowText = $(this).text().toLowerCase();
-                    if(currentRowText.indexOf(searchText) !== -1){
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                });
-            });
-        });
-    </script>
+    <!-- inject:js -->
+    <script src="{% static 'manager_dashboard/js/off-canvas.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/template.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/settings.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/todolist.js' %}"></script>
+    <!-- endinject -->
 
-    <script src="{% static 'js/jquery1-3.4.1.min.js' %}"></script>
-
-    <script src="{% static 'js/popper1.min.js' %}"></script>
-
-    <script src="{% static 'js/bootstrap1.min.js' %}"></script>
-
-    <script src="{% static 'js/metisMenu.js' %}"></script>
-
-    <script src="{% static 'vendors/count_up/jquery.waypoints.min.js' %}"></script>
-
-    <script src="{% static 'vendors/chartlist/Chart.min.js' %}"></script>
-
-    <script src="{% static 'vendors/count_up/jquery.counterup.min.js' %}"></script>
-
-    <script src="{% static 'vendors/niceselect/js/jquery.nice-select.min.js' %}"></script>
-
-    <script src="{% static 'vendors/owl_carousel/js/owl.carousel.min.js' %}"></script>
-
-    <script src="{% static 'vendors/datatable/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.flash.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/jszip.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/pdfmake.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/vfs_fonts.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.print.min.js' %}"></script>
-
-    <script src="{% static 'vendors/datepicker/datepicker.js' %}"></script>
-    <script src="{% static 'vendors/datepicker/datepicker.en.js' %}"></script>
-    <script src="{% static 'vendors/datepicker/datepicker.custom.js' %}"></script>
-    <script src="{% static 'js/chart.min.js' %}"></script>
-    <script src="{% static 'vendors/chartjs/roundedBar.min.js' %}"></script>
-
-    <script src="{% static 'vendors/progressbar/jquery.barfiller.js' %}"></script>
-
-    <script src="{% static 'vendors/tagsinput/tagsinput.js' %}"></script>
-
-    <script src="{% static 'vendors/text_editor/summernote-bs4.js' %}"></script>
-    <script src="{% static 'vendors/am_chart/amcharts.js' %}"></script>
-
-    <script src="{% static 'vendors/scroll/perfect-scrollbar.min.js' %}"></script>
-    <script src="{% static 'vendors/scroll/scrollable-custom.js' %}"></script>
-
-    <script src="{% static 'vendors/vectormap-home/vectormap-2.0.2.min.js' %}"></script>
-    <script src="{% static 'vendors/vectormap-home/vectormap-world-mill-en.js' %}"></script>
-
-    <script src="{% static 'vendors/apex_chart/apex-chart2.js' %}"></script>
-    <script src="{% static 'vendors/apex_chart/apex_dashboard.js' %}"></script>
-
-    <script src="{% static 'vendors/chart_am/core.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/charts.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/animated.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/kelly.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/chart-custom.js' %}"></script>
-
-    <script src="{% static 'js/dashboard_init.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- Custom js for this page-->
+    <!-- End custom js for this page-->
 </body>
 
 </html>

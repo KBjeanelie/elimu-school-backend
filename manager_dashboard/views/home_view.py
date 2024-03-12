@@ -8,6 +8,12 @@ from backend.models.gestion_ecole import AcademicYear, Parent, StudentClassroom,
 from django.contrib import messages
 from backend.forms.user_account_forms import LoginForm
 
+class LogoutView(View):
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(to='manager_dashboard:login')
+
 class LoginView(View):
     template_name = "manager_dashboard/login.html"
     def get(self, request, *args, **kwargs):
