@@ -2,95 +2,76 @@
 {% load static %}
 {% block content %}
 
-<!-- =============== MAIN PAGE =============================-->
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Admin établissements</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "administration:index" %}'> Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Admin établissements</a></li>
-                        </ol>
-                    </div>
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <a href='{% url "administration:add_user_school" %}' class="white_btn3">Ajouter un admin</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+{% if messages %}
+    {% for message in messages %}
+        <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+            <div class="alert-text">{{ message }}</div>
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
         </div>
+    {% endfor %}
+{% endif %}
 
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+<!-- DATA TABLE-->
+<section class="p-t-20">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h3 class="title-5 m-b-35">Comptes Directeurs</h3>
+                <div class="table-data__tool">
+                    <div class="table-data__tool-left">
+                        <div class="rs-select2--light rs-select2--sm"></div>
+                    </div>
+                    <div class="table-data__tool-right">
+                        <a href='{% url "administration:add_user_school" %}' class="au-btn au-btn-icon au-btn--green au-btn--small"><i class="zmdi zmdi-plus"></i>Ajouter</a>
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form Active="#">
-                                                <div class="search_field">
-                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
+                <div class="table-responsive table-responsive-data2">
+                    <table class="table table-data2">
+                        <thead>
+                            <tr>
+                                <th>Nom d'utilisateur</th>
+                                <th>Mot de passe</th>
+                                <th>Nom complet</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Date d'enregistrement</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                                <tr class="tr-shadow">
+                                    <td> {{user.username}} </td>
+                                    <td>**************</td>
+                                    <td class="desc">{{user.management_profil.lastname|upper}} {{user.management_profil.firstname}}</td>
+                                    <td><span class="block-email"> {{user.management_profil.email}} </span></td>
+                                    <td>
+                                        <span class="status--process">{{user.management_profil.tel}}</span>
+                                    </td>
+                                    <td>
+                                        {{user.management_profil.created_at}}
+                                    </td>
+                                    <td>
+                                        <div class="table-data-feature">
+                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                <i class="zmdi zmdi-eye"></i>
+                                            </button>
+                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                <i class="zmdi zmdi-edit"></i>
+                                            </button>
                                         </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table id="dataTable" class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Nom d'utilisateur</th>
-                                            <th scope="col">Mot de passe</th>
-                                            <th scope="col">Établissement</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        {% for user in users %}
-                                            <tr data-id="{{ user.id }}">
-                                                <td><h6> {{ user.username }} </h6></td>
-                                                <td><h6> ************ </h6></td>
-                                                <td><h6> {{ user.school.name }} </h6></td>
-                                                <td>
-                                                    <div class="action_btns d-flex">
-                                                        <a href="#" onclick="deleteUser({{ user.id }})" class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                                    </td>
+                                </tr>
+                                <tr class="spacer"></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-
-
     </div>
-</div>
-
+</section>
+<!-- END DATA TABLE-->
 
 <script>
 
@@ -109,7 +90,7 @@
     });
 
     // Supprimer un élément
-    function deleteUser(item_id) {
+    function deleteSchool(item_id) {
         var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
         $.ajax({
             url: `${item_id}/delete/`,

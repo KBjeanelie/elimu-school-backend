@@ -13,13 +13,12 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
-    
-    path('', include('administration.urls')),
-    path('manager_dashboard/', include('manager_dashboard.urls')),
+    path('', include('manager_dashboard.urls')),
     path('accountnant-dashboard/', include('accountant_dashboard.urls')),
     path('authentication/', include('backend.urls')),
     
-    path('admin/', admin.site.urls),
+    path('admin/', include('administration.urls')),
+    path('admin-site/', admin.site.urls),
     
     re_path('api/', include('api.urls')),
     path('api-auth/', include('rest_framework.urls')),

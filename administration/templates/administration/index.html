@@ -1,146 +1,127 @@
 {% extends './base.html' %}
 {% load static %}
 {% block content %}
-<!-- =============== MAIN PAGE =============================-->
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Tableau de bord</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a>Accueil</a></li>
-                        </ol>
-                    </div>
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <img src="img/icon/calender_icon.svg" alt>
-                            Mercredi, 22 Novembre 2023
-                        </div>
-                    </div>
-                </div>
+
+
+<!-- WELCOME-->
+<section class="welcome p-t-10">
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <h1 class="title-4">Welcome back
+                    <span>Admin!</span>
+                </h1>
+                <hr class="line-seprate">
             </div>
         </div>
-
-        <div class="row ">
-            <div class="col-xl-12 ">
-                <div class="white_card card_height_100 mb_30 user_crm_wrapper">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="single_crm">
-                                <div class="crm_head d-flex align-items-center justify-content-between">
-                                    <div class="thumb">
-                                        <img src="img/crm/businessman.svg" alt>
-                                    </div>
-                                    <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                </div>
-                                <div class="crm_body">
-                                    <h4>{{count_school}}</h4>
-                                    <p>Établissement enregistré</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="single_crm ">
-                                <div class="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
-                                    <div class="thumb">
-                                        <img src="img/crm/businessman.svg" alt>
-                                    </div>
-                                    <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                </div>
-                                <div class="crm_body">
-                                    <h4>{{count_student}}</h4>
-                                    <p>Étudiants enregistré</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="single_crm">
-                                <div class="crm_head d-flex align-items-center justify-content-between">
-                                    <div class="thumb">
-                                        <img src="img/crm/businessman.svg" alt>
-                                    </div>
-                                    <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                </div>
-                                <div class="crm_body">
-                                    <h4>{{count_teacher}}</h4>
-                                    <p>Enseignants enregistré</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3">
-                            <div class="single_crm">
-                                <div class="crm_head d-flex align-items-center justify-content-between">
-                                    <div class="thumb">
-                                        <img src="img/crm/businessman.svg" alt>
-                                    </div>
-                                    <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                </div>
-                                <div class="crm_body">
-                                    <h4> {{count_user}} </h4>
-                                    <p>Utilisateurs enregistré</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="crm_reports_bnner">
-                        <div class="row justify-content-end ">
-                            <div class="col-lg-6">
-                                <h4>ELIMU Universite</h4>
-                                <p>Administrer votre établissement universitaire en toute simplicité et sécurité</p>
-                                <a href="#">savoir plus <i class="fas fa-arrow-right"></i> </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-6">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Activité recente</h3>
-                            </div>
-                            <div class="header_more_tool">
-                                <div class="dropdown">
-                                    <span class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                                        <i class="ti-more-alt"></i>
-                                    </span>
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#"> <i class="ti-eye"></i> Vois tous</a>
-                                        <a class="dropdown-item" href="#"> <i class="ti-trash"></i> Supprimer</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="white_card_body">
-                        <div class="Activity_timeline">
-                            <ul>
-                                <li>
-                                    <div class="activity_bell"></div>
-                                    <div class="timeLine_inner d-flex align-items-center">
-                                        <div class="activity_wrap">
-                                            <h6>Il y a 5 minutes</h6>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque scelerisque</p>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
-</div>
+</section>
+<!-- END WELCOME-->
+
+<!-- STATISTIC-->
+<section class="statistic statistic2">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-lg-3">
+                <div class="statistic__item statistic__item--green">
+                    <h2 class="number"> {{count_user}} </h2>
+                    <span class="desc">Utilisateur</span>
+                    <div class="icon">
+                        <i class="zmdi zmdi-account-o"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="statistic__item statistic__item--orange">
+                    <h2 class="number"> {{count_school}} </h2>
+                    <span class="desc">Etablissements</span>
+                    <div class="icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="statistic__item statistic__item--blue">
+                    <h2 class="number">{{count_student}}</h2>
+                    <span class="desc">Étudiant</span>
+                    <div class="icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="statistic__item statistic__item--red">
+                    <h2 class="number">0F CFA</h2>
+                    <span class="desc">Recètte Annuelle</span>
+                    <div class="icon">
+                        <i class="zmdi zmdi-money"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END STATISTIC-->
+
+
+<!-- DATA TABLE-->
+<section class="p-t-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h3 class="title-5 m-b-35">Établissement récement ajouté</h3>
+                <div class="table-data__tool">
+                    <div class="table-data__tool-left">
+                        <div class="rs-select2--light rs-select2--sm"></div>
+                    </div>
+                    <div class="table-data__tool-right">
+                        <a href='{% url "administration:add_school" %}' class="au-btn au-btn-icon au-btn--green au-btn--small"><i class="zmdi zmdi-plus"></i>Ajouter</a>
+                    </div>
+                </div>
+                <div class="table-responsive table-responsive-data2">
+                    <table class="table table-data2">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Adresse</th>
+                                <th>Téléphone</th>
+                                <th>Date d'enregistrement</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for school in schools %}
+                                <tr class="tr-shadow">
+                                    <td> {{school.name}} </td>
+                                    <td>
+                                        <span class="block-email">{{school.email}}</span>
+                                    </td>
+                                    <td class="desc">{{school.address}}</td>
+                                    <td>{{school.tel}}</td>
+                                    <td>
+                                        <span class="status--process">3 janvier</span>
+                                    </td>
+                                    <td>
+                                        <div class="table-data-feature">
+                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Send">
+                                                <i class="zmdi zmdi-eye"></i>
+                                            </button>
+                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Edit">
+                                                <i class="zmdi zmdi-edit"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="spacer"></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- END DATA TABLE-->
 
 {% endblock content %}

@@ -1,69 +1,84 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<!-- =============== MAIN PAGE =============================-->
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Admin établissements</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "administration:index" %}'> Accueil</a></li>
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "administration:user_school" %}' >Admin établissements</a></li>
-                            <li class="breadcrumb-item"><a href="">Ajouter</a></li>
-                        </ol>
-                    </div>
-                </div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card mt-5">
+            <div class="card-header">
+                <strong>Ajouter </strong> un compte directeur
             </div>
-        </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-8">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Ajouter un admin  </h3>
-                            </div>
+            <div class="card-body card-block">
+                <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
+                    {% csrf_token %}
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="text-input" class=" form-control-label">Nom du directeur</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" id="text-input" name="lastname" placeholder="Nom" class="form-control" required>
                         </div>
                     </div>
-                    <div class="white_card_body">
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Nom d'utilisateur</label>
-                                <input type='text' class='form-control' name='username' id='username' placeholder='Nom utilisateur'>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Mot de passe</label>
-                                <input type='password' class='form-control' name='password' id='password' placeholder='**********'>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Établissements</label>
-                                <select name="school" class="form-control" required id="school">
-                                    {% for school in schools %}
-                                        <option value="{{school.id}}"> {{school.name}} </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <a  href='{% url "administration:user_school" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
-                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
-
-                        </form>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="text-input" class=" form-control-label">Prénom du directeur</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" id="text-input" name="firstname" placeholder="Prenom" class="form-control" required>
+                        </div>
                     </div>
-                </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="text-input" class=" form-control-label">Numéro de téléphone du directeur</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <input type="tel" id="text-input" name="tel" placeholder="ex:064838870" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="text-input" class=" form-control-label">Email du directeur</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <input type="email" id="text-input" name="email" placeholder="Email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="text-input" class=" form-control-label">Nom d'utilisateur</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <input type="text" id="text-input" name="username" placeholder="Nom d'utilisateur" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="text-input" class=" form-control-label">Mot de passe</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <input type="password" id="text-input" name="password" placeholder="Mot de passe" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3">
+                            <label for="selectSm" class=" form-control-label">Établissement</label>
+                        </div>
+                        <div class="col-12 col-md-9">
+                            <select name="school" id="SelectLm" class="form-control-sm form-control" required>
+                                {% for school in schools %}
+                                    <option value="{{school.id}}"> {{school.name}} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-3 justify-content-center">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa fa-save"></i> Ajouter
+                        </button>
+                        <a href='{% url "administration:user_school" %}' class="ml-3 btn btn-danger btn-lg">
+                            <i class="fa fa-ban"></i> Annuler
+                        </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
