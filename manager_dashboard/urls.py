@@ -1,21 +1,23 @@
 from django.conf.urls.static import static
 from django.urls import path
-
 from elimu_school import settings
 from manager_dashboard.views.administration_view import EditProfileView, ProfileAppView, TypeDocumentDeleteView, TypeDocumentView, TypeEvaluationDeleteView, TypeEvaluationView, TypeSanctionDeleteView, TypeSanctionView, SettingAppView, get_last_document_type, get_last_sanction_type
 from manager_dashboard.views.communication_view import AddEventView, AddInformationView, EditEventView, EditInformationView, EventDetail, EventView,  InformationDetail, InformationView
-from manager_dashboard.views.comptes_view import AddDirectionAccount, AddParentAccount, AddStudentAccount, AddTeacherAccount, EditDirectionAccountView, EditParentAccountView, EditStudentAccountView, EditTeacherAccountView, ListAllDirectionAccount, ListAllParentAccount, ListAllStudentAccount, ListAllTeacherAccount
+from manager_dashboard.views.comptes_view import AddDirectionAccount, AddParentAccount, AddStudentAccount, AddTeacherAccount, EditParentAccountView, EditStudentAccountView, EditTeacherAccountView, ListAllDirectionAccount, ListAllParentAccount, ListAllStudentAccount, ListAllTeacherAccount
 from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook, eBookView
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
 from manager_dashboard.views.gestion_temps_view import AddScheduleView, ScheduleView
 from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddParentView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditParentView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ParentDetailView, ParentView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
-from manager_dashboard.views.home_view import ManagerIndexView, NotAcademicYearFound
+from manager_dashboard.views.home_view import LoginView, ManagerIndexView, NotAcademicYearFound
 from manager_dashboard.views.statistique_view import AddNextLevelView, CloseAcademicYear, NextLevelView, ResultatAcademique, ReportCardView, AddReportCardView, EditReportCardView
 
 
 app_name = 'manager_dashboard'
 urlpatterns = [
     path(route='', view=ManagerIndexView.as_view(), name='index'),
+    
+    path(route='login/', view=LoginView.as_view(), name='login'),
+    
     
     path(route='gestion_ecole/année-academiques/', view=AcademicYearView.as_view(), name='years'),
     path(route='gestion_ecole/année-academiques/ajouter/', view=AddAcademicYearView.as_view(), name='add_year'),

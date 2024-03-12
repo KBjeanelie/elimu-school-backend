@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.views import View
 from django.contrib import messages
 from backend.forms.user_account_forms import LoginForm

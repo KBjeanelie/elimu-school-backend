@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ELIMU | Connexion</title>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/feather/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/mdi/css/materialdesignicons.min.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/ti-icons/css/themify-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/font-awesome/css/font-awesome.min.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/typicons/typicons.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/simple-line-icons/css/simple-line-icons.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/css/vendor.bundle.base.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
+  <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/jquery-toast-plugin/jquery.toast.min.css' %}">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="{% static 'manager_dashboard/css/vertical-layout-light/style.css' %}">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="{% static 'manager_dashboard/images/favicon.png' %}" />
+</head>
+
+<body class="sidebar-fixed">
+  <div class="container-scroller">
+    <div class="container-fluid page-body-wrapper full-page-wrapper">
+      <div class="content-wrapper d-flex align-items-stretch auth auth-img-bg">
+        <div class="row flex-grow">
+          <div class="col-lg-6 d-flex align-items-center justify-content-center">
+            <div class="auth-form-transparent text-left p-3">
+              <div class="brand-logo">
+                <img src="{% static 'manager_dashboard/images/logo.svg' %}" alt="logo">
+              </div>
+              <h4>Bon retour !</h4>
+              <h6 class="fw-light">Heureux de vous revoir!</h6>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+              <form class="pt-3" method='post'>
+                {% csrf_token %}
+                <div class="form-group">
+                  <label for="exampleInputEmail">Nom d'utilisateur</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="ti-user text-primary"></i>
+                      </span>
+                    </div>
+                    <input type="text" name='username' class="form-control form-control-lg border-left-0" id="exampleInputEmail" placeholder="Nom d'utilisateur" required>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword">Mot de passe</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="ti-lock text-primary"></i>
+                      </span>
+                    </div>
+                    <input type="password" name='password' class="form-control form-control-lg border-left-0" id="exampleInputPassword" placeholder="Mot de passe" required>
+                  </div>
+                </div>
+                <!--<div class="my-2 d-flex justify-content-between align-items-center">
+                  <div class="form-check">
+                    <label class="form-check-label text-muted">
+                      <input type="checkbox" class="form-check-input">
+                      Keep me signed in
+                    </label>
+                  </div>
+                </div>-->
+                <div class="my-3 d-grid gap-2">
+                  <button type='submit' class="btn btn-block btn-primary btn-lg fw-medium auth-form-btn">Connexion</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-6 login-half-bg d-flex flex-row">
+            <p class="text-white fw-medium text-center flex-grow align-self-end">Copyright &copy; 2024 Tout droit réservé
+              reserved.</p>
+          </div>
+        </div>
+      </div>
+      <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+  </div>
+  <!-- container-scroller -->
+  <!-- plugins:js -->
+  <script src="{% static 'manager_dashboard/vendors/js/vendor.bundle.base.js' %}"></script>
+  <script src="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+  <!-- endinject -->
+  <!-- Plugin js for this page -->
+  <!-- End plugin js for this page -->
+  <!-- inject:js -->
+  <script src="{% static 'manager_dashboard/js/off-canvas.js' %}"></script>
+  <script src="{% static 'manager_dashboard/js/hoverable-collapse.js' %}"></script>
+  <script src="{% static 'manager_dashboard/js/template.js' %}"></script>
+  <script src="{% static 'manager_dashboard/js/settings.js' %}"></script>
+  <script src="{% static 'manager_dashboard/js/todolist.js' %}"></script>
+  <!-- endinject -->
+</body>
+
+</html>
