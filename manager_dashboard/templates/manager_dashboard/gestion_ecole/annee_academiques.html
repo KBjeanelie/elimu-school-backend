@@ -17,10 +17,7 @@
 </div>
 {% if messages %}
     {% for message in messages %}
-        <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-            <div class="alert-text">{{ message }}</div>
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-        </div>
+        <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
 {% endif %}
 <div class="card">
@@ -30,8 +27,8 @@
             <h4 class="card-title card-title-dash">Années Académiques</h4>
             </div>
             <div>
-            <button class="btn btn-primary text-white mb-0 me-0" type="button"><i
-                class="mdi mdi-calendar-plus "></i> Ajouter une année académique</button>
+            <a href='{% url "manager_dashboard:add_year" %}' class="btn btn-primary text-white mb-0 me-0"><i
+                class="mdi mdi-calendar-plus "></i> Ajouter une année académique</a>
             </div>
         </div>
         <div class="row mt-3">
@@ -47,19 +44,23 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id='elementList'>
                             {% for year in academic_years %}
-                                <tr>
-                                    <td>1</td>
-                                    <td>2012/08/03</td>
-                                    <td>Edinburgh</td>
+                                <tr data-id='{{year.id}}'>
+                                    <td>{{year.label}}</td>
+                                    <td>{{year.start_date}}</td>
+                                    <td>{{year.end_date}}</td>
                                     <td>
-                                        <label class="badge badge-danger">Pending</label>
+                                        {% if year.status %}
+                                            <label class="badge badge-success">En cours</label>
+                                        {% else %}
+                                            <label class="badge badge-danger">Clôturé</label>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <!--<a href=""><i class="fa fa-eye h4 text-primary"></i></a>-->
-                                        <a href="" class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
-                                        <a href=""><i class="fa fa-trash-o h4 text-danger"></i></a>
+                                        <a href='{% url "manager_dashboard:edit_year" year.id %}' class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
+                                        <a href="#" onclick="delete_function({{year.id}})" ><i class="fa fa-trash-o h4 text-danger"></i></a>
                                     </td>
                                 </tr>
                             {% endfor %}

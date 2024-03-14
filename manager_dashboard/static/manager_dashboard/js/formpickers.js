@@ -2,7 +2,7 @@
   'use strict';
   if ($("#timepicker-example").length) {
     $('#timepicker-example').datetimepicker({
-      format: 'LT'
+      format: 'LT',
     });
   }
   if ($(".color-picker").length) {
@@ -16,6 +16,12 @@
   }
   if ($("#datepicker-default").length) {
     $('#datepicker-default').datepicker({
+      enableOnReadonly: true,
+      todayHighlight: true,
+    });
+  }
+  if ($("#datepicker-default2").length) {
+    $('#datepicker-default2').datepicker({
       enableOnReadonly: true,
       todayHighlight: true,
     });

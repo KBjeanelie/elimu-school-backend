@@ -295,12 +295,13 @@
     <!-- Custom js for all page-->
     <script src="{% static 'manager_dashboard/js/data-table.js' %}"></script>
     <script src="{% static 'manager_dashboard/js/alerts.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/formpickers.js' %}"></script>
     <!-- End custom js for all page-->
 
 
 <script>
 
-    function delete_function(account_id) {
+    function delete_function(id) {
         var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
     
         swal({
@@ -331,13 +332,13 @@
             if (result) {
                 // Si l'utilisateur clique sur "OK"
                 $.ajax({
-                    url: `${account_id}/delete/`,
+                    url: `${id}/delete/`,
                     type: 'DELETE',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
                     },
                     success: function(response) {
-                        $('#elementList').find(`tr[data-id="${account_id}"]`).remove();
+                        $('#elementList').find(`tr[data-id="${id}"]`).remove();
                         console.log('Élément supprimé avec succès');
                     },
                     error: function(error) {
