@@ -39,6 +39,10 @@
           required: true,
           email: true
         },
+        tel: {
+          required: true,
+          minlength: 9
+        },
         topic: {
           required: "#newsletter:checked",
           minlength: 2
@@ -46,22 +50,23 @@
         agree: "required"
       },
       messages: {
-        firstname: "Please enter your firstname",
-        lastname: "Please enter your lastname",
+        firstname: "Veuillez saisir votre prénom",
+        lastname: "Veuillez saisir votre nom",
         username: {
-          required: "Please enter a username",
-          minlength: "Your username must consist of at least 2 characters"
+          required: "Veuillez saisir votre nom d'utilisateur",
+          minlength: "Votre nom d'utilisateur doit être composé d'au moins 2 caractères"
         },
         password: {
-          required: "Please provide a password",
-          minlength: "Your password must be at least 5 characters long"
+          required: "Veuillez fournir un mot de passe",
+          minlength: "Votre mot de passe doit comporter au moins 5 caractères"
         },
         confirm_password: {
-          required: "Please provide a password",
-          minlength: "Your password must be at least 5 characters long",
-          equalTo: "Please enter the same password as above"
+          required: "Veuillez fournir un mot de passe",
+          minlength: "Votre mot de passe doit comporter au moins 5 caractères",
+          equalTo: "Veuillez saisir le même mot de passe que ci-dessus"
         },
-        email: "Please enter a valid email address",
+        email: "Veuillez saisir une adresse électronique valide",
+        tel: "Veuillez saisir un numéro de téléphone valide",
         agree: "Please accept our policy",
         topic: "Please select at least 2 topics"
       },

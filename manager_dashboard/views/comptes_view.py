@@ -1,10 +1,11 @@
 
+from django.db import IntegrityError
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.user_account_forms import UserParentForm, UserStudentForm, UserTeacherForm
 from backend.models.user_account import ManagementProfil, User
-
+from django.contrib import messages
 
 #========================== PARTIE CONCERNANT LA GESTION DE COMPTE ENSEIGNANT
 class EditDirectionAccountView(View):
@@ -52,11 +53,28 @@ class AddDirectionAccount(View):
         return redirect('backend:logout')
     
     def get(self, request, *args, **kwargs):
-        return render(request, template_name=self.template, context=self.context_object)
+        return render(request, template_name=self.template)
     
     def post(self, request, *args, **kwargs):
         if request.POST['type'] == 'gestionnaire':
-            manager = ManagementProfil()
+            
+            if request.POST['password'] != request.POST['confirm_password']:
+                messages.error(request, "Les deux mot de passe ne corresponde pas :(")
+                return redirect('manager_dashboard:director_add')
+            
+            # Vérifiez si l'email existe déjà dans la base de données
+            if ManagementProfil.objects.filter(email=request.POST['email']).exists():
+                print(ManagementProfil.objects.filter(email=request.POST['email']))
+                messages.error(request, "Erreur: Cet email est déjà utilisé!")
+                return redirect('manager_dashboard:director_add')
+
+            # Si l'email n'existe pas, créez une nouvelle entrée dans la base de données
+            manager = ManagementProfil(
+                lastname=request.POST['lastname'],
+                firstname=request.POST['firstname'],
+                tel=request.POST['tel'],
+                email=request.POST['email']
+            )
             manager.save()
             user = User.objects.create_user(
                 username=request.POST['username'],
@@ -64,8 +82,24 @@ class AddDirectionAccount(View):
             )
             user.is_manager = True
             user.management_profil = manager
+            
         else:
-            manager = ManagementProfil()
+            if request.POST['password'] != request.POST['confirm_password']:
+                messages.error(request, "Les deux mot de passe ne corresponde pas :(")
+                return redirect('manager_dashboard:director_add')
+            
+            # Vérifiez si l'email existe déjà dans la base de données
+            if ManagementProfil.objects.filter(email=request.POST['email']).exists():
+                messages.error(request, "Erreur: Cet email est déjà utilisé!")
+                return redirect('manager_dashboard:director_add')
+
+            # Si l'email n'existe pas, créez une nouvelle entrée dans la base de données
+            manager = ManagementProfil(
+                lastname=request.POST['lastname'],
+                firstname=request.POST['firstname'],
+                tel=request.POST['tel'],
+                email=request.POST['email']
+            )
             manager.save()
             user = User.objects.create_user(
                 username=request.POST['username'],
@@ -76,6 +110,7 @@ class AddDirectionAccount(View):
         
         user.school = request.user.school
         user.save()
+        messages.success(request, "Le compte a été ajouté avec succèss !")
         return redirect('manager_dashboard:directors')
 
 class ListAllDirectionAccount(View):
@@ -97,6 +132,7 @@ class ListAllDirectionAccount(View):
 
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(User, pk=pk)
+        instance.management_profil.delete()
         instance.delete()
         
         managers_and_accountants = User.objects.filter(is_manager=True, school=request.user.school) | User.objects.filter(is_accountant=True, school=request.user.school)

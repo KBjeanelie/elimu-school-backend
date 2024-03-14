@@ -1,72 +1,74 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Compte de direction</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:directors" %}'>Comptes de directions</a></li>
-                            <li class="breadcrumb-item"><a>Ajouter</a></li>
+
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="template-demo">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-custom">
+                            <li class="breadcrumb-item"><a href='{% url "manager_dashboard:index" %}'>Tableau de board</a></li>
+                            <li class="breadcrumb-item"><a href='{% url "manager_dashboard:directors" %}'>Équipes de direction</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><span>Ajouter</span></li>
                         </ol>
-                    </div>
+                    </nav>
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="col-lg-12">
         {% if messages %}
             {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
             {% endfor %}
         {% endif %}
-
-        <div class="row">
-            <div class="col-8">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Ajouter un Compte Enseignant</h3>
-                            </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Ajouter un membre</h4>
+                <form class="cmxform" id="signupForm" method="post" action="#">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="firstname">Prénom</label>
+                            <input id="firstname" class="form-control" name="firstname" type="text" maxlength="50" minlength="3" required>
                         </div>
-                    </div>
-                    <div class="white_card_body">
-                        <form method='post'>
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Nom Utilisateur</label>
-                                <input type="text" name='username' class="form-control" id="libelle" placeholder="kbjeanelie" required minLength="5">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Mot de passe</label>
-                                <input type="password" name='password' class="form-control" id="libelle" placeholder="*******" required minLength='5'>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Type de compte</label>
-                                <select id="level" class="form-control" name='type'>
-                                    <option value='gestionnaire'>Gestionnaire</option>
-                                    <option value='comptable'>Comptable</option>
-                                </select>
-                            </div>
-                            <div>
-                                <div class="form-check">
-                                    <input class="form-check-input" name='is_active' type="checkbox" id="gridCheck">
-                                    <label class="form-label form-check-label" for="gridCheck">Actif ?</label>
-                                </div>
-                            </div>
-                            <a href='{% url "manager_dashboard:directors" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
-                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
-                        </form>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label for="lastname">Nom</label>
+                            <input id="lastname" class="form-control" name="lastname" type="text" maxlength="50" minlength="3" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Nom d'utilisateur</label>
+                            <input id="username" class="form-control" name="username" type="text" maxlength="50" minlength="2" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Mot de passe</label>
+                            <input id="password" class="form-control" name="password" type="password" maxlength="50" minlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirm_password">Confirmer le Mot de passe</label>
+                            <input id="confirm_password" class="form-control" name="confirm_password" type="password" maxlength="50" minlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input id="email" class="form-control" name="email" type="email" maxlength="50" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tel">Téléphone</label>
+                            <input id="tel" class="form-control" name="tel" type="tel" required maxlength="15" minlength="9" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleSelectRole">Rôle</label>
+                            <select class="form-select" name='type' id="exampleSelectRole">
+                              <option value="gestionnaire">Gestionnaire</option>
+                              <option value='comptable'>Comptable</option>
+                            </select>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Envoyer">
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>

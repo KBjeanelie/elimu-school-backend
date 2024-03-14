@@ -54,8 +54,8 @@
       )
     } else if (type === 'warning-message-and-cancel') {
       swal({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: 'Vous êtes sûr?',
+        text: "Cette suppression est irreversible!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3f51b5',
@@ -74,7 +74,6 @@
             value: true,
             visible: true,
             className: "btn btn-primary",
-            closeModal: true
           }
         }
       })
