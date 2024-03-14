@@ -18,12 +18,10 @@
 </div>
 {% if messages %}
     {% for message in messages %}
-        <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-            <div class="alert-text">{{ message }}</div>
-            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-        </div>
+        <div class="alert alert-success" role="alert">{{ message }}</div>
     {% endfor %}
 {% endif %}
+
 <div class="card">
     <div class="card-body">
         <div class="d-sm-flex justify-content-between align-items-start">
@@ -31,8 +29,8 @@
             <h4 class="card-title card-title-dash">Informations</h4>
             </div>
             <div>
-            <button class="btn btn-primary text-white mb-0 me-0" type="button"><i
-                class="mdi mdi-note-plus"></i> Ajouter une informations</button>
+            <a href='{% url "manager_dashboard:add_information" %}' class="btn btn-primary text-white mb-0 me-0"><i
+                class="mdi mdi-note-plus"></i> Ajouter une informations</a>
             </div>
         </div>
         <div class="row mt-3">
@@ -48,19 +46,36 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {% for year in academic_years %}
-                                <tr>
-                                    <td>1</td>
-                                    <td>2012/08/03</td>
-                                    <td>Edinburgh</td>
+                        <tbody id='elementList'>
+                            {% for info in informations %}
+                                <tr data-id='{{info.id}}'>
+                                    <td> {{info.title}} </td>
+                                    <td> {{info.created_at}} </td>
                                     <td>
-                                        <label class="badge badge-danger">Pending</label>
+                                        {% if info.file_exists %}
+                                            <a href="{{ info.file.url }}" target="_blank">{{ info.file.name }}</a>
+                                        {% else %}
+                                            <p>Aucun fichier disponible</p>
+                                        {% endif %}
                                     </td>
                                     <td>
-                                        <!--<a href=""><i class="fa fa-eye h4 text-primary"></i></a>-->
-                                        <a href="" class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
-                                        <a href=""><i class="fa fa-trash-o h4 text-danger"></i></a>
+                                        {% if info.status %}
+                                            <label class="badge badge-success">Oui</label>
+                                        {% else %}
+                                            <label class="badge badge-danger">Non</label>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href='' class="action_btn mr_10"> <i class="fa fa-eye h4 text-primary"></i> </a>
+                                        {% if not user.is_admin_school %}
+                                        <a href="{% url 'manager_dashboard:edit_info' info.id %}" class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
+                                        {% endif %}
+                                        {% if info.file_exists %}
+                                            <a href="{{ info.file.url }}" target="_blank" class='pe-2'> <i class="fa fa-download h4 text-success"></i> </a>
+                                        {% endif %}
+                                        {% if not user.is_admin_school %}
+                                        <a href="#" onclick="delete_function({{info.id}})"><i class="fa fa-trash-o h4 text-danger"></i></a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -72,43 +87,4 @@
     </div>
 </div>
 
-
-<script>
-
-    // Supprimer un élément
-    function deleteInformation(info_id) {
-        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
-        $.ajax({
-            url: `${info_id}/delete/`,
-            type: 'DELETE',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
-            },
-            success: function(response) {
-                $('#elementList').find(`tr[data-id="${info_id}"]`).remove();
-                console.log('Élément supprimé avec succès');
-            },
-            error: function(error) {
-                console.error('Erreur lors de la suppression de l\'élément', error);
-            }
-        });
-    }
-    
-    // Fonction pour récupérer le jeton CSRF depuis le cookie
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-</script>
 {% endblock content %}

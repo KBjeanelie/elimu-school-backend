@@ -59,6 +59,19 @@ class AddInformationView(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template, context=self.context)
+    
+    def post(self, request, *args, **kwargs):
+        data = request.POST.copy()
+        data['school'] = request.user.school
+        form = InformationForm(data, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Information a été enregistré avec succès")
+            return redirect('manager_dashboard:informations')
+        
+        messages.error(request, "ERREUR: Impossible d'ajouter l'information")
+        context = {'informations': Information.objects.filter(school=request.user.school).order_by('-created_at')}
+        return render(request, template_name=self.template, context=context)
 
 
 class InformationView(View):
@@ -77,19 +90,7 @@ class InformationView(View):
         context = {'informations': Information.objects.filter(school=request.user.school).order_by('-created_at')}
         return render(request, template_name=self.template, context=context)
     
-    def post(self, request, *args, **kwargs):
-        data = request.POST.copy()
-        data['school'] = request.user.school
-        form = InformationForm(data, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Information a été enregistré avec succès")
-            return redirect('manager_dashboard:informations')
-        
-        messages.error(request, "ERREUR: Impossible d'ajouter l'information")
-        context = {'informations': Information.objects.filter(school=request.user.school).order_by('-created_at')}
-        return render(request, template_name=self.template, context=context)
-    
+
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(Information,pk=pk)
         instance.delete()
