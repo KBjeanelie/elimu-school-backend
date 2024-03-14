@@ -1,99 +1,70 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Année académique</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a href="">Année académique</a></li>
-                        </ol>
-                    </div>
-                    {% if not user.is_admin_school %}
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <a href='{% url "manager_dashboard:add_year" %}' class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter une année académique</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="template-demo">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item"><a href='{% url "manager_dashboard:index" %}'>Tableau de board</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Années académiques</span></li>
+                    </ol>
+                </nav>
             </div>
         </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Années académiques </h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form Active="#">
-                                                <div class="search_field">
-                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table id="dataTable" class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Libelle</th>
-                                            <th scope="col">Date de début</th>
-                                            <th scope="col">Date de fin</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        {% for year in academic_years %}
-                                            <tr data-id="{{ year.id }}">
-                                                <td> <h6> {{ year.label }} </h6></td>
-                                                <td> <h6> {{ year.start_date }}</h6></td>
-                                                <td> <h6> {{ year.end_date }} </h6></td>
-                                                
-                                                {% if year.status %}
-                                                    <td><h6> <a class="status_btn">En cours</a></h6></td>
-                                                {% else %}
-                                                    <td><h6> <a class="status_Btn">Clôturé</a></h6></td>
-                                                {% endif %}
-                                                {% if not user.is_admin_school %}
-                                                <td>
-                                                    <div class="action_btns d-flex">
-                                                        <a href='{% url "manager_dashboard:edit_year" year.id %}' class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
-                                                        <a href="#" onclick='deleteYear({{ year.id }})' class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                    </div>
-                                                </td>
-                                                {% endif %}
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    </div>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+            <div class="alert-text">{{ message }}</div>
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-sm-flex justify-content-between align-items-start">
+            <div>
+            <h4 class="card-title card-title-dash">Années Académiques</h4>
+            </div>
+            <div>
+            <button class="btn btn-primary text-white mb-0 me-0" type="button"><i
+                class="mdi mdi-calendar-plus "></i> Ajouter une année académique</button>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="order-listing" class="table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Date de début</th>
+                                <th>Date de fin</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for year in academic_years %}
+                                <tr>
+                                    <td>1</td>
+                                    <td>2012/08/03</td>
+                                    <td>Edinburgh</td>
+                                    <td>
+                                        <label class="badge badge-danger">Pending</label>
+                                    </td>
+                                    <td>
+                                        <!--<a href=""><i class="fa fa-eye h4 text-primary"></i></a>-->
+                                        <a href="" class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
+                                        <a href=""><i class="fa fa-trash-o h4 text-danger"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

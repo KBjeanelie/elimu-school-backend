@@ -18,8 +18,9 @@
     <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
     <!-- endinject -->
 
-    <!-- Plugin css for this page -->
-    <!-- End plugin css for this page -->
+    <!-- Plugin css for all page -->
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
+    <!-- End plugin css for all page -->
     
     <!-- inject:css -->
     <link rel="stylesheet" href="{% static 'manager_dashboard/css/vertical-layout-light/style.css' %}">
@@ -118,7 +119,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href='{% url "manager_dashboard:years" %}'>
-                        <i class="menu-icon mdi mdi-calendar"></i>
+                        <i class="mdi mdi-calendar menu-icon"></i>
                         <span class="menu-title">Années Académiques</span>
                     </a>
                 </li>
@@ -146,7 +147,7 @@
                 <!-- GESTION ÉCOLE -->
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#ecole" aria-expanded="false" aria-controls="editors">
-                        <i class="menu-icon mdi mdi-bank "></i>
+                        <i class="menu-icon mdi mdi-bank"></i>
                         <span class="menu-title">Gestion école</span>
                         <i class="menu-arrow"></i>
                     </a>
@@ -190,14 +191,14 @@
                 <!-- GESTION COMMUNICATION-->
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#com" aria-expanded="false" aria-controls="editors">
-                        <i class="menu-icon mdi mdi-email  "></i>
+                        <i class="menu-icon mdi mdi-email"></i>
                         <span class="menu-title">Communication</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="com">
                         <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:informations" %}'>Informations</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:events" %}'>Évenements</a></li>
                         </ul>
                     </div>
                 </li>
@@ -233,10 +234,13 @@
                 </li>
             </ul>
         </nav>
-        
-        <!-- partial -->
+        <!-- partial footer -->
         <div class="main-panel">
-            <div class="content-wrapper"></div>
+            <div class="content-wrapper">
+                <!-- =============== MAIN PAGE =============================-->
+                {% block content %}{% endblock %}
+                <!-- =============== END MAIN PAGE =============================-->
+            </div>
 
             <footer class="footer">
                 <div class="d-sm-flex justify-content-center">
@@ -253,8 +257,10 @@
     <script src="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
     <!-- endinject -->
     
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
+    <!-- Plugin js all this page -->
+    <script src="{% static 'manager_dashboard/vendors/datatables.net/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+    <!-- End plugin js all this page -->
 
     <!-- inject:js -->
     <script src="{% static 'manager_dashboard/js/off-canvas.js' %}"></script>
@@ -264,8 +270,9 @@
     <script src="{% static 'manager_dashboard/js/todolist.js' %}"></script>
     <!-- endinject -->
 
-    <!-- Custom js for this page-->
-    <!-- End custom js for this page-->
+    <!-- Custom js for all page-->
+    <script src="{% static 'manager_dashboard/js/data-table.js' %}"></script>
+    <!-- End custom js for all page-->
 </body>
 
 </html>

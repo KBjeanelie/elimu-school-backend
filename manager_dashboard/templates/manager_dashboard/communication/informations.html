@@ -1,106 +1,71 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Informations</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary'  href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Informations</a></li>
-                        </ol>
-                    </div>
-                    {% if not user.is_admin %}
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <a href='{% url "manager_dashboard:add_information" %}' class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter une information</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
+
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="template-demo">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item"><a href='{% url "manager_dashboard:index" %}'>Tableau de board</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Informations</span></li>
+                    </ol>
+                </nav>
             </div>
         </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Liste des Informations</h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form Active="#">
-                                                <div class="search_field">
-                                                    <input type="text" placeholder="rechercher une information....">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Titre</th>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Pièce jointe</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        {% for information in informations %}
-                                            <tr data-id="{{ information.id }}">
-                                                <td><h6> {{ information.title }} </h6></td>
-                                                <td><h6> {{ information.created_at }} </h6></td>
-                                                <td>
-                                                    {% if information.file_exists %}
-                                                        <a href="{{ information.file.url }}" target="_blank">{{ information.file.name }}</a>
-                                                    {% else %}
-                                                        <p>Aucun fichier disponible</p>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <div class="action_btns d-flex">
-                                                        <a href='{% url "manager_dashboard:info" information.id %}' class="action_btn mr_10"> <i class="fas fa-eye"></i> </a>
-                                                        {% if not user.is_admin %}
-                                                        <a href='{% url "manager_dashboard:edit_info" information.id %}' class="action_btn mr_10"> <i class="fas fa-edit"></i> </a>
-                                                        {% endif %}
-                                                        {% if information.file_exists %}
-                                                            <a href="{{ information.file.url }}" target="_blank" class="action_btn mr_10"> <i class="fas fa-download"></i> </a>
-                                                        {% else %}
-                                                            <a href="#" class="action_btn mr_10"> <i class="fas fa-download"></i> </a>
-                                                        {% endif %}
-                                                        {% if not user.is_admin %}
-                                                        <a href="#"onclick="deleteInformation({{ information.id }})" class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                        {% endif %}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+    </div>
+</div>
+{% if messages %}
+    {% for message in messages %}
+        <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
+            <div class="alert-text">{{ message }}</div>
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="card">
+    <div class="card-body">
+        <div class="d-sm-flex justify-content-between align-items-start">
+            <div>
+            <h4 class="card-title card-title-dash">Informations</h4>
+            </div>
+            <div>
+            <button class="btn btn-primary text-white mb-0 me-0" type="button"><i
+                class="mdi mdi-note-plus"></i> Ajouter une informations</button>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="order-listing" class="table">
+                        <thead>
+                            <tr>
+                                <th>Titre</th>
+                                <th>Date</th>
+                                <th>Pièce jointe</th>
+                                <th>Est publié ?</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for year in academic_years %}
+                                <tr>
+                                    <td>1</td>
+                                    <td>2012/08/03</td>
+                                    <td>Edinburgh</td>
+                                    <td>
+                                        <label class="badge badge-danger">Pending</label>
+                                    </td>
+                                    <td>
+                                        <!--<a href=""><i class="fa fa-eye h4 text-primary"></i></a>-->
+                                        <a href="" class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
+                                        <a href=""><i class="fa fa-trash-o h4 text-danger"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
