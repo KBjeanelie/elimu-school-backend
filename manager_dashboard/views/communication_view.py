@@ -133,6 +133,19 @@ class AddEventView(View):
     
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template, context=self.context)
+    
+    def post(self, request, *args, **kwargs):
+        data = request.POST.copy()
+        data['school'] = request.user.school
+        form = EventForm(data, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Évenement a été enregistré avec succès")
+            return redirect('manager_dashboard:events')
+        
+        messages.error(request, "ERREUR: Impossible d'ajouter l'evenement")
+        context = {'events': Event.objects.filter(school=request.user.school).order_by('-created_at')}
+        return render(request, template_name=self.template, context=context)
 
 class EditEventView(View):
     template = "manager_dashboard/communication/editer_evenement.html"
@@ -199,18 +212,6 @@ class EventView(View):
         context = {'events': Event.objects.filter(school=request.user.school).order_by('-created_at')}
         return render(request, template_name=self.template, context=context)
     
-    def post(self, request, *args, **kwargs):
-        data = request.POST.copy()
-        data['school'] = request.user.school
-        form = EventForm(data, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Évenement a été enregistré avec succès")
-            return redirect('manager_dashboard:events')
-        
-        messages.error(request, "ERREUR: Impossible d'ajouter l'evenement")
-        context = {'events': Event.objects.filter(school=request.user.school).order_by('-created_at')}
-        return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(Event,pk=pk)

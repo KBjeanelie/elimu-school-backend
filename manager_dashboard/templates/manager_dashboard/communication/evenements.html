@@ -1,150 +1,105 @@
-{% extends '../base.html' %}
-{% load static %}
-{% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Evenements</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary'  href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Evenements</a></li>
-                        </ol>
-                    </div>
-                    {% if not user.is_admin_school %}
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <a href='{% url "manager_dashboard:add_event" %}' class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter un evenement</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
+{% extends '../base.html' %} {% load static %} {% block content %}
 
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Liste des Evenements</h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form Active="#">
-                                                <div class="search_field">
-                                                    <input type="text" placeholder="rechercher un evenement....">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Titre</th>
-                                            <th scope="col">Date de début</th>
-                                            <th scope="col">Date de fin</th>
-                                            <th scope="col">Pièce jointe</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        {% for event in events %}
-                                            <tr data-id="{{ event.id }}">
-                                                <td><h6> {{ event.title }} </h6></td>
-                                                <td><h6> {{ event.start_date }} </h6></td>
-                                                <td><h6> {{ event.end_date }} </h6></td>
-                                                <td>
-                                                    {% if event.file_exists %}
-                                                        <a href="{{ event.file.url }}" target="_blank">{{ event.file.name }}</a>
-                                                    {% else %}
-                                                        <p>Aucun fichier disponible</p>
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    <div class="action_btns d-flex">
-                                                        <a href='{% url "manager_dashboard:event" event.id %}' class="action_btn mr_10"> <i class="fas fa-eye"></i> </a>
-                                                        {% if not user.is_admin_school %}
-                                                        <a href="{% url 'manager_dashboard:edit_event' event.id %}" class="action_btn mr_10"> <i class="fas fa-edit"></i> </a>
-                                                        {% endif %}
-                                                        {% if event.file_exists %}
-                                                            <a href="{{ event.file.url }}" target="_blank" class="action_btn mr_10"> <i class="fas fa-download"></i> </a>
-                                                        {% else %}
-                                                            <a href="#" class="action_btn mr_10"> <i class="fas fa-download"></i> </a>
-                                                        {% endif %}
-                                                        {% if not user.is_admin_school %}
-                                                        <a href="#" onclick="deleteEvent({{ event.id }})" class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                        {% endif %}
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div class="col-md-12 grid-margin stretch-card">
+  <div class="card">
+    <div class="card-body">
+      <div class="template-demo">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-custom">
+            <li class="breadcrumb-item">
+              <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              <span>Évenements</span>
+            </li>
+          </ol>
+        </nav>
+      </div>
     </div>
+  </div>
+</div>
+{% if messages %} {% for message in messages %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
+{% endfor %} {% endif %}
+
+<div class="card">
+  <div class="card-body">
+    <div class="d-sm-flex justify-content-between align-items-start">
+      <div>
+        <h4 class="card-title card-title-dash">Évenements</h4>
+      </div>
+      <div>
+        <a
+          href='{% url "manager_dashboard:add_event" %}'
+          class="btn btn-primary text-white mb-0 me-0"
+          ><i class="mdi mdi-note-plus"></i> Ajouter un évenement</a
+        >
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="table-responsive">
+          <table id="order-listing" class="table">
+            <thead>
+              <tr>
+                <th>Titre</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Pièce jointe</th>
+                <th>Est publié ?</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="elementList">
+              {% for event in events %}
+              <tr data-id="{{event.id}}">
+                <td>{{event.title}}</td>
+                <td>{{event.start_date}}</td>
+                <td>{{event.end_date}}</td>
+                <td>
+                  {% if event.file_exists %}
+                  <a href="{{ event.file.url }}" target="_blank"
+                    >{{ event.file.name }}</a
+                  >
+                  {% else %}
+                  <p>Aucun fichier disponible</p>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if event.status %}
+                  <label class="badge badge-success">Oui</label>
+                  {% else %}
+                  <label class="badge badge-danger">Non</label>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="" class="action_btn mr_10">
+                    <i class="fa fa-eye h4 text-primary"></i>
+                  </a>
+                  {% if not user.is_admin_school %}
+                  <a
+                    href="{% url 'manager_dashboard:edit_event' event.id %}"
+                    class="p-2"
+                    ><i class="fa fa-edit h4 text-dark"></i
+                  ></a>
+                  {% endif %} {% if event.file_exists %}
+                  <a href="{{ event.file.url }}" target="_blank" class="pe-2">
+                    <i class="fa fa-download h4 text-success"></i>
+                  </a>
+                  {% endif %} {% if not user.is_admin_school %}
+                  <a href="#" onclick="delete_function({{event.id}})"
+                    ><i class="fa fa-trash-o h4 text-danger"></i
+                  ></a>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<script>
-
-    // Supprimer un élément
-    function deleteEvent(event_id) {
-        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
-        $.ajax({
-            url: `${event_id}/delete/`,
-            type: 'DELETE',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
-            },
-            success: function(response) {
-                $('#elementList').find(`tr[data-id="${event_id}"]`).remove();
-                console.log('Élément supprimé avec succès');
-            },
-            error: function(error) {
-                console.error('Erreur lors de la suppression de l\'élément', error);
-            }
-        });
-    }
-    
-    // Fonction pour récupérer le jeton CSRF depuis le cookie
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-</script>
 {% endblock content %}
