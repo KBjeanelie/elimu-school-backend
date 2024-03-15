@@ -114,7 +114,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link" href='{% url "manager_dashboard:index" %}'>
+                    <a class="nav-link" href=''>
                         <i class="mdi mdi-grid-large menu-icon"></i>
                         <span class="menu-title">Tableau de board</span>
                     </a>
@@ -148,51 +148,56 @@
 
                 <!-- GESTION ÉCOLE -->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#ecole" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ecole" aria-expanded="false" aria-controls="ecole">
                         <i class="menu-icon mdi mdi-bank"></i>
                         <span class="menu-title">Gestion école</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="ecole">
                         <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href=''>Trombinoscope</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:trombinoscopes" %}'>Trombinoscope</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:series" %}'>Series</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:levels" %}'>Niveaux</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:classrooms" %}'>Salles de classes</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:group_subjects" %}'>Groupes de matière</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:subjects" %}'>Matières</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:programs" %}'>Programmes</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:sanction_appreciations" %}'>Sanctions & Appréciations</a></li>
                         </ul>
                     </div>
                 </li>
 
                 <!-- GESTION TEMPS -->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#clock" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#clock" aria-expanded="false" aria-controls="clock">
                         <i class="menu-icon mdi mdi mdi-calendar-clock "></i>
                         <span class="menu-title">Gestion de temps</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="clock">
                         <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:times" %}'>Emplois du temps</a></li>
                         </ul>
                     </div>
                 </li>
                 <!-- GESTION ÉVALUATION -->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#evaluation" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#evaluation" aria-expanded="false" aria-controls="evaluation">
                         <i class="menu-icon  mdi mdi-deskphone"></i>
                         <span class="menu-title">Évaluation</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="evaluation">
                         <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:evaluations" %}'>Evaluations</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:table_notes" %}'>Tableau de notes</a></li>
                         </ul>
                     </div>
                 </li>
 
                 <!-- GESTION COMMUNICATION-->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#com" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#com" aria-expanded="false" aria-controls="com">
                         <i class="menu-icon mdi mdi-email"></i>
                         <span class="menu-title">Communication</span>
                         <i class="menu-arrow"></i>
@@ -207,22 +212,21 @@
 
                 <!-- CONTENUE PEDAGOGIQUE-->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#book" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#book" aria-expanded="false" aria-controls="book">
                         <i class="menu-icon mdi mdi-library   "></i>
                         <span class="menu-title">Contenue <br> pédagogique</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="book">
                         <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:ebooks" %}'>eBook</a></li>
                         </ul>
                     </div>
                 </li>
 
-                <!-- CONTENUE PEDAGOGIQUE-->
+                <!-- GESTION COMPTE-->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#compte" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#compte" aria-expanded="false" aria-controls="compte">
                         <i class="menu-icon mdi mdi-account-circle"></i>
                         <span class="menu-title">Gestion compte</span>
                         <i class="menu-arrow"></i>
@@ -232,7 +236,8 @@
                         {% if user.is_admin_school %}
                             <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:directors" %}'>Équipe de direction</a></li>
                         {% else %}
-                            <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                            <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:parents_account" %}'>Comptes Parents</a></li>
+                            <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:students_account" %}'>Comptes Élèves</a></li>
                         {% endif %}
                         
                         </ul>
@@ -241,15 +246,16 @@
 
                 <!-- ADMINISTRATION -->
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="editors">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="setting">
                         <i class="menu-icon  mdi mdi-tune "></i>
                         <span class="menu-title">Administration</span>
                         <i class="menu-arrow"></i>
                     </a>
                     <div class="collapse" id="setting">
                         <ul class="nav flex-column sub-menu">
-                        <li class="nav-item"><a class="nav-link" href="">Parents</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Élèves</a></li>
+                            <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:type_documents" %}'>Types de documents</a></li>
+                            <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:type_sanctions" %}'>Types de sanctions</a></li>
+                            <li class="nav-item"><a class="nav-link" href='{% url "manager_dashboard:reglage_general" %}'>Réglages général</a></li>
                         </ul>
                     </div>
                 </li>
