@@ -1,127 +1,71 @@
-{% extends "../base.html" %}
+{% extends '../base.html' %}
 {% load static %}
-
 {% block content %}
-
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Type de Sanctions & Appréciations</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Sanctions & Appréciation</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="template-demo">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom">
+              <li class="breadcrumb-item">
+                <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                <span>Type de Sanctions & Appréciations</span>
+              </li>
+            </ol>
+          </nav>
         </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Type de Sanctions & Appréciations </h4>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Titre</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        
-                                        {% for type_sanction in type_sanctions %}
-                                            <tr data-id="{{ type_sanction.id }}">
-                                                <td><h6> {{ type_sanction.title }} </h6></td>
-                                                {% if not user.is_admin_school %}
-                                                <td>
-                                                    <div class="action_btns d-flex">
-                                                        {% comment %} <a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a> {% endcomment %}
-                                                        <a href="#" onclick="deleteSanctionType({{type_sanction.id}})" class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                    </div>
-                                                </td>
-                                                {% endif %}
-                                            </tr>
-                                        {% endfor %}
-                                            
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% if not user.is_admin_school %}
-            <div class="col-6">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Ajouter un Type de Sanction / Appréciation</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="white_card_body">
-                        <form method="post" id="form_id">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Titre</label>
-                                <input type="text" class="form-control" id="title", name="title" placeholder="avertissement" maxLength="50" required>
-                            </div>
-                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
+  <div class="card">
+        <div class="card-body">
+        <div class="d-sm-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="card-title card-title-dash">Type de Sanctions & Appréciations</h4>
+            </div>
+            
+        </div>
+        <div class="row mt-3">
+            <div class="col-6">
+            <div class="table-responsive">
+                <table id="order-listing" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titre</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="elementList">
+                        {% for type in type_sanctions %}
+                            <tr data-id="{{type.id}}">
+                            <td>{{type.title}}</td>
+                            <td>
+                                <a href="#" onclick="delete_function({{type.id}})">
+                                    <i class="fa fa-trash-o h4 text-danger"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="col-6">
+                <h4 class="card-title">Formulaire d'ajout</h4>
+                <form class="cmxform" id="signupForm" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Titre</label>
+                            {{ form.title }}
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Enregister">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+  </div>
 
-    // Supprimer un élément
-    function deleteSanctionType(sanctionTypeId) {
-        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
-        $.ajax({
-            url: `/administration/type_sanctions/${sanctionTypeId}/delete/`,
-            type: 'DELETE',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
-            },
-            success: function(response) {
-                $('#elementList').find(`tr[data-id="${sanctionTypeId}"]`).remove();
-                console.log('Élément supprimé avec succès');
-            },
-            error: function(error) {
-                console.error('Erreur lors de la suppression de l\'élément', error);
-            }
-        });
-    }
-    
-    // Fonction pour récupérer le jeton CSRF depuis le cookie
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-
-</script>
 {% endblock content %}
-    

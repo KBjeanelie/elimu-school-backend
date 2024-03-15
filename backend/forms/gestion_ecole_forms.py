@@ -790,6 +790,17 @@ class SanctionAppreciationTypeForm(forms.ModelForm):
     class Meta:
         model = SanctionAppreciationType
         fields = ['title', 'description', 'school']
+        widgets = {
+            'title' : forms.TextInput(
+                attrs={
+                    'id': 'title',
+                    'class': 'form-control',
+                    'name': 'title',
+                    'placeholder': 'ex: Avertissement',
+                    'required': True
+                }
+            ),
+        }
 
 class SanctionAppreciationForm(forms.ModelForm):
     

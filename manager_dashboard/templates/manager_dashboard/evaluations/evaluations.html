@@ -73,42 +73,4 @@
     </div>
   </div>
 
-<script>
-
-    // Supprimer un élément
-    function deleteEvaluation(id) {
-        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
-        $.ajax({
-            url: `${id}/delete/`,
-            type: 'DELETE',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
-            },
-            success: function(response) {
-                $('#elementList').find(`tr[data-id="${id}"]`).remove();
-                console.log('Élément supprimé avec succès');
-            },
-            error: function(error) {
-                console.error('Erreur lors de la suppression de l\'élément', error);
-            }
-        });
-    }
-    
-    // Fonction pour récupérer le jeton CSRF depuis le cookie
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-    </script>
 {% endblock content %}

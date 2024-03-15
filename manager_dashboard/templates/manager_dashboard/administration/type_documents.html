@@ -1,141 +1,83 @@
 {% extends '../base.html' %}
 {% load static %}
-
-
 {% block content %}
-    
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Type des Documents</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Type Documents</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="template-demo">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom">
+              <li class="breadcrumb-item">
+                <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                <span>Types de Documents</span>
+              </li>
+            </ol>
+          </nav>
         </div>
-
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Type de Documents </h4>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Type de docment</th>
-                                            <th scope="col">Requiseà l'inscription ?</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        {% for type_document in type_documents %}
-                                            <tr data-id="{{ type_document.id }}">
-                                                <td> <h6>{{ type_document.title }}</h6> </td>
-                                                <td> 
-                                                    {% if type_document.status %}
-                                                        <a  class="badge rounded-pill bg-primary">Oui</a>
-                                                    {% else %}
-                                                        <a class="badge rounded-pill bg-danger">Non</a>
-                                                    {% endif %}
-                                                </td>
-                                                {% if not user.is_admin_school %}
-                                                <td>
-                                                    <div class="action_btns d-flex">
-                                                        {% comment %} <a href="#" class="action_btn mr_10"> <i class="far fa-edit"></i> </a> {% endcomment %}
-                                                        <a href="#" onclick="deleteDocumentType({{type_document.id}})" class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                    </div>
-                                                </td>
-                                                {% endif %}
-                                            </tr>
-                                        {% endfor %}
-                                        
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% if not user.is_admin_school %}
-            <div class="col-6">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Ajouter un Type de document</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="white_card_body">
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label class="form-label" for="libelle">Type de document</label>
-                                <input type="text" id="title" class='form-control' name="title", placeholder="Acte de naissance..." maxLength="50" required>
-                            </div>
-                            <div>
-                                <div class="form-check">
-                                    {{ form.status}}
-                                    <label class="form-label form-check-label" for="gridCheck">Requise à l'inscription ?</label>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Enregistrer</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
-        </div>
+      </div>
     </div>
-</div>
+  </div>
 
-<script>
+  <div class="card">
+        <div class="card-body">
+        <div class="d-sm-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="card-title card-title-dash">Types de Documents</h4>
+            </div>
+            
+        </div>
+        <div class="row mt-3">
+            <div class="col-6">
+            <div class="table-responsive">
+                <table id="order-listing" class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Titre</th>
+                            <th scope="col">Demandé à l'inscription ?</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="elementList">
+                        {% for type_document in type_documents %}
+                            <tr data-id="{{type_document.id}}">
+                            <td>{{type_document.title}}</td>
+                            <td> 
+                                {% if type_document.status %}
+                                    <p  class="badge rounded-pill bg-primary">Oui</p>
+                                {% else %}
+                                    <p class="badge rounded-pill bg-danger">Non</p>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="#" onclick="delete_function({{type_document.id}})">
+                                    <i class="fa fa-trash-o h4 text-danger"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </div>
+            <div class="col-6">
+                <h4 class="card-title">Formulaire d'ajout</h4>
+                <form class="cmxform" id="signupForm" method="post">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Titre</label>
+                            {{ form.title }}
+                        </div>
+                        <div class="form-group">
+                            <label for="firstname">Demandé à l'insciption ?</label>
+                            {{form.status}}
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Enregister">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+  </div>
 
-// Supprimer un élément
-function deleteDocumentType(documentTypeId) {
-    var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
-    $.ajax({
-        url: `${documentTypeId}/delete/`,
-        type: 'DELETE',
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
-        },
-        success: function(response) {
-            $('#elementList').find(`tr[data-id="${documentTypeId}"]`).remove();
-            console.log('Élément supprimé avec succès');
-        },
-        error: function(error) {
-            console.error('Erreur lors de la suppression de l\'élément', error);
-        }
-    });
-}
-
-// Fonction pour récupérer le jeton CSRF depuis le cookie
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-
-</script>
 {% endblock content %}
