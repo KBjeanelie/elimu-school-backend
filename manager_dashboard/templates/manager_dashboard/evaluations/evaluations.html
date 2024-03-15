@@ -2,23 +2,23 @@
 {% load static %}
 {% block content %}
 <div class="col-md-12 grid-margin stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <div class="template-demo">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-custom">
-              <li class="breadcrumb-item">
-                <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">
-                <span>Évaluations</span>
-              </li>
-            </ol>
-          </nav>
+      <div class="card">
+        <div class="card-body">
+          <div class="template-demo">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-custom">
+                <li class="breadcrumb-item">
+                  <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  <span>Évaluations</span>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   {% if messages %} {% for message in messages %}
   <div class="alert alert-success" role="alert">{{ message }}</div>
   {% endfor %} {% endif %}
