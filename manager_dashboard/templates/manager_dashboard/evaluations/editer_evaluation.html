@@ -1,86 +1,68 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Evaluations</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a class='text-primary' href="{% url 'manager_dashboard:evaluations' %}">Evaluations</a></li>
-                            <li class="breadcrumb-item"><a>Modifier</a></li>
+<div class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="template-demo">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-custom">
+                            <li class="breadcrumb-item"><a href='{% url "manager_dashboard:index" %}'>Tableau de board</a></li>
+                            <li class="breadcrumb-item"><a href='{% url "manager_dashboard:evaluations" %}'>Évaluations</a></li>
+                            <li class="breadcrumb-item active" aria-current="page"><span>Modification</span></li>
                         </ol>
-                    </div>
+                    </nav>
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="col-lg-12">
         {% if messages %}
             {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
+                <div class="alert alert-danger" role="alert">{{ message }}</div>
             {% endfor %}
         {% endif %}
-
-        <div class="row">
-            <div class="col-8">
-                <div class="white_card card_height_100 mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
-                                <h3 class="m-0">Ajouter une évaluation</h3>
-                            </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Modifier une évalution</h4>
+                <form class="cmxform" id="signupForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Salle de classe</label>
+                            {{ form.classroom }}
                         </div>
-                    </div>
-                    <div class="white_card_body">
-                        <form method="post">
-                            {% csrf_token %}
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Salle de classe</label>
-                                {{ form.classroom }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Matières</label>
-                                {{ form.subject }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Étudiant</label>
-                                {{ form.student }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Note devoir</label>
-                                {{ form.note }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Note examen</label>
-                                {{ form.note_exam }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Periode d'évaluation</label>
-                                {{ form.period }}
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="level">Type d'évaluation</label>
-                                {{ form.type_evaluation }}
-                            </div>
-                            <div>
-                                <div class="form-check">
-                                    {{ form.is_publish}}
-                                    <label class="form-label form-check-label" for="gridCheck">Publier la note ?</label>
-                                </div>
-                                
-                            </div>
-                            <a href='{% url "manager_dashboard:evaluations" %}' class="btn btn-danger"> <i class="ti-close"></i> Annuler</a>
-                            <button type="submit" class="btn btn-dark"> <i class="ti-save"></i> Modifier</button>
-                        </form>
-                    </div>
-                </div>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Matières</label>
+                            {{ form.subject }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Étudiant</label>
+                            {{ form.student }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Note devoir</label>
+                            {{ form.note }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Note examen</label>
+                            {{ form.note_exam }}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="level">Periode d'évaluation</label>
+                            {{ form.period }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="firstname">Publié ?</label>
+                            {{form.is_publish}}
+                        </div>
+                        <a href='{% url "manager_dashboard:evaluations" %}' class="btn btn-danger">Retour</a>
+                        <input class="btn btn-dark" type="submit" value="Modifier">
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
