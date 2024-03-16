@@ -206,7 +206,12 @@ class EditLevelView(View):
     def get(self, request, pk, *args, **kwargs):
         level = get_object_or_404(Level, pk=pk)
         form = LevelForm(request.user, instance=level)
-        context = {'form':form, 'level':level}
+        context = {
+            'form':form, 
+            'level':level, 
+            'series':Series.objects.filter(school=request.user.school),
+            'teachers':Teacher.objects.filter(school=request.user.school).order_by('-created_at')
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
@@ -237,7 +242,11 @@ class AddLevelView(View):
     
     def get(self, request, *args, **kwargs):
         form = LevelForm(request.user)
-        context = {'form':form}
+        context = {
+            'form':form,
+            'series':Series.objects.filter(school=request.user.school),
+            'teachers':Teacher.objects.filter(school=request.user.school).order_by('-created_at')
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -293,12 +302,12 @@ class EditClassRoomView(View):
     def get(self, request, pk, *args, **kwargs):
         classroom = get_object_or_404(ClassRoom, pk=pk)
         form = ClassRoomForm(request.user, instance=classroom)
-        context = {'form':form, 'classroom':classroom}
+        context = {'form':form, 'classroom':classroom, 'levels':Level.objects.filter(school=request.user.school)}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
         classroom = get_object_or_404(ClassRoom, pk=pk)
-        form = ClassRoomForm(request.user, request.POST, instance=classroom)
+        form = ClassRoomForm(request.user,  request.POST, instance=classroom)
         if form.is_valid():
             form.save()
             messages.success(request, "Salle de classe modifier avec succès !")
@@ -322,16 +331,17 @@ class AddClassRoomView(View):
     
     def get(self, request, *args, **kwargs):
         form = ClassRoomForm(request.user)
-        context = {'form':form}
+        context = {'form':form, 'levels':Level.objects.filter(school=request.user.school)}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
-        form = ClassRoomForm(request.user, request.POST)
+        form = ClassRoomForm(request.user,  request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Salle de classe ajouter avec succès !")
             return redirect("manager_dashboard:classrooms")
-        
+        else:
+            print(form.errors)
         messages.error(request, "ERREUR: Impossible d'ajouter une salle de classe")
         context = {'form':form}
         return render(request, template_name=self.template, context=context)
@@ -414,7 +424,13 @@ class EditSubjectView(View):
     def get(self, request, pk, *args, **kwargs):
         subject = get_object_or_404(Subject, pk=pk)
         form = SubjectForm(request.user, instance=subject)
-        context = {'form':form, 'subject':subject}
+        context = {
+            'form':form,
+            'subject':subject,
+            'levels':Level.objects.filter(school=request.user.school),
+            'groups':GroupSubject.objects.filter(school=request.user.school),
+            'teachers':Teacher.objects.filter(school=request.user.school).order_by('-created_at')
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
@@ -443,7 +459,12 @@ class AddSubjectView(View):
     
     def get(self, request, *args, **kwargs):
         form = SubjectForm(request.user)
-        context = {'form':form}
+        context = {
+            'form':form,
+            'levels':Level.objects.filter(school=request.user.school),
+            'groups':GroupSubject.objects.filter(school=request.user.school),
+            'teachers':Teacher.objects.filter(school=request.user.school).order_by('-created_at')
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -515,7 +536,7 @@ class EditProgramView(View):
     def get(self, request, pk, *args, **kwargs):
         program = get_object_or_404(Program, pk=pk)
         form = ProgramForm(request.user, instance=program)
-        context = {'form':form, 'program':program}
+        context = {'form':form, 'program':program, 'levels':Level.objects.filter(school=request.user.school)}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
@@ -553,7 +574,7 @@ class AddProgramView(View):
     
     def get(self, request, *args, **kwargs):
         form = ProgramForm(request.user)
-        context = {'form':form}
+        context = {'form':form, 'levels':Level.objects.filter(school=request.user.school)}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -636,7 +657,18 @@ class AddSanctionView(View):
     
     def get(self, request, *args, **kwargs):
         form = SanctionAppreciationForm(request.user)
-        context = {'form':form}
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        students = Student.objects.filter(id__in=student_ids)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        types = SanctionAppreciationType.objects.filter(school=request.user.school)
+        subjects = Subject.objects.filter(level__school=request.user.school)
+        context = {
+            'form':form,
+            'students':students,
+            'classrooms':classrooms,
+            'types':types,
+            'subjects':subjects,
+        }
         return render(request, template_name=self.template, context=context)
     
     def dispatch(self,request, *args, **kwargs):

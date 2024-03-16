@@ -26,28 +26,44 @@
         {% endif %}
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Ajouter un Programme</h4>
+                <h4 class="card-title">Ajouter une Sanction & Appreciation</h4>
                 <form class="cmxform" id="signupForm" method="post">
                     {% csrf_token %}
                     <fieldset>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Etudiant</label>
-                                {{ form.student }}
+                                <select name='student'  class="js-example-basic-single w-100">
+                                    {% for student in students %}
+                                        <option value="{{student.id}}">{{student.fullname}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Salle de classe</label>
-                                {{ form.classroom }}
+                                <select name='classroom'  class="js-example-basic-single w-100">
+                                    {% for classroom in classrooms %}
+                                        <option value="{{classroom.id}}">{{classroom.title}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Type de sanction / Appréciation</label>
-                               {{ form.type }}
+                               <select name='type'  class="js-example-basic-single w-100">
+                                    {% for type in types %}
+                                        <option value="{{type.id}}">{{type.title}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Matière</label>
-                                {{ form.subject }}
+                                <select name='subject'  class="js-example-basic-single w-100">
+                                    {% for subject in subjects %}
+                                        <option value="{{subject.id}}">{{subject.label}}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="mb-3">

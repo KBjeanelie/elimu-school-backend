@@ -40,7 +40,15 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="level">Niveau</label>
-                            {{ form.level}}
+                            <select name='level'  class="js-example-basic-single w-100">
+                                {% for level in levels %}
+                                    {% if program.level.label == level.label %}
+                                        <option value="{{level.id}}" selected>{{level}}</option>
+                                    {% else %}
+                                        <option value="{{level.id}}">{{level}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="level">Fichier</label>

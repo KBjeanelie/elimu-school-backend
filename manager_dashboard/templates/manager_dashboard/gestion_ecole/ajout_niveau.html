@@ -40,7 +40,12 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Serie (<i>Optionnel</i>)</label>
-                            {{ form.serie}}
+                            <select name='serie' class="js-example-basic-single w-100">
+                                <option value="" selected>Sélectionnez une série</option>
+                                {% for serie in series %}
+                                    <option value="{{serie.id}}"> {{serie.title}} </option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Cycles </label>
@@ -48,7 +53,11 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Enseignants Principal</label>
-                            {{ form.principal_teacher}}
+                            <select name='principal_teacher'  class="js-example-basic-single w-100">
+                                {% for teacher in teachers %}
+                                    <option value="{{teacher.id}}">{{teacher.fullname}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <a href='{% url "manager_dashboard:levels" %}' class="btn btn-danger">Retour</a>
                         <input class="btn btn-primary" type="submit" value="Enregister">

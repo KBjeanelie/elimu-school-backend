@@ -37,12 +37,28 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="libelle">Responsable</label>
-                            {{form.teacher_in_charge }}
+                            <select name='principal_teacher' class="js-example-basic-single w-100">
+                                {% for teacher in teachers %}
+                                  {% if teacher.fullname == subject.teacher_in_charge.fullname %}
+                                      <option value="{{teacher.id}}" selected> {{teacher.fullname}} </option>
+                                  {% else %}
+                                    <option value="{{teacher.id}}" selected> {{teacher.fullname}} </option>
+                                  {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Niveau</label>
-                                {{ form.level }}
+                                <select name='level'  class="js-example-basic-single w-100">
+                                    {% for level in levels %}
+                                        {% if subject.level.label == level.label %}
+                                            <option value="{{level.id}}" selected>{{level}}</option>
+                                        {% else %}
+                                            <option value="{{level.id}}">{{level}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Type de matière</label>
@@ -51,7 +67,15 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="level">Groupe de Matière</label>
-                            {{ form.subject_group}}
+                            <select name='subject_group'  class="js-example-basic-single w-100">
+                                {% for group in groups %}
+                                    {% if subject.subject_group.title == group.title %}
+                                        <option value="{{group.id}}" selected>{{group.title}}</option>
+                                    {% else %}
+                                        <option value="{{group.id}}">{{group.title}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="level">Coefficient</label>

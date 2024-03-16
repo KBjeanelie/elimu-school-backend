@@ -40,7 +40,16 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Serie (<i>Optionnel</i>)</label>
-                            {{ form.serie}}
+                            <select name='serie' class="js-example-basic-single w-100">
+                                <option value="">Sélectionnez une série</option>
+                              {% for serie in series %}
+                                {% if serie.title == level.serie.title %}
+                                    <option value="{{serie.id}}" selected> {{serie.title}} </option>
+                                {% else %}
+                                    <option value="{{serie.id}}"> {{serie.title}} </option>
+                                {% endif %}
+                              {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Cycles </label>
@@ -48,7 +57,15 @@
                         </div>
                         <div class="form-group">
                             <label class="form-label">Enseignants Principal</label>
-                            {{ form.principal_teacher}}
+                            <select name='principal_teacher' class="js-example-basic-single w-100">
+                                {% for teacher in teachers %}
+                                  {% if teacher.fullname == form.principal_teacher.fullname.value %}
+                                      <option value="{{teacher.id}}" selected> {{teacher.fullname}} </option>
+                                  {% else %}
+                                    <option value="{{teacher.id}}" selected> {{teacher.fullname}} </option>
+                                  {% endif %}
+                                {% endfor %}
+                            </select>
                         </div>
                         <a href='{% url "manager_dashboard:levels" %}' class="btn btn-danger">Retour</a>
                         <input class="btn btn-dark" type="submit" value="Modifier">

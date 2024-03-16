@@ -1,146 +1,89 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Parents</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Parents</a></li>
-                        </ol>
-                    </div>
-                    {% if not user.is_admin %}
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <a href='{% url "manager_dashboard:add_parent" %}' class="white_btn3"><i class="fas fa-plus-square"></i>  Ajouter un Parent</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
+<div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="template-demo">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-custom">
+                <li class="breadcrumb-item">
+                  <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  <span>Parentsx</span>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
-
-        {% if messages %}
-            {% for message in messages %}
-                <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                    <div class="alert-text">{{ message }}</div>
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card QA_section border-0">
-                    <div class="card-body QA_table ">
-                        <div class="white_box_tittle list_header">
-                            <h4>Liste des Parents</h4>
-                            <div class="box_right d-flex lms_block">
-                                <div class="serach_field_2">
-                                    <div class="search_inner">
-                                        <form Active="#">
-                                            <div class="search_field">
-                                                <input type="text" id="searchInput" placeholder="rechercher un....">
-                                            </div>
-                                            <button type="submit"> <i class="ti-search"></i> </button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="add_button ms-2">
-                                    <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive shopping-cart ">
-                            <table id="dataTable" class="table mb-0">
-                                <thead>
-                                    <tr>
-                                        <th class="border-top-0">Photo</th>
-                                        <th class="border-top-0">Nom</th>
-                                        <th class="border-top-0">Prénom</th>
-                                        <th class="border-top-0">Email</th>
-                                        <th class="border-top-0">Téléphone</th>
-                                        <th class="border-top-0">Accès en ligne</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="elementList">
-                                    
-                                    {% for parent in parents %}
-                                        <tr data-id="{{ parent.id }}">
-                                            <td>
-                                                {% if parent.file_exist_one %}
-                                                    <img src="{{ parent.picture_one.url }}" alt height="52" alt="">
-                                                {% else %}
-                                                <img src="{% static 'img/staf/teacher.png' %}" alt height="52">
-                                                {% endif %}
-                                                    
-                                            </td>
-                                            <td><h6> {{ parent.lastname_one }} </h6></td>
-                                            <td><h6> {{ parent.firstname_one }} </h6></td>
-                                            <td><h6> {{ parent.email_one }} </h6></td>
-                                            <td><h6> {{ parent.tel_one }} </h6></td>
-                                            <td><a class="status_btn">Oui</a></td>
-                                            <td>
-                                                <div class="action_btns d-flex">
-                                                    <a href='{% url "manager_dashboard:parent_detail" parent.id %}' class="action_btn mr_10"> <i class="fas fa-eye"></i> </a>
-                                                    {% if not user.is_admin %}
-                                                    <a href='{% url "manager_dashboard:edit_parent" parent.id %}' class="action_btn mr_10"> <i class="far fa-edit"></i> </a>
-                                                    <a href="#" onclick='deleteParent({{ parent.id}})' class="action_btn"> <i class="fas fa-trash"></i> </a>
-                                                    {% endif %}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-</div>
-<script>
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-success" role="alert">{{ message }}</div>
+  {% endfor %} {% endif %}
+  
+  <div class="card">
+    <div class="card-body">
+      <div class="d-sm-flex justify-content-between align-items-start">
+        <div>
+          <h4 class="card-title card-title-dash">Parents</h4>
+        </div>
+        <div>
+          <a
+            href='{% url "manager_dashboard:add_parent" %}'
+            class="btn btn-primary text-white mb-0 me-0"
+            ><i class=" mdi mdi-account-plus "></i> Ajouter un Parent</a
+          >
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table id="order-listing" class="table">
+                <thead>
+                    <tr>
+                        <th class="border-top-0">Photo</th>
+                        <th class="border-top-0">Nom</th>
+                        <th class="border-top-0">Prénom</th>
+                        <th class="border-top-0">Email</th>
+                        <th class="border-top-0">Téléphone</th>
+                        <th class="border-top-0">Accès en ligne</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="elementList">
+                    {% for parent in parents %}
+                        <tr data-id="{{parent.id}}">
+                            <td>
+                                {% if parent.file_exist_one %}
+                                    <img src="{{ parent.picture_one.url }}" alt height="52" alt="">
+                                {% else %}
+                                <img src="{% static 'img/staf/teacher.png' %}" alt height="52">
+                                {% endif %}
+                                    
+                            </td>
+                            <td>{{ parent.lastname_one|upper }}</td>
+                            <td>{{ parent.firstname_one }}</td>
+                            <td>{{ parent.email_one }}</td>
+                            <td>{{ parent.tel_one }}</td>
+                            <td><p class="badge badge-success">Oui</p></td>
+                            <td>
+                                <a href='{% url "manager_dashboard:parent_detail" parent.id %}' class="p-2">
+                                    <i class="fa fa-eye h4 text-dark"></i></a>
+                                <a href='{% url "manager_dashboard:edit_parent" parent.id %}' class="p-2">
+                                    <i class="fa fa-edit h4 text-dark"></i></a>
+                                <a href="#" onclick="delete_function({{parent.id}})">
+                                    <i class="fa fa-trash-o h4 text-danger"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    // Supprimer un élément
-    function deleteParent(parent_id) {
-        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
-        $.ajax({
-            url: `${parent_id}/delete/`,
-            type: 'DELETE',
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
-            },
-            success: function(response) {
-                $('#elementList').find(`tr[data-id="${parent_id}"]`).remove();
-                console.log('Élément supprimé avec succès');
-            },
-            error: function(error) {
-                console.error('Erreur lors de la suppression de l\'élément', error);
-            }
-        });
-    }
-    
-    // Fonction pour récupérer le jeton CSRF depuis le cookie
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    
-</script>
 {% endblock content %}
