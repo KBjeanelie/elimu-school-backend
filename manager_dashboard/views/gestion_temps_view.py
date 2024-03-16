@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.gestion_ecole_forms import ScheduleForm
-from backend.models.gestion_ecole import AcademicYear, ClassRoom, Schedule, Series, Subject
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Schedule, Subject
 from django.contrib import messages
 
 class AddScheduleView(View):
