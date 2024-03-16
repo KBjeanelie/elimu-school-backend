@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.gestion_ecole_forms import ScheduleForm
-from backend.models.gestion_ecole import AcademicYear, ClassRoom, Schedule, Series
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Schedule, Series, Subject
 from django.contrib import messages
 
 class AddScheduleView(View):
@@ -24,7 +24,9 @@ class AddScheduleView(View):
     
     def get(self, request, *args, **kwargs):
         form = ScheduleForm(request.user)
-        context = {'form':form}
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        subjects = Subject.objects.filter(level__school=request.user.school)
+        context = {'form':form, 'classrooms':classrooms, 'subjects':subjects}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
