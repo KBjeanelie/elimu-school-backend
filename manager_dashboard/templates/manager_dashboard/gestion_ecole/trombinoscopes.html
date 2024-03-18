@@ -1,136 +1,96 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Trombinoscope</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a href="javascript:void(0);">Trombinoscope</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+<div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <div class="template-demo">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-custom">
+                <li class="breadcrumb-item">
+                  <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  <span>Trombinoscope</span>
+                </li>
+              </ol>
+            </nav>
+          </div>
         </div>
+      </div>
+</div>
+{% if messages %} {% for message in messages %}
+<div class="alert alert-success" role="alert">{{ message }}</div>
+{% endfor %} {% endif %}
 
-        <div class="row ">
-            <div class="col-12">
-                <div class="white_card mb_30 ">
-                    <div class="white_card_header">
-                        <div class="bulder_tab_wrapper">
-                            <ul class="nav" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="student-tab" data-bs-toggle="tab" href="#student" role="tab" aria-controls="profile" aria-selected="false">Trombinoscope des étudiants</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="teacher-tab" data-bs-toggle="tab" href="#teacher" role="tab" aria-controls="teacher" aria-selected="false">Trombinoscope des enseignants</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="parent-tab" data-bs-toggle="tab" href="#parent" role="tab" aria-controls="parent" aria-selected="false">Trombinoscope des parents</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
 
-                    <div class="white_card_body">
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
-                                <div class="builder_select">
-                                    <div class="row">
-                                        {% for student in students %}
-                                            <div class="col-md-4 col-lg-4 col-xl-4 box-col-6">
-                                                <div class="card custom-card">
-                                                    <div class="card-header"><img class="img-fluid" src="{% static 'img/profilebox/3.jpg' %}" alt data-original-title title></div>
-                                                    <div class="card-profile">
-                                                        <a href='{% url "manager_dashboard:student_detail" student.id %}'> 
-                                                            {% if student.file_exists %}
-                                                                <img class="rounded-circle" src="{{ student.picture.url }}" alt data-original-title title>
-                                                            {% else %}
-                                                                <img class="rounded-circle" src="{% static 'img/staf/student.png' %}" alt height="52" alt="No Picture" alt data-original-title title>
-                                                            {% endif %}
-                                                        </a>
-                                                    </div>
-                                                    <div class="text-center profile-details">
-                                                        <h4> <a href='{% url "manager_dashboard:student_detail" student.id %}' >{{ student.firstname }} {{ student.lastname | upper}}</a> </h4>
-                                                        <h6>Date de naissance : {{ student.bithday }} </h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% empty %}
-                                            <p>trombinoscopes pour etudiant ici</p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="teacher" role="tabpanel" aria-labelledby="teacher-tab">
-                                <div class="builder_select">
-                                    <div class="row">
-                                        {% for teacher in teachers %}
-                                            <div class="col-md-4 col-lg-4 col-xl-4 box-col-6">
-                                                <div class="card custom-card">
-                                                    <div class="card-header"><img class="img-fluid" src="{% static 'img/profilebox/2.jpg' %}" alt data-original-title title></div>
-                                                    <div class="card-profile">
-                                                        <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}'> 
-                                                            {% if teacher.file_exists %}
-                                                                <img class="rounded-circle" src="{{ teacher.picture.url }}" alt data-original-title title>
-                                                            {% else %}
-                                                                <img src="{% static 'img/staf/teacher.png' %}" alt height="52" alt="No Picture">
-                                                            {% endif %}
-                                                        </a>
-                                                    </div>
-                                                    <div class="text-center profile-details">
-                                                        <h4> <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}' >{{ teacher.firstname }} {{ teacher.lastname | upper}}</a> </h4>
-                                                        <h6>Date de naissance : {{ teacher.bithday }} </h6>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% empty %}
-                                            <p>trombinoscopes pour enseignants ici</p>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="tab-pane fade" id="parent" role="tabpanel" aria-labelledby="parent-tab">
-                                <div class="builder_select">
-                                    <div class="row">
-                                        {% for parent in parents %}
-                                            <div class="col-md-4 col-lg-4 col-xl-4 box-col-6">
-                                                <div class="card custom-card">
-                                                    <div class="card-header"><img class="img-fluid" src="{% static 'img/profilebox/2.jpg' %}" alt data-original-title title></div>
-                                                    <div class="card-profile">
-                                                        <a href='{% url "manager_dashboard:parent_detail" parent.id %}'> 
-                                                            {% if parent.file_exist_one %}
-                                                                <img class="rounded-circle" src="{{ parent.picture_one.url }}" alt data-original-title title>
-                                                            {% else %}
-                                                                <img src="{% static 'img/staf/teacher.png' %}" alt height="52" alt="No Picture">
-                                                            {% endif %}
-                                                        </a>
-                                                    </div>
-                                                    <div class="text-center profile-details">
-                                                        <h4> <a href='{% url "manager_dashboard:parent_detail" parent.id %}' >{{ parent.firstname_one }} {{ parent.lastname_one | upper}}</a> </h4>
-                                                        <!--<h6>Date de naissance : {{ teacher.bithday }} </h6>-->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% empty %}
-                                            <p>trombinoscopes pour enseignants ici</p>
-                                        {% endfor %}
-                                    </div>
+<div class="card">
+    <div class="card-body">
+      <h4 class="card-title">Trombinoscope</h4>
+      <div class="row">
+        <div class="col-md-10 mx-auto">
+          <ul class="nav nav-pills nav-pills-custom" id="pills-tab-custom" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" id="pills-home-tab-custom" data-bs-toggle="pill"
+                href="#pills-health" role="tab" aria-controls="pills-home" aria-selected="true">
+                Trombinoscope parents
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id="pills-profile-tab-custom" data-bs-toggle="pill" href="#pills-career"
+                role="tab" aria-controls="pills-profile" aria-selected="false">
+                Trombinoscope élèves
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content tab-content-custom-pill" id="pills-tabContent-custom">
+            <div class="tab-pane fade show active" id="pills-health" role="tabpanel" aria-labelledby="pills-home-tab-custom">
+                <div class='row'>
+                    {% for parent in parents %}
+                        <div class='col-md-3'>
+                            <div class="text-center align-items-center">
+                                <a href=''>
+                                    <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
+                                </a>
+                                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
+                                    <h4 class="mb-0 mt-3">
+                                        <a href='' class='text-info'>
+                                            {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
+                                        </a>
+                                    </h4>
+                                    <p class="text-muted mb-1">{{parent.email_one}} </p>
+                                    <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+            <div class="tab-pane fade" id="pills-career" role="tabpanel" aria-labelledby="pills-profile-tab-custom">
+                <div class='row'>
+                    {% for parent in parents %}
+                        <div class='col-md-3'>
+                            <div class="text-center align-items-center">
+                                <a href=''>
+                                    <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
+                                </a>
+                                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
+                                    <h4 class="mb-0 mt-3">
+                                        <a href='' class='text-info'>
+                                            {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
+                                        </a>
+                                    </h4>
+                                    <p class="text-muted mb-1">{{parent.email_one}} </p>
+                                    <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+          </div>
         </div>
-
+      </div>
     </div>
 </div>
 {% endblock content %}
