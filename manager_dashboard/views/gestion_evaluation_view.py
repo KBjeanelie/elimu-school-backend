@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.evaluation_forms import AssessmentForm
 from backend.models.evaluations import Assessment
-from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, StudentClassroom, Subject
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Series, Student, StudentClassroom, Subject
 from django.db.models import Sum
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -172,7 +172,16 @@ class AddAssessmentView(View):
     
     def get(self, request, *args, **kwargs):
         form = AssessmentForm(request.user)
-        context = {'form': form}
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        subjects = Subject.objects.filter(level__school=request.user.school)
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        students = Student.objects.filter(id__in=student_ids)
+        context = {
+            'form': form,
+            'classrooms':classrooms,
+            'subjects':subjects,
+            'students':students
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):

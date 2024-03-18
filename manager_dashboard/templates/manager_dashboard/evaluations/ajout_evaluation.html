@@ -32,15 +32,27 @@
                     <fieldset>
                         <div class="form-group">
                             <label class="form-label" for="level">Salle de classe</label>
-                            {{ form.classroom }}
+                            <select name='classroom'  class="js-example-basic-single w-100">
+                                {% for classroom in classrooms %}
+                                    <option value="{{classroom.id}}">{{classroom.title}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="level">Matières</label>
-                            {{ form.subject }}
+                            <label class="form-label" for="level">Matière</label>
+                            <select name='subject'  class="js-example-basic-single w-100">
+                                {% for subject in subjects %}
+                                    <option value="{{subject.id}}">{{subject.label}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label" for="level">Étudiant</label>
-                            {{ form.student }}
+                            <label class="form-label" for="level">Etudiant</label>
+                            <select name='student'  class="js-example-basic-single w-100">
+                                {% for student in students %}
+                                    <option value="{{student.id}}">{{student.fullname}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="level">Note devoir</label>
