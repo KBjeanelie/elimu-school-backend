@@ -1,6 +1,6 @@
 import os
 from django.db import models
-from backend.models.gestion_ecole import ClassRoom, Etablishment, Level
+from backend.models.gestion_ecole import Etablishment, Level
 from backend.models.user_account import Teacher
 from elimu_school import settings
 

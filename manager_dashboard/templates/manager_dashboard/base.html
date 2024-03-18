@@ -351,6 +351,7 @@
                     },
                     success: function(response) {
                         $('#elementList').find(`tr[data-id="${id}"]`).remove();
+                        $('#elementList').find(`div[data-id="${id}"]`).remove();
                         console.log('Élément supprimé avec succès');
                     },
                     error: function(error) {

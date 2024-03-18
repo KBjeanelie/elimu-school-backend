@@ -4,6 +4,7 @@ from django.views import View
 from backend.forms.contenue_pedagogique_forms import eBookForm
 from django.contrib import messages
 from backend.models.contenue_pedagogique import  eBook
+from backend.models.gestion_ecole import Level, Teacher
 
 class AddeBook(View):
     template = "manager_dashboard/contenue_pedagogique/ajout_ebook.html"
@@ -19,7 +20,11 @@ class AddeBook(View):
     
     def get(self, request, *args, **kwargs):
         form = eBookForm(request.user)
-        context_object = {'form': form}
+        context_object = {
+            'form': form,
+            'levels':Level.objects.filter(school=request.user.school),
+            'teachers':Teacher.objects.filter(school=request.user.school).order_by('-created_at')
+        }
         return render(request, template_name=self.template, context=context_object)
     
     def post(self, request, *args, **kwargs):
@@ -50,7 +55,12 @@ class EditEbook(View):
     def get(self, request, pk, *args, **kwargs):
         ebook = get_object_or_404(eBook, pk=pk)
         form = eBookForm(request.user, instance=ebook)
-        context = {'form':form, 'ebook':ebook}
+        context = {
+            'form':form, 
+            'ebook':ebook,
+            'levels':Level.objects.filter(school=request.user.school),
+            'teachers':Teacher.objects.filter(school=request.user.school).order_by('-created_at')
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
