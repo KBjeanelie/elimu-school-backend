@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.user_account_forms import UserParentForm, UserStudentForm, UserTeacherForm
+from backend.models.gestion_ecole import Parent
 from backend.models.user_account import ManagementProfil, User
 from django.contrib import messages
 
@@ -64,7 +65,6 @@ class AddDirectionAccount(View):
             
             # Vérifiez si l'email existe déjà dans la base de données
             if ManagementProfil.objects.filter(email=request.POST['email']).exists():
-                print(ManagementProfil.objects.filter(email=request.POST['email']))
                 messages.error(request, "Erreur: Cet email est déjà utilisé!")
                 return redirect('manager_dashboard:director_add')
 
@@ -363,10 +363,21 @@ class AddParentAccount(View):
     
     def get(self, request, *args, **kwargs):
         form = UserParentForm(request.user)
-        context_object = {'form': form}
+        context_object = {
+            'form': form,
+            'parents': Parent.objects.filter(school=request.user.school)
+        }
         return render(request, template_name=self.template, context=context_object)
     
     def post(self, request, *args, **kwargs):
+        if request.POST['password'] != request.POST['confirm_password']:
+            messages.error(request, "Les deux mot de passe ne corresponde pas :(")
+            return redirect('manager_dashboard:add_parent_account')
+        
+        if User.objects.filter(username=request.POST['username']).exists():
+            messages.error(request, "Erreur: Ce nom d'utilisateur est déjà utilisé!")
+            return redirect('manager_dashboard:add_parent_account')
+        
         form = UserParentForm(request.user, request.POST)
         if form.is_valid():
             new_user = User.objects.create_parent_user(
