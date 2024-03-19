@@ -954,10 +954,10 @@ class AddStudentView(View):
         return redirect('backend:logout')
 
     def get(self, request, *args, **kwargs):
-        levels = ClassRoom.objects.filter(level__school=self.request.user.school)
+        classrooms = ClassRoom.objects.filter(level__school=self.request.user.school)
         parents = Parent.objects.filter(school=self.request.user.school)
         type_documents = DocumentType.objects.filter(status=True, school=request.user.school)
-        context = {'levels':levels, 'type_documents':type_documents, 'parents':parents}
+        context = {'classrooms':classrooms, 'type_documents':type_documents, 'parents':parents}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
