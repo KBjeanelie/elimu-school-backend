@@ -172,7 +172,7 @@
                 <!-- GESTION TEMPS -->
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="collapse" href="#clock" aria-expanded="false" aria-controls="clock">
-                        <i class="menu-icon mdi mdi mdi-calendar-clock "></i>
+                        <i class="menu-icon mdi mdi-calendar-clock "></i>
                         <span class="menu-title">Gestion de temps</span>
                         <i class="menu-arrow"></i>
                     </a>
@@ -353,6 +353,7 @@
                     success: function(response) {
                         $('#elementList').find(`tr[data-id="${id}"]`).remove();
                         $('#elementList').find(`div[data-id="${id}"]`).remove();
+                        $('#elementList').find(`p[data-id="${id}"]`).remove();
                         console.log('Élément supprimé avec succès');
                     },
                     error: function(error) {
