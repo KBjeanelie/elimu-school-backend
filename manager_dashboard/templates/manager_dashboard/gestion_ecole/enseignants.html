@@ -67,7 +67,8 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <!--<a href=""><i class="fa fa-eye h4 text-primary"></i></a>-->
+                                        <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}' class="p-2">
+                                            <i class="fa fa-eye h4 text-dark"></i></a>
                                         <a href='{% url "manager_dashboard:edit_teacher" teacher.id %}' class='p-2'><i class="fa fa-edit h4 text-dark"></i></a>
                                         <a href="#" onclick="delete_function({{teacher.id}})" ><i class="fa fa-trash-o h4 text-danger"></i></a>
                                     </td>

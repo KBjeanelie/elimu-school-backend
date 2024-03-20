@@ -78,6 +78,7 @@ urlpatterns = [
     path(route='gestion_ecole/parents-elèves/<int:pk>/editer/', view=EditParentView.as_view(), name='edit_parent'),
     path(route='gestion_ecole/parents-elèves/<int:pk>/delete/', view=ParentView.as_view(), name='delete_parent'),
     path(route='gestion_ecole/parents-elèves/<int:pk>/detail/', view=ParentDetailView.as_view(), name='parent_detail'),
+    path(route='gestion_ecole/parents-elèves/<int:pk>/delete-document/', view=ParentDetailView.as_view(), name='parent_delete_document'),
     #path(route='gestion_ecole/parents-elèves/<int:pk>/delete-document/', view=TeacherDetailView.as_view(), name='parent_delete_document'),
     
     #===END
