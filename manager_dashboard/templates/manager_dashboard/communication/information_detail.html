@@ -33,7 +33,7 @@
                     {% endautoescape %}
                 </br>
                 {% if info.file_exists %}
-                    <p>Cliquez pour télécharger le fichier correspondant <a href="" class="text-primary"><strong>ici</strong></a></p>
+                    <p>Cliquez pour télécharger le fichier correspondant <a href="{{info.file.url}}" target='blank' class="text-primary"><strong>ici</strong></a></p>
                 {% endif %}
                 </div>
             </div>

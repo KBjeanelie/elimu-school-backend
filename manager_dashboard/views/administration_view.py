@@ -6,6 +6,8 @@ from backend.forms.gestion_ecole_forms import DocumentTypeForm, EtablishmentForm
 from backend.models.evaluations import TypeOfEvaluation
 from backend.models.gestion_ecole import DocumentType, SanctionAppreciationType
 from backend.forms.gestion_ecole_forms import ManagementProfilForm
+from django.contrib import messages
+
 
 class TypeEvaluationView(View):
     template_name = "manager_dashboard/administration/type_evaluations.html"
@@ -188,6 +190,7 @@ class SettingAppView(View):
         form = EtablishmentForm(request.POST, instance=request.user.school)
         if form.is_valid():
             form.save()
+            messages.success(request, "Enregistrement reussit!")
             redirect('manager_dashboard:reglage_general')
         else:
             print(form.errors)
