@@ -134,7 +134,17 @@ class EditAssessmentView(View):
     def get(self, request, pk, *args, **kwargs):
         evaluation = get_object_or_404(Assessment, pk=pk)
         form = AssessmentForm(request.user, instance=evaluation)
-        context = {'form': form}
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        subjects = Subject.objects.filter(level__school=request.user.school)
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        students = Student.objects.filter(id__in=student_ids)
+        context = {
+            'form': form,
+            'classrooms':classrooms,
+            'subjects':subjects,
+            'students':students,
+            'evaluation':evaluation
+        }
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):

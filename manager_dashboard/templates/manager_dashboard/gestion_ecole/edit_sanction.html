@@ -33,21 +33,55 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Etudiant</label>
-                                {{ form.student }}
+                                <select name='student'  class="js-example-basic-single w-100">
+                                    {% for student in students %}
+                                        {% if sanction.student.id == student.id %}
+                                            <option value="{{student.id}}" selected>{{student.fullname}}</option>
+                                        {% else %}
+                                            <option value="{{student.id}}">{{student.fullname}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Salle de classe</label>
-                                {{ form.classroom }}
+                                <select name='classroom'  class="js-example-basic-single w-100">
+                                    {% for classroom in classrooms %}
+                                        {% if sanction.classroom.id == classroom.id %}
+                                            <option value="{{classroom.id}}">{{classroom.title}}</option>
+                                        {% else %}
+                                            <option value="{{classroom.id}}">{{classroom.title}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Type de sanction / Appréciation</label>
-                               {{ form.type }}
+                               <select name='type'  class="js-example-basic-single w-100">
+                                    {% for type in types %}
+                                    {% if sanction.types.id == type.id %}
+                                        <option value="{{type.id}}" selected>{{type.title}}</option>
+                                    {% else %}
+                                        <option value="{{type.id}}">{{type.title}}</option>
+                                    {% endif %}
+                                        
+                                    {% endfor %}
+                                </select>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label" for="level">Matière</label>
-                                {{ form.subject }}
+                                <select name='subject'  class="js-example-basic-single w-100">
+                                    {% for subject in subjects %}
+                                        {% if sanction.subject.id == subject.id %}
+                                            <option value="{{subject.id}}" selected>{{subject.label}}</option>
+                                        {% else %}
+                                            <option value="{{subject.id}}">{{subject.label}}</option>
+                                        {% endif %}
+                                        
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
                         <div class="mb-3">

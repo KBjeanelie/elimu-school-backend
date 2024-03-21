@@ -1,151 +1,140 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Tableau des Notes</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            <li class="breadcrumb-item"><a>Tableau des notes</a></li>
-                        </ol>
-                    </div>
-                    {% if not user.is_admin %}
-                    <div class="page_title_right">
-                        <div class="page_date_button d-flex align-items-center">
-                            <a href='{% url "manager_dashboard:add_evaluation" %}' class="white_btn3"><i class="fas fa-plus-square"></i> Ajouter une évaluation</a>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
 
-        <div class="container mt-3">
-            <div class="row">
-                <div class="col-12">
-                    <form method="post" class="row g-3">
-                        {% csrf_token %}
-                        <div class="col-auto">
-                            <label class="form-label" for="inputStateCareer">Selectionner la période</label>
-                            <select id="inputStateCareer" class="form-control" name="period" required>
-                                <option value="Octobre">Octobre</option>
-                                <option value="Novembre">Novembre</option>
-                                <option value="Décembre">Décembre</option>
-                                <option value="Janvier">Janvier</option>
-                                <option value="Février">Février</option>
-                                <option value="Mars">Mars</option>
-                                <option value="Avril">Avril</option>
-                                <option value="MaiJuin">MaiJuin</option>
-                                <option value="Juin">Juin</option>
-                                <option value="Juillet">Juillet</option>
-                                <option value="Premier trimestre">Premier trimestre</option>
-                                <option value="Deuxième trimestre">Deuxième trimestre</option>
-                                <option value="Troisième trimestre">Troisième trimestre</option>
-                            </select> 
-                        </div>
-                        <div class="col-auto">
-                            <label class="form-label" for="inputStateCareer">Selectionner la classe</label>
-                            <select id="inputStateCareer" class="form-control" name="classroom" required>
-                                {% for classroom in classrooms %}
-                                    <option value="{{classroom.id}}"> {{classroom.title}} </option>
-                                {% endfor %}
-                            </select> 
-                        </div>
-                        <div class="col-auto">
-                            <label class="form-label" for="inputStateYear">Selectionner la matière</label>
-                            <select id="inputStateYear" class="form-control" name="subject" required>
-                                
-                                {% for subject in subjects %}
-                                    <option value="{{subject.id}}"> {{subject.label}} </option>
-                                {% endfor %}
-                            </select> 
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary mt-4">Rechercher</button>
-                        </div>
-                    </form>
-                    
-                </div>
-            </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="template-demo">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom">
+              <li class="breadcrumb-item">
+                <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                <span>Tableau des notes</span>
+              </li>
+            </ol>
+          </nav>
         </div>
+      </div>
+    </div>
+</div>
 
-        <div class="row mt-3">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        {% if evaluations %}
-                            <div class="QA_section">
-                                <div class="QA_table mb_30">
-                                    <table class="table lms_table_active ">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Matricule</th>
-                                                <th scope="col">Nom complet</th>
-                                                <th scope="col">Rang</th>
-                                                <th scope="col">Note devoir</th>
-                                                <th scope="col">Note examen</th>
-                                                <th scope="col">Evaluations</th>
-                                                <th scope="col">Coefficient</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="elementList">
-                                            {% for evaluation in evaluations %}
-                                                <tr class='bg-light'>
-                                                    <td>
-                                                        <h6> {{evaluation.student.registration_number}} </h6>
-                                                    </td>
-                                                    <td><h6> {{evaluation.student.firstname}} {{evaluation.student.lastname|upper}}</h6></td>
-                                                    <td><h6> {{ forloop.counter }} </h6></td>
-                                                    <td><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}} </span></h6></td>
-                                                    <td><h6><span class="badge rounded-pill bg-primary"> {{evaluation.note_exam}} </span></h6></td>
-                                                    <td><h6>{{evaluation.subject.label}}</h6></td>
-                                                    <td><h6>{{evaluation.subject.coefficient}}</h6></td>
-                                                </tr>
-                                            {% endfor %}
-                                            <tr class='bg-secondary'>
-                                                <td colspan="3">
-                                                    <h6 class='text-center text-white'> Moyenne de classe </h6>
-                                                </td>
-                                                <td><h6 class="text-white"> {{average}} </h6></td>
-                                                <td colspan="2">
-                                                    <h6 class='text-center text-white'> {{average}} </h6>
-                                                </td>
-                                            </tr>
-                                            <tr class='bg-secondary'>
-                                                <td colspan="3">
-                                                    <h6 class='text-center text-white'> Note la plus haute </h6>
-                                                </td>
-                                                <td><h6 class="text-white"> {{max_note}} </h6></td>
-                                                <td colspan="2">
-                                                    <h6 class='text-center text-white'> {{max_note}} </h6>
-                                                </td>
-                                            </tr>
-                                            <tr class='bg-secondary'>
-                                                <td colspan="3">
-                                                    <h6 class='text-center text-white'> Note la plus base </h6>
-                                                </td>
-                                                <td><h6 class="text-white"> {{last_note}} </h6></td>
-                                                <td colspan="2">
-                                                    <h6 class='text-center text-white'> {{last_note}} </h6>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        {% else %}
-                            <p>Aucun résultat ne correspond à la recherche</p>
-                        {% endif %}
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <form method="post" class="row g-3">
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='col-md-3'>
+                        <select class="js-example-basic-single w-100 form-control" name="period" required>
+                            <option value="Octobre">Octobre</option>
+                            <option value="Novembre">Novembre</option>
+                            <option value="Décembre">Décembre</option>
+                            <option value="Janvier">Janvier</option>
+                            <option value="Février">Février</option>
+                            <option value="Mars">Mars</option>
+                            <option value="Avril">Avril</option>
+                            <option value="MaiJuin">MaiJuin</option>
+                            <option value="Juin">Juin</option>
+                            <option value="Juillet">Juillet</option>
+                            <option value="Premier trimestre">Premier trimestre</option>
+                            <option value="Deuxième trimestre">Deuxième trimestre</option>
+                            <option value="Troisième trimestre">Troisième trimestre</option>
+                        </select> 
+                    </div>
+                    <div class='col-md-3'>
+                        <select  class="js-example-basic-single w-100 form-control" name="classroom" required>
+                            {% for classroom in classrooms %}
+                                <option value="{{classroom.id}}"> {{classroom.title}} </option>
+                            {% endfor %}
+                        </select> 
+                    </div>
+                    <div class='col-md-3'>
+                        <select name='subject'  class="js-example-basic-single w-100 form-control">
+                            {% for subject in subjects %}
+                                <option value="{{subject.id}}">{{subject.label}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class='col-md-3'>
+                        <button type="submit" class="btn btn-primary mt-4">Rechercher</button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
+
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            {% if evaluations %}
+            <div>
+                <table class="table">
+                    <thead>
+                        <tr class='text-center'>
+                            <th scope="col" class='bg-info text-white'>Matricule</th>
+                            <th scope="col" class='bg-info text-white'>Nom complet</th>
+                            <th scope="col" class='bg-info text-white'>Rang</th>
+                            <th scope="col" class='bg-info text-white'>Note devoir</th>
+                            <th scope="col" class='bg-info text-white'>Note examen</th>
+                            <th scope="col" class='bg-info text-white'>Evaluations</th>
+                            <th scope="col" class='bg-info text-white'>Coefficient</th>
+                        </tr>
+                    </thead>
+                    <tbody id="elementList">
+                        {% for evaluation in evaluations %}
+                            <tr>
+                                <td class='bg-light text-dark'>
+                                    <h6> {{evaluation.student.registration_number}} </h6>
+                                </td>
+                                <td class='bg-light text-dark'><h6> {{evaluation.student.firstname}} {{evaluation.student.lastname|upper}}</h6></td>
+                                <td class='bg-light text-dark'><h6> {{ forloop.counter }} </h6></td>
+                                <td class='bg-light text-dark'><h6><span class="badge rounded-pill bg-info"> {{evaluation.note}} </span></h6></td>
+                                <td class='bg-light text-dark'><h6><span class="badge rounded-pill bg-primary"> {{evaluation.note_exam}} </span></h6></td>
+                                <td class='bg-light text-dark'><h6>{{evaluation.subject.label}}</h6></td>
+                                <td class='bg-light text-dark'><h6>{{evaluation.subject.coefficient}}</h6></td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="3" class='bg-info text-white'>
+                                <h6 class='text-center'> Moyenne de classe </h6>
+                            </td>
+                            <td class='bg-info text-white'><h6> {{average}} </h6></td>
+                            <td colspan="2" class='bg-info text-white'>
+                                <h6 class='text-center'> {{average}} </h6>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"  class='bg-info text-white'>
+                                <h6 class='text-center'> Note la plus haute </h6>
+                            </td>
+                            <td  class='bg-info text-white'><h6> {{max_note}} </h6></td>
+                            <td colspan="2"  class='bg-info text-white'>
+                                <h6 class='text-center'> {{max_note}} </h6>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class='bg-info text-white'>
+                                <h6 class='text-center text-white'> Note la plus base </h6>
+                            </td>
+                            <td class='bg-info text-white'><h6 class="text-white"> {{last_note}} </h6></td>
+                            <td colspan="2" class='bg-info text-white'>
+                                <h6 class='text-center text-white'> {{last_note}} </h6>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p>Aucun résultat ne correspond à la recherche</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 
 {% endblock content %}

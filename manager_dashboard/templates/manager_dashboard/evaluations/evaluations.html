@@ -2,23 +2,23 @@
 {% load static %}
 {% block content %}
 <div class="col-md-12 grid-margin stretch-card">
-      <div class="card">
-        <div class="card-body">
-          <div class="template-demo">
-            <nav aria-label="breadcrumb">
-              <ol class="breadcrumb breadcrumb-custom">
-                <li class="breadcrumb-item">
-                  <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page">
-                  <span>Évaluations</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
+  <div class="card">
+    <div class="card-body">
+      <div class="template-demo">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb breadcrumb-custom">
+            <li class="breadcrumb-item">
+              <a href='{% url "manager_dashboard:index" %}'>Tableau de board</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+              <span>Évaluations</span>
+            </li>
+          </ol>
+        </nav>
       </div>
     </div>
+  </div>
+</div>
   {% if messages %} {% for message in messages %}
   <div class="alert alert-success" role="alert">{{ message }}</div>
   {% endfor %} {% endif %}
@@ -49,21 +49,33 @@
                         <th scope="col">Note examen</th>
                         <th scope="col">Salle de classe</th>
                         <th scope="col">Période</th>
-                        <!--<th scope="col">Est public ?</th>-->
+                        <th scope="col">Est public ?</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody id="elementList">
                     {% for evaluation in evaluations %}
                         <tr data-id="{{evaluation.id}}">
-                        <td>{{info.title}}</td>
-                        <td>{{info.created_at}}</td>
-                        <td>
-                            <a href="{% url 'manager_dashboard:edit_evaluation' evaluation.id %}" class="p-2">
-                                <i class="fa fa-edit h4 text-dark"></i></a>
-                            <a href="#" onclick="delete_function({{evaluation.id}})">
-                                <i class="fa fa-trash-o h4 text-danger"></i></a>
-                        </td>
-                    </tr>
+                          <td>{{evaluation.student.fullname}}</td>
+                          <td>{{evaluation.subject.label}}</td>
+                          <td>{{evaluation.note}}</td>
+                          <td>{{evaluation.note_exam}}</td>
+                          <td>{{evaluation.classroom.title}}</td>
+                          <td>{{evaluation.period}}</td>
+                          <td>
+                            {% if evaluation.is_publish %}
+                                <span class="badge rounded-pill bg-success"> Oui </span>
+                            {% else %}
+                                <span class="badge rounded-pill bg-danger"> Non </span>
+                            {% endif %}
+                          </td>
+                          <td>
+                              <a href="{% url 'manager_dashboard:edit_evaluation' evaluation.id %}" class="p-2">
+                                  <i class="fa fa-edit h4 text-dark"></i></a>
+                              <a href="#" onclick="delete_function({{evaluation.id}})">
+                                  <i class="fa fa-trash-o h4 text-danger"></i></a>
+                          </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
