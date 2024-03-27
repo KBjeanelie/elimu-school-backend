@@ -13,7 +13,7 @@ from elimu_school.constant import generate_qr_code_and_save
 def moyenne_primaire(notes):
     somme_notes = sum(notes)
     nombre_matières = len(notes)
-    moyenne = somme_notes / nombre_matières
+    moyenne = (somme_notes / nombre_matières)
     return moyenne
 
 def calcul_moyenne_college(notes_devoirs, notes_compos):
@@ -45,7 +45,10 @@ def calcul_resultat_primaire(period, classroom, student, academic_year):
     # Extraire les notes à partir des évaluations
     notes = [evaluation.note_exam for evaluation in evaluations]
 
-    average = moyenne_primaire(notes)
+    if notes:
+        average = moyenne_primaire(notes)
+    else:
+        average = 0
     student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
     
     return {
