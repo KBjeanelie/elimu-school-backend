@@ -631,7 +631,7 @@ class EditSanctionView(View):
     def get(self, request, pk, *args, **kwargs):
         sanction = get_object_or_404(SanctionAppreciation, pk=pk)
         form = SanctionAppreciationForm(request.user, instance=sanction)
-        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True, is_registered=True).values_list('student', flat=True).distinct()
         students = Student.objects.filter(id__in=student_ids)
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         types = SanctionAppreciationType.objects.filter(school=request.user.school)
@@ -669,7 +669,7 @@ class AddSanctionView(View):
     
     def get(self, request, *args, **kwargs):
         form = SanctionAppreciationForm(request.user)
-        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True, is_registered=True).values_list('student', flat=True).distinct()
         students = Student.objects.filter(id__in=student_ids)
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         types = SanctionAppreciationType.objects.filter(school=request.user.school)

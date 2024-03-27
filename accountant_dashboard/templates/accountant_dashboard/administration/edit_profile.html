@@ -3,30 +3,25 @@
 
 
 {% block content %}
-    
-    <!-- =============== MAIN PAGE =============================-->
-    <div class="main_content_iner overly_inner ">
-        <div class="container-fluid p-0 ">
-            <!-- ================= Entête ====================-->
-            <div class="row">
-                <div class="col-12">
-                    <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                        <div class="page_title_left d-flex align-items-center">
-                            <h3 class="f_s_25 f_w_700 dark_text mr_30">Editer Mon Profil</h3>
-                        </div>
-                    </div>
-                </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="template-demo">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:index" %}'>Tableau de board</a></li>
+                        <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:user_profile" %}'>Mon Profil</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>Éditer</span></li>
+                    </ol>
+                </nav>
             </div>
+        </div>
+    </div>
+</div>
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div {% if message.tags %} class="alert text-white bg-{{ message.tags }} d-flex align-items-center justify-content-between" {% endif %} role="alert">
-                        <div class="alert-text">{{ message }}</div>
-                        <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><i class="ti-close text-white f_s_14"></i></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
             <div class="row ">
 
                 <div class="col-xl-12">
@@ -35,7 +30,7 @@
                             <form method='post'>
                                 {% csrf_token %}
                                 <h5 class="text-primary mt-2">Informations générales</h5><hr>
-                                <div class="row mb-3">
+                                <div class="row form-group">
                                     <div class="col-md-4">
                                         <label class="form-label" for="level">Nom</label>
                                         {{form.lastname}}
@@ -49,7 +44,7 @@
                                         {{form.address}}
                                     </div>
                                 </div>
-                                <div class="row mb-3">
+                                <div class="row form-group">
                                     <div class="col-md-4">
                                         <label class="form-label" for="level">Téléphone</label>
                                         {{form.tel}}
@@ -63,32 +58,31 @@
                                         {{form.city}}
                                     </div>
                                 </div>
-                                <div class="row mb-3">
+                                <div class="row form-group">
                                     <div class="col-md-6">
                                         <label class="form-label" for="level">Sexe</label>
                                         {{form.sex}}
                                     </div>
-                                    <div class="col-md-6">
+                                    <!--<div class="col-md-6">
                                         <label class="form-label" for="level">Picture</label>
                                         {{form.picture}}
-                                    </div>
+                                    </div>-->
                                 </div>
                                 
-                                <div class="row mb-3">
+                                <div class="row form-group">
                                     <div class="col-md-12">
                                         <label class="form-label" for="level">Biographie</label>
                                         {{form.bio}}
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-success"> <i class="ti-save"></i> Sauvegarder</button>
+                                <button type="submit" class="btn btn-dark"> <i class="ti-save"></i> Modifier</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    
+</div>
 {% endblock content %}
     

@@ -136,7 +136,7 @@ class EditAssessmentView(View):
         form = AssessmentForm(request.user, instance=evaluation)
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
-        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True, is_registered=True).values_list('student', flat=True).distinct()
         students = Student.objects.filter(id__in=student_ids)
         context = {
             'form': form,
@@ -184,7 +184,7 @@ class AddAssessmentView(View):
         form = AssessmentForm(request.user)
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
-        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True).values_list('student', flat=True).distinct()
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True, is_registered=True).values_list('student', flat=True).distinct()
         students = Student.objects.filter(id__in=student_ids)
         context = {
             'form': form,

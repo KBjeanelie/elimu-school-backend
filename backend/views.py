@@ -3,7 +3,7 @@ from django.shortcuts import redirect
 from django.views import View
 from django.contrib import messages
 from backend.forms.user_account_forms import LoginForm
-from backend.models.gestion_ecole import AcademicYear
+from backend.models.gestion_ecole import AcademicYear, StudentClassroom
 
 
 # Create your views here.
@@ -31,6 +31,7 @@ class LoginView(View):
         login(request, user)
         
         years = AcademicYear.objects.filter(school=user.school)
+        
         
         for academic_year in years:
             if academic_year.status:

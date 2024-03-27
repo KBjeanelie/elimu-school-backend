@@ -2,141 +2,140 @@
 {% load static %}
 {% load humanize %}
 {% block content %}
-
-<!-- =============== MAIN PAGE =============================-->
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Suivis des soldes </h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a class='text-primary' href='{% url "accountant_dashboard:index" %}'> Accueil</a></li>
-                            <li class="breadcrumb-item"><a href=''> Suivis des soldes</a></li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+      <div class="card-body">
+        <div class="template-demo">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-custom">
+              <li class="breadcrumb-item">
+                <a href='{% url "accountant_dashboard:index" %}'>Tableau de board</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                <span>Suivis des soldes</span>
+              </li>
+            </ol>
+          </nav>
         </div>
+      </div>
+    </div>
+</div>
 
+<div class="card">
+    <div class="card-body">
         <div class="row">
             <div class="col-md-3">
-                <div class="card bg-success mb-3 widget-chart">
+                <div class="card bg-success text-center p-3 mb-3 widget-chart">
                     <div class="icon-wrapper rounded-circle">
                         <div class="icon-wrapper-bg bg-primary"></div>
-                        <i class="ti-server" style="color: white;"></i>
+                        <i class="ti-server h1" style="color: white;"></i>
                     </div>
-                    <div><h4 style="color: white;">{{total_engagements}}F CFA</h4></div>
-                    <div class="widget-subheading">Facturé cette année</div>
+                    <div><h4 class='text-white mt-3'>{{total_engagements}}F CFA</h4></div>
+                    <div class="widget-subheading text-white">Facturé cette année</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card bg-info mb-3 widget-chart">
+                <div class="card bg-warning text-center p-3 mb-3 widget-chart">
                     <div class="icon-wrapper rounded-circle">
-                        <div class="icon-wrapper-bg bg-primary"></div>
-                        <i class="ti-server" style="color: white;"></i>
+                        <div class="icon-wrapper-bg"></div>
+                        <i class="ti-server h1" style="color: white;"></i>
                     </div>
-                    <div><h4 style="color: white;"> {{amount_payed}}F CFA</h4></div>
-                    <div class="widget-subheading">Payé</div>
+                    <div><h4 class='text-white mt-3'>{{amount_payed}}F CFA</h4></div>
+                    <div class="widget-subheading text-white">Payé</div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card bg-danger mb-3 widget-chart">
+                <div class="card bg-danger text-center p-3 mb-3 widget-chart">
                     <div class="icon-wrapper rounded-circle">
-                        <div class="icon-wrapper-bg bg-primary"></div>
-                        <i class="ti-receipt" style="color: white;"></i>
+                        <div class="icon-wrapper-bg"></div>
+                        <i class="ti-receipt h1" style="color: white;"></i>
                     </div>
-                    <div><h4 style="color: white;"> {{count_invoices}}</h4></div>
-                    <div class="widget-subheading">Factures payés</div>
+                    <div><h4 class='text-white mt-3'>{{count_invoices}}</h4></div>
+                    <div class="widget-subheading text-white">Factures payés</div>
                 </div>
             </div>
-
             <div class="col-md-3">
-                <div class="card bg-primary mb-3 widget-chart">
+                <div class="card bg-primary text-center p-3 mb-3 widget-chart">
                     <div class="icon-wrapper rounded-circle">
-                        <div class="icon-wrapper-bg bg-primary"></div>
-                        <i class="ti-receipt" style="color: white;"></i>
+                        <div class="icon-wrapper-bg"></div>
+                        <i class="ti-receipt h1" style="color: white;"></i>
                     </div>
-                    <div><h4 style="color: white;"> {{not_payed}}F CFA </h4></div>
-                    <div class="widget-subheading">Reste à payés</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row mt-5">
-            <div class="col-lg-12">
-                <div class="white_card card_height_100 mb_30 pt-4">
-                    <div class="white_card_body">
-                        <div class="QA_section">
-                            <div class="white_box_tittle list_header">
-                                <h4>Factures Payés </h4>
-                                <div class="box_right d-flex lms_block">
-                                    <div class="serach_field_2">
-                                        <div class="search_inner">
-                                            <form Active="#">
-                                                <div class="search_field">
-                                                    <input type="text" id="searchInput" placeholder="rechercher un....">
-                                                </div>
-                                                <button type="submit"> <i class="ti-search"></i> </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="add_button ms-2">
-                                        <a href="#" data-toggle="modal" data-target="#addcategory" class="btn_1">search</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="QA_table mb_30">
-                                <table id="dataTable" class="table lms_table_active ">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">N° Facture</th>
-                                            <th scope="col">Date de facture</th>
-                                            <th scope="col">Étudiant</th>
-                                            <th scope="col">Parcours</th>
-                                            <th scope="col">Montant</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="elementList">
-                                        {% for invoice in invoices %}
-                                            <tr data-id='{{invoice.id}}'>
-                                                <td><h6>{{ invoice.invoice_number }}</h6></td>
-                                                <td><h6>{{ invoice.invoice_date }}</h6></td>
-                                                <td><h6>{{ invoice.student.fullname }}</h6></td>
-                                                <td><h6>{{ invoice.career.title }}</h6></td>
-                                                <td><h6>{{ invoice.amount }} XAF</h6></td>
-                                                <td><h6><span class="badge rounded-pill bg-success">{{ invoice.invoice_status}}</span></h6></td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <div><h4 class='text-white mt-3'> {{not_payed}}F CFA </h4></div>
+                    <div class="widget-subheading text-white">Reste à payés</div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function(){
-        $('#searchInput').keyup(function(){
-            var searchText = $(this).val().toLowerCase();
-            $('#dataTable tbody tr').each(function(){
-                var currentRowText = $(this).text().toLowerCase();
-                if(currentRowText.indexOf(searchText) !== -1){
-                    $(this).show();
-                } else {
-                    $(this).hide();
-                }
-            });
-        });
-    });
-</script>
+<div class="card mt-5">
+    <div class="card-body">
+        <div class="d-sm-flex justify-content-between align-items-start">
+            <div>
+                <h4 class="card-title card-title-dash">Facture Payé</h4>
+            </div>
+            <div>
+                <a href='{% url "accountant_dashboard:invoice_add" %}' class="btn btn-primary text-white mb-0 me-0">
+                <i class="mdi mdi-note-plus"></i> Ajouter une facture</a>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <table id="order-listing" class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">N° Facture</th>
+                                <th scope="col">Date de facture</th>
+                                <th scope="col">Étudiant</th>
+                                <th scope="col">Classe</th>
+                                <th scope="col">Écolage de</th>
+                                <th scope="col">Montant</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="elementList">
+                            {% for invoice in invoices %}
+                                <tr data-id='{{invoice.id}}'>
+                                    <td><h6>{{ invoice.invoice_number }}</h6></td>
+                                    <td><h6>{{ invoice.invoice_date }}</h6></td>
+                                    <td><h6>{{ invoice.student.fullname }}</h6></td>
+                                    <td><h6>{{ invoice.classroom.title }}</h6></td>
+                                    <td><h6>{{ invoice.schooling_of }}</h6></td>
+                                    <td><h6>{{ invoice.amount }} XAF</h6></td>
+                                    <td><h6>
+                                        {% if invoice.is_repayment %}
+                                            <span class="badge rounded-pill bg-danger">Remboursé</span>
+                                        {% else %}
+                                            {% if invoice.invoice_status == 'Entièrement payé' %}
+                                                <span class="badge rounded-pill bg-success">{{ invoice.invoice_status}}</span>
+                                            {% elif  invoice.invoice_status == 'Non payé' %}
+                                                <span class="badge rounded-pill bg-warning">{{ invoice.invoice_status}}</span>
+                                            {% else %}
+                                                <span class="badge rounded-pill bg-danger">{{ invoice.invoice_status}}</span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </h6></td>
+                                    <td>
+                                        {% if not invoice.is_repayment %}
+                                        <a href='{% url "accountant_dashboard:invoice" invoice.id %}' class="p-2">
+                                            <i class="fa fa-eye h4 text-primary"></i></a>
+                                        <a href='{% url "accountant_dashboard:invoice_edit" invoice.id %}' class="p-2">
+                                            <i class="fa fa-edit h4 text-dark"></i></a>
+                                        <a href="#" onclick="delete_function({{invoice.id}})">
+                                            <i class="fa fa-trash-o h4 text-danger"></i></a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 {% endblock content %}

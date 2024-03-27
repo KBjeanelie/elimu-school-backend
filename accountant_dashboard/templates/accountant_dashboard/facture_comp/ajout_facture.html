@@ -11,7 +11,7 @@
                         <ol class="breadcrumb breadcrumb-custom">
                             <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:index" %}'>Tableau de board</a></li>
                             <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:invoices" %}'>Factures</a></li>
-                            <li class="breadcrumb-item active" aria-current="page"><span>{{invoice.invoice_number}}</span></li>
+                            <li class="breadcrumb-item active" aria-current="page"><span>Ajouter</span></li>
                         </ol>
                     </nav>
                 </div>
@@ -27,7 +27,7 @@
         {% endif %}
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Modifier une facture</h4>
+                <h4 class="card-title">Ajouter une facture</h4>
                 <form class="cmxform" id="signupForm" method="post" >
                     {% csrf_token %}
                     <fieldset>
@@ -35,11 +35,7 @@
                             <label class="form-label" for="libelle">Etudiant</label>
                             <select name='student'  class="js-example-basic-single w-100 form-control">
                                 {% for student in students %}
-                                    {% if invoice.student.id == student.id %}
-                                        <option value="{{student.id}}" selected>{{student.fullname}}</option>
-                                    {% else %}
-                                        <option value="{{student.id}}">{{student.fullname}}</option>
-                                    {% endif %}
+                                    <option value="{{student.id}}">{{student.fullname}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -47,11 +43,7 @@
                             <label class="form-label" for="level">Salle de classe</label>
                             <select name='classroom'  class="js-example-basic-single w-100">
                                 {% for classroom in classrooms %}
-                                    {% if invoice.classroom.id == classroom.id%}
-                                        <option value="{{classroom.id}}" selected>{{classroom.title}}</option>
-                                    {% else %}
                                     <option value="{{classroom.id}}">{{classroom.title}}</option>
-                                    {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
@@ -59,11 +51,7 @@
                             <label class="form-label" for="level">Article</label>
                             <select name='item'  class="js-example-basic-single w-100">
                                 {% for item in items %}
-                                    {% if invoice.item.id == item.id  %}
-                                        <option value="{{item.id}}" selected>{{item.name}}</option>
-                                    {% else %}
-                                        <option value="{{item.id}}">{{item.name}}</option>
-                                    {% endif %}
+                                    <option value="{{item.id}}">{{item.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>

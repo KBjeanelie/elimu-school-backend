@@ -1,352 +1,321 @@
 <!DOCTYPE html>
+<html lang="en">
 {% load static %}
-<html lang="fr">
-
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>ELIMU Universite</title>
-    <link rel="icon" href="{% static 'img/mini_logo.png' %}" type="image/png">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Star Admin2 </title>
 
-    <link rel="stylesheet" href="{% static 'css/bootstrap1.min.css' %}" />
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/feather/feather.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/mdi/css/materialdesignicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/ti-icons/css/themify-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/typicons/typicons.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/simple-line-icons/css/simple-line-icons.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/css/vendor.bundle.base.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css' %}">
+    <!-- endinject -->
 
-    <link rel="stylesheet" href="{% static 'vendors/themefy_icon/themify-icons.css' %}" />
+    <!-- Plugin css for all page -->
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/datatables.net-bs4/dataTables.bootstrap4.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/jquery-toast-plugin/jquery.toast.min.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'manager_dashboard/vendors/select2-bootstrap-theme/select2-bootstrap.min.css' %}">
+    
+    <!-- End plugin css for all page -->
+    
+    <!-- inject:css -->
+    <link rel="stylesheet" href="{% static 'manager_dashboard/css/vertical-layout-light/style.css' %}">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="{% static 'manager_dashboard/images/favicon.png' %}" />
 
-    <link rel="stylesheet" href="{% static 'vendors/niceselect/css/nice-select.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/owl_carousel/css/owl.carousel.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/gijgo/gijgo.min.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/font_awesome/css/all.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/tagsinput/tagsinput.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/datepicker/date-picker.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/vectormap-home/vectormap-2.0.2.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/scroll/scrollable.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/datatable/css/jquery.dataTables.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/datatable/css/responsive.dataTables.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'vendors/datatable/css/buttons.dataTables.min.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/text_editor/summernote-bs4.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'vendors/morris/morris.css' %}">
-
-    <link rel="stylesheet" href="{% static 'vendors/material_icon/material-icons.css' %}" />
-
-    <link rel="stylesheet" href="{% static 'css/metisMenu.css' %}">
-
-    <link rel="stylesheet" href="{% static 'css/style1.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/colors/default.css' %}" id="colorSkinCSS">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://raw.githack.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
 </head>
 
-<body class="crm_body_bg">
-
-    <nav class="sidebar dark_sidebar">
-        <div class="logo d-flex justify-content-between">
-            <a class="large_logo" href="index-2.html"><img src="{% static 'img/logo_white.png' %}" alt></a>
-            <a class="small_logo" href="index-2.html"><img src="{% static 'img/mini_logo.png' %}" alt></a>
-            <div class="sidebar_close_icon d-lg-none">
-                <i class="ti-close"></i>
-            </div>
-        </div>
-        <ul id="sidebar_menu">
-
-            <li class>
-                <a href='{% url "accountant_dashboard:index" %}' aria-expanded="false">
-                    <div class="nav_icon_small">
-                    <img src="{% static 'img/menu-icon/dashboard.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Tableau de bord</span>
-                    </div>
-                </a>
-            </li>
-
-            <li class>
-                <a href='{% url "accountant_dashboard:pre_registrations" %}' aria-expanded="true">
-                    <div class="nav_icon_small">
-                    <img src="{% static 'img/menu-icon/5.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Pré-Inscriptions</span>
-                    </div>
-                </a>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/21.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Rapport Financier </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "accountant_dashboard:balances" %}'> Suivi des soldes </a></li>
-                    <!--<li><a href=''> Compte de résultat </a></li>
-                    <li><a href=""> Bilan annuel </a></li>-->
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/20.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Factures & Comptabilité </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "accountant_dashboard:financials" %}'> Engagements financiers </a></li>
-                    <li><a href='{% url "accountant_dashboard:invoices" %}'> Factures étudiants </a></li>
-                    <li><a href='{% url "accountant_dashboard:repayments" %}'> Remboursements </a></li>
-                    <li><a href='{% url "accountant_dashboard:spend" %}'> Dépenses </a></li>
-                </ul>
-            </li>
-
-
-            <!-- <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="../img/menu-icon/15.svg" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Gestion du Temps </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href="">Mes absences</a></li>
-                </ul>
-            </li> 
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="../img/menu-icon/11.svg" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Mon Stockage </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href="stockage/media.html">Gestion de media</a></li>
-                </ul>
-            </li>-->
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/8.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Communication </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "accountant_dashboard:infos" %}'>Informations</a></li>
-                    <li><a href='{% url "accountant_dashboard:events" %}'>Évenements</a></li>
-                    <!--<li><a href="communication/messages.html">Messages</a></li>
-                     <li><a href="communication/notifications.html">Notifications</a></li> -->
-                </ul>
-            </li>
-
-            <li class>
-                <a class="has-arrow" href="#" aria-expanded="false">
-                    <div class="nav_icon_small">
-                        <img src="{% static 'img/menu-icon/18.svg' %}" alt>
-                    </div>
-                    <div class="nav_title">
-                        <span>Administration </span>
-                    </div>
-                </a>
-                <ul>
-                    <li><a href='{% url "accountant_dashboard:items" %}'>Catalogue des articles</a></li>
+<body class="sidebar-fixed">
+    <div class="container-scroller">
+        <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+            <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+                <div class="me-3">
+                    <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+                        <span class="icon-menu"></span>
+                    </button>
+                </div>
+                <div>
+                    <a class="navbar-brand brand-logo" href='{% url "accountant_dashboard:index" %}'><img src="{% static 'manager_dashboard/images/logo.svg' %}" alt="logo" /></a>
                     
+                    <a class="navbar-brand brand-logo-mini" href='{% url "accountant_dashboard:index" %}'><img src="{% static 'manager_dashboard/images/logo-mini.svg' %}" alt="logo" /></a>
+                </div>
+            </div>
+            <div class="navbar-menu-wrapper d-flex align-items-top">
+                <ul class="navbar-nav">
+                    <li class="nav-item fw-semibold d-none d-lg-block ms-0">
+                        <h1 class="welcome-text">Bonjour, <span class="text-black fw-bold"> {{user.username}} </span></h1>
+                    </li>
                 </ul>
-            </li>
-        </ul>
-    </nav>
-
-    <section class="main_content dashboard_part large_header_bg">
-        <!-- ========================= HEADER ======================= -->
-        <div class="container-fluid g-0">
-            <div class="row">
-                <div class="col-lg-12 p-0 ">
-
-                    <div class="header_iner d-flex justify-content-between align-items-center">
-                        <div class="sidebar_icon d-lg-none"><i class="ti-menu"></i></div>
-                        <div class="line_icon open_miniSide d-none d-lg-block">
-                            <img src="{% static 'img/line_img.png' %}" alt>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item d-none d-lg-block">
+                        <span class="text-dark h5">
+                            Établissement : 
+                        </span> 
+                        <span class="badge badge-pill badge-warning">
+                            {{request.user.school.name}}
+                        </span>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <span class="text-dark h5">
+                            Année academique : 
+                        </span> 
+                        <span class="badge badge-pill badge-primary">
+                            {{request.session.academic_year}}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <form class="search-form" action="#">
+                        <i class="icon-search"></i>
+                        <input type="search" class="form-control" placeholder="Search Here" title="Search here">
+                        </form>
+                    </li>
+                    <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+                        <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="img-xs rounded-circle" src="{% static 'manager_dashboard/images/faces/face8.jpg' %}" alt="Profile image"> </a>
+                        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+                        <div class="dropdown-header text-center">
+                            <img class="img-md rounded-circle" src="{% static 'manager_dashboard/images/faces/face8.jpg' %}" alt="Profile image">
+                            <p class="mb-1 mt-3 fw-semibold"> {{user.username}} </p>
+                            <p class="fw-light text-muted mb-0">{{user.management_profil.email}}</p>
                         </div>
-                        <!-- <div class="serach_field-area d-flex align-items-center">
-                            <div class="search_inner">
-                                <form action="#">
-                                    <div class="search_field">
-                                        <input type="text" placeholder="Search">
-                                    </div>
-                                    <button type="submit"> <img src="img/icon/icon_search.svg" alt> </button>
-                                </form>
-                            </div>
-                        </div> -->
-                        <h4 class='text-center text-primary'>{{user.school.name}}</h4>
-                        <div class="header_right d-flex justify-content-between align-items-center">
-
-                            <div class="header_notification_warp d-flex align-items-center">
-                                <li style="margin-right: 25px;">
-                                    Année academique : 
-                                    {% if request.session.academic_year %}
-                                        {% with academic_year=request.session.academic_year %}
-                                            <span class="badge rounded-pill bg-primary">{{request.session.academic_year}}</span>
-                                        {% endwith %}
-                                    {% else %}
-                                        <span class="badge rounded-pill bg-danger">Indisponible</span>
-                                    {%endif%}
-                                </li>
-                                {% comment %} <li>
-                                    <a class="bell_notification_clicker" href="#"> <img src="{% static 'img/icon/bell.svg' %}" alt><span>2</span></a>
-                                    <div class="Menu_NOtification_Wrap">
-                                        <div class="notification_Header"><h4>Notifications</h4></div>
-                                        <div class="Notification_body">
-                                            <div class="single_notify d-flex align-items-center">
-                                                <div class="notify_thumb">
-                                                    <a href="#"><img src="{% static 'img/staf/2.png' %}" alt></a>
-                                                </div>
-                                                <div class="notify_content">
-                                                <a href="#"><h5>Cool Marketing </h5></a>
-                                                <p>Lorem ipsum dolor sit amet</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="nofity_footer">
-                                            <div class="submit_button text-center pt_20">
-                                                <a href="#" class="btn_1">Voir plus</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li> {% endcomment %}
-                            </div>
-
-                            <div class="profile_info">
-                                <img src="{% static 'img/membre.jpg' %}" width="50" height="50" alt="#">
-                                <div class="profile_info_iner">
-                                    <div class="profile_author_name">
-                                        {% if user.is_admin %}
-                                            <p>ADMINISTRATEUR</p>
-                                        {% else %}
-                                            <p>COMPTABLE</p>
-                                        {% endif %}
-                                        <h6 class='text-white'>
-                                            {% if user.management_profil %}
-                                            {{user.management_profil.firstname|capfirst}} {{user.management_profil.lastname|upper}}
-                                            {% else %}
-                                                {{user.username | capfirst}}
-                                            {% endif %}
-                                        </h6>
-                                </div>
-                                <div class="profile_info_details">
-                                    <a href='{% url "accountant_dashboard:user_profile" %}'>Mon Profile </a>
-                                    <a href='{% url "backend:logout" %}'>Se deconnecter</a>
-                                    </div>
-                                </div>
-                            </div>
+                        <a href='{% url "accountant_dashboard:user_profile" %}' class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Mon Profil</a>
+                        <a href='{% url "manager_dashboard:logout" %}' class="dropdown-item"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Déconnexion</a>
                         </div>
+                    </li>
+                </ul>
+                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+                    <span class="mdi mdi-menu"></span>
+                </button>
+            </div>
+        </nav>
+
+        <div class="container-fluid page-body-wrapper">
+            <div class="theme-setting-wrapper">
+                <div id="settings-trigger"><i class="ti-settings"></i></div>
+                <div id="theme-settings" class="settings-panel">
+                    <i class="settings-close ti-close"></i>
+                    <p class="settings-heading">SIDEBAR SKINS</p>
+                    <div class="sidebar-bg-options selected" id="sidebar-light-theme">
+                        <div class="img-ss rounded-circle bg-light border me-3"></div>Light
                     </div>
+                    <div class="sidebar-bg-options" id="sidebar-dark-theme">
+                        <div class="img-ss rounded-circle bg-dark border me-3"></div>Dark
+                    </div>
+                    <p class="settings-heading mt-2">HEADER SKINS</p>
+                    <div class="color-tiles mx-0 px-4">
+                    <div class="tiles success"></div>
+                    <div class="tiles warning"></div>
+                    <div class="tiles danger"></div>
+                    <div class="tiles info"></div>
+                    <div class="tiles dark"></div>
+                    <div class="tiles default"></div>
                 </div>
             </div>
         </div>
 
-        <!-- =============== MAIN PAGE =============================-->
-        {% block content %}{% endblock %}
-        <!--======================== FOOTER PAGE ===========================-->
-        <div class="footer_part">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="footer_iner text-center">
-                            <p>{% now "Y" %} © eneo group - conçu par <a href="#"> <i class="ti-heart"></i> </a><a href="#"> Tableau de Bord</a></p>
-                        </div>
+        <!-- MENU DE SIDE BAR -->
+        <nav class="sidebar sidebar-offcanvas" id="sidebar">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href='{% url "accountant_dashboard:pre_registrations" %}'>
+                        <i class="menu-icon  mdi mdi-account "></i>
+                        <span class="menu-title">
+                            Préinscriptions
+                            {% if request.session.request_student %}
+                                <span class="badge badge-pill badge-danger"> {{request.session.request_student}} </span>
+                            {% endif %}
+                        </span>
+                    </a>
+                </li>
+                <!-- GESTION ÉLÈVE -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#editors" aria-expanded="false" aria-controls="editors">
+                        <i class="menu-icon mdi mdi-account-multiple"></i>
+                        <span class="menu-title">Rapport financier</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="editors">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:balances" %}'> Suivi des soldes </a></li>
+                            <!--<li class="nav-item"><a class="nav-link" href=''> Compte de résultat </a></li>
+                            <li class="nav-item"><a class="nav-link" href=""> Bilan annuel </a></li>-->
+                        </ul>
                     </div>
-                </div>
+                </li>
+
+                <!-- GESTION ÉCOLE -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ecole" aria-expanded="false" aria-controls="ecole">
+                        <i class="menu-icon mdi mdi-bank"></i>
+                        <span class="menu-title">Facture & Comptabilité</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="ecole">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:financials" %}'> Engagements financiers </a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:invoices" %}'> Factures étudiants </a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:repayments" %}'> Remboursements </a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:spend" %}'> Dépenses </a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- GESTION COMMUNICATION-->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#com" aria-expanded="false" aria-controls="com">
+                        <i class="menu-icon mdi mdi-email"></i>
+                        <span class="menu-title">Communication</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="com">
+                        <ul class="nav flex-column sub-menu">
+                        <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:infos" %}'>Informations</a></li>
+                        <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:events" %}'>Évenements</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- ADMINISTRATION -->
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#setting" aria-expanded="false" aria-controls="setting">
+                        <i class="menu-icon  mdi mdi-tune "></i>
+                        <span class="menu-title">Administration</span>
+                        <i class="menu-arrow"></i>
+                    </a>
+                    <div class="collapse" id="setting">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item"><a class="nav-link" href='{% url "accountant_dashboard:items" %}'>Catalogue d'article</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <!-- partial footer -->
+        <div class="main-panel">
+            <div class="content-wrapper">
+                <!-- =============== MAIN PAGE =============================-->
+                {% block content %}{% endblock %}
+                <!-- =============== END MAIN PAGE =============================-->
             </div>
+
+            <footer class="footer">
+                <div class="d-sm-flex justify-content-center">
+                    <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {% now "Y" %}. Tout droit réservé.</span>
+                </div>
+            </footer>
+            <!-- partial -->
         </div>
-
-    </section>
-
-
-
-
-    <div id="back-top" style="display: none;">
-        <a title="Go to Top" href="#"><i class="ti-angle-up"></i></a>
     </div>
-
+    <!-- page-body-wrapper ends -->
+  
+    <!-- plugins:js -->
+    <script src="{% static 'manager_dashboard/vendors/js/vendor.bundle.base.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js' %}"></script>
+    <!-- endinject -->
     
+    <!-- Plugin js all this page -->
+    <script src="{% static 'manager_dashboard/vendors/datatables.net/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/datatables.net-bs4/dataTables.bootstrap4.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/typeahead.js/typeahead.bundle.min.js' %}"></script>
+    <script src="{% static 'manager_dashboard/vendors/select2/select2.min.js' %}"></script>
+    <!-- End plugin js all this page -->
 
-    <script src="{% static 'js/jquery1-3.4.1.min.js' %}"></script>
+    <!-- inject:js -->
+    <script src="{% static 'manager_dashboard/js/off-canvas.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/hoverable-collapse.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/template.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/settings.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/todolist.js' %}"></script>
+    <!-- endinject -->
 
-    <script src="{% static 'js/popper1.min.js' %}"></script>
+    <!-- Custom js for all page-->
+    <script src="{% static 'manager_dashboard/js/data-table.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/alerts.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/formpickers.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/typeahead.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/select2.js' %}"></script>
+    <script src="{% static 'manager_dashboard/js/tabs.js' %}"></script>
+    <!-- End custom js for all page-->
 
-    <script src="{% static 'js/bootstrap1.min.js' %}"></script>
 
-    <script src="{% static 'js/metisMenu.js' %}"></script>
+<script>
 
-    <script src="{% static 'vendors/count_up/jquery.waypoints.min.js' %}"></script>
+    function delete_function(id) {
+        var csrftoken = getCookie('csrftoken'); // Récupérer le jeton CSRF
+    
+        swal({
+            title: 'Vous êtes sûr?',
+            text: "Cette suppression est irreversible!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3f51b5',
+            cancelButtonColor: '#ff4081',
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            buttons: {
+                cancel: {
+                    text: "Cancel",
+                    value: null,
+                    visible: true,
+                    className: "btn btn-danger",
+                    closeModal: true,
+                },
+                confirm: {
+                    text: "OK",
+                    value: true,
+                    visible: true,
+                    className: "btn btn-primary",
+                }
+            }
+        }).then((result) => {
+            if (result) {
+                // Si l'utilisateur clique sur "OK"
+                $.ajax({
+                    url: `${id}/delete/`,
+                    type: 'DELETE',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-CSRFToken', csrftoken); // Ajouter le jeton CSRF à l'en-tête de la requête
+                    },
+                    success: function(response) {
+                        $('#elementList').find(`tr[data-id="${id}"]`).remove();
+                        $('#elementList').find(`div[data-id="${id}"]`).remove();
+                        $('#elementList').find(`p[data-id="${id}"]`).remove();
+                        console.log('Élément supprimé avec succès');
+                    },
+                    error: function(error) {
+                        console.error('Erreur lors de la suppression de l\'élément', error);
+                    }
+                });
+            }
+        });
+    }
+    // Fonction pour récupérer le jeton CSRF depuis le cookie
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
-    <script src="{% static 'vendors/chartlist/Chart.min.js' %}"></script>
-
-    <script src="{% static 'vendors/count_up/jquery.counterup.min.js' %}"></script>
-
-    <script src="{% static 'vendors/niceselect/js/jquery.nice-select.min.js' %}"></script>
-
-    <script src="{% static 'vendors/owl_carousel/js/owl.carousel.min.js' %}"></script>
-
-    <script src="{% static 'vendors/datatable/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/dataTables.responsive.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.flash.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/jszip.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/pdfmake.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/vfs_fonts.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'vendors/datatable/js/buttons.print.min.js' %}"></script>
-
-    <script src="{% static 'vendors/datepicker/datepicker.js' %}"></script>
-    <script src="{% static 'vendors/datepicker/datepicker.en.js' %}"></script>
-    <script src="{% static 'vendors/datepicker/datepicker.custom.js' %}"></script>
-    <script src="{% static 'js/chart.min.js' %}"></script>
-    <script src="{% static 'vendors/chartjs/roundedBar.min.js' %}"></script>
-
-    <script src="{% static 'vendors/progressbar/jquery.barfiller.js' %}"></script>
-
-    <script src="{% static 'vendors/tagsinput/tagsinput.js' %}"></script>
-
-    <script src="{% static 'vendors/text_editor/summernote-bs4.js' %}"></script>
-    <script src="{% static 'vendors/am_chart/amcharts.js' %}"></script>
-
-    <script src="{% static 'vendors/scroll/perfect-scrollbar.min.js' %}"></script>
-    <script src="{% static 'vendors/scroll/scrollable-custom.js' %}"></script>
-
-    <script src="{% static 'vendors/vectormap-home/vectormap-2.0.2.min.js' %}"></script>
-    <script src="{% static 'vendors/vectormap-home/vectormap-world-mill-en.js' %}"></script>
-
-    <script src="{% static 'vendors/apex_chart/apex-chart2.js' %}"></script>
-    <script src="{% static 'vendors/apex_chart/apex_dashboard.js' %}"></script>
-
-    <script src="{% static 'vendors/chart_am/core.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/charts.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/animated.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/kelly.js' %}"></script>
-    <script src="{% static 'vendors/chart_am/chart-custom.js' %}"></script>
-
-    <script src="{% static 'js/dashboard_init.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+</script>
 </body>
 
 </html>

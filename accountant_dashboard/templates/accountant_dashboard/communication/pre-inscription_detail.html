@@ -1,63 +1,55 @@
 {% extends '../base.html' %}
 {% load static %}
 {% block content %}
-<div class="main_content_iner overly_inner ">
-    <div class="container-fluid p-0 ">
-        <!-- ================= Entête ====================-->
-        <div class="row">
-            <div class="col-12">
-                <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                    <div class="page_title_left d-flex align-items-center">
-                        <h3 class="f_s_25 f_w_700 dark_text mr_30">Pré-Inscriptions</h3>
-                        <ol class="breadcrumb page_bradcam mb-0">
-                            <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:pre_registrations" %}'>Pre-inscriptions</a></li>
-                            <li class="breadcrumb-item"><a>{{student_career.student.lastname}}</a></li>
-                        </ol>
-                    </div>
-                </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="template-demo">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-custom">
+                        <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:index" %}'>Tableau de board</a></li>
+                        <li class="breadcrumb-item"><a href='{% url "accountant_dashboard:pre_registrations" %}'>Demande de Préinscriptions</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><span>{{student_career.student.fullname}}</span></li>
+                    </ol>
+                </nav>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="white_card position-relative mb_20">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-6 align-self-center">
-                                <img src="{{ student_career.student.picture.url }}" alt class="mx-auto d-block" height="300" />
-                            </div>
-                            <div class="col-lg-6 align-self-center">
-                                <div class="single-pro-detail">
-                                    <p class="mb-1 text-primary"><strong>Pré-inscription</strong></p>
-                                    <div class="custom-border mb-3"></div>
-                                    <h3 class="pro-title"> {{student_career.student.firstname}} {{student_career.student.lastname|upper}} </h3><br>
-                                    
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Date de naissance : {{student_career.student.bithday}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Genre : {{student_career.student.sex}} </h5>
-                                    <hr>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Email : {{student_career.student.email}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Matricule : {{student_career.student.registration_number|upper}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Téléphone : {{student_career.student.tel}} </h5>
-                                    <hr>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.level.label}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.title}} </h5>
-                                    <hr>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Nom Responsable 1 : {{student_career.student.parent.lastname_one}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Prenom Responsable 1 : {{student_career.student.parent.firstname_one}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Adresse Responsable 1 : {{student_career.student.parent.address_one}} </h5>
-                                    <h5 class="text-dark font_s_13 mt-2 mb-1">Téléphone Responsable 1 : {{student_career.student.parent.tel_one}} </h5>
-                                    <div class="quantity mt-3">
-                                        <a href='{% url "accountant_dashboard:pre_registrations_check" student_career.id %}' class="btn bg-success text-white px-4 d-inline-block "><i class="ti-check-box me-2"></i>Valider</a>
-                                        <a href='{% url "accountant_dashboard:pre_registrations_delete" student_career.id %}' class="btn bg-danger text-white px-4 d-inline-block "><i class="fa fa-trash me-2"></i>Refuser</a>
-                                    </div>
-                                </div>
-                            </div>
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-6 align-self-center">
+                    <img src="{{ student_career.student.picture.url }}" alt class="mx-auto d-block" height="300" />
+                </div>
+                <div class="col-lg-6 align-self-center">
+                    <div class="single-pro-detail">
+                        <h3 class="text-primary"> {{student_career.student.firstname}} {{student_career.student.lastname|upper}} </h3><br>
+                        
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Date de naissance : {{student_career.student.bithday}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Genre : {{student_career.student.sex}} </h5>
+                        <hr>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Email : {{student_career.student.email}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Matricule : {{student_career.student.registration_number|upper}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Téléphone : {{student_career.student.tel}} </h5>
+                        <hr>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.level.label}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Niveau : {{student_career.classroom.title}} </h5>
+                        <hr>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Nom Responsable 1 : {{student_career.student.parent.lastname_one}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Prenom Responsable 1 : {{student_career.student.parent.firstname_one}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Adresse Responsable 1 : {{student_career.student.parent.address_one}} </h5>
+                        <h5 class="text-dark font_s_13 mt-2 mb-1">Téléphone Responsable 1 : {{student_career.student.parent.tel_one}} </h5>
+                        <div class="quantity mt-3">
+                            <a href='{% url "accountant_dashboard:pre_registrations_check" student_career.id %}' class="btn bg-success text-white px-4 d-inline-block "><i class="ti-check-box me-2"></i>Valider</a>
+                            <a href='{% url "accountant_dashboard:pre_registrations_delete" student_career.id %}' class="btn bg-danger text-white px-4 d-inline-block "><i class="fa fa-trash me-2"></i>Refuser</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 

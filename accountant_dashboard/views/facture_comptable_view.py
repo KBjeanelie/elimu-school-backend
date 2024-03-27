@@ -1,13 +1,14 @@
 import datetime
+from django.urls import reverse_lazy
 from django.utils.timezone import now
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from backend.forms.facturation_forms import InvoiceForm, RepaymentForm, SpendForm
-from backend.models.facturation import FinancialCommitment, Invoice, Repayment, Spend
+from backend.models.facturation import FinancialCommitment, Invoice, Item, Repayment, Spend
 from django.core.cache import cache
 from django.db.models import Sum
 from django.contrib import messages
-from backend.models.gestion_ecole import AcademicYear
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Student, StudentClassroom
 
 def generate_payment_number():
         now = datetime.datetime.now()
@@ -53,12 +54,16 @@ class FinancialCommitmentView(View):
         return render(request, template_name=self.template_name, context=context)
     
     def send(self, pk, *args, **kwargs):
-        engagement = FinancialCommitment.objects.get(pk=pk)
-        engagement.send_date = now()
-        engagement.is_send = True
-        engagement.save()
-        #messages.success(request, "Engagement financier envoyé avec succès !")
-        return redirect('accountant_dashboard:financials')
+        if pk is not None:
+            engagement = get_object_or_404(FinancialCommitment, pk=pk)
+            engagement.send_date = now()
+            engagement.is_send = True
+            engagement.save()
+            #messages.success(request, "Engagement financier envoyé avec succès !")
+            return redirect(reverse_lazy('accountant_dashboard:financials'))
+        else:
+            #messages.error(request, "Impossible de trouver l'engagement financier.")
+            return redirect(reverse_lazy('accountant_dashboard:financials'))
         
 
 class InvoiceView(View):
@@ -80,22 +85,9 @@ class InvoiceView(View):
     def get(self, request, *args, **kwargs):
         academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
         invoices = Invoice.objects.filter(academic_year=academic_year)
-        form = InvoiceForm(request.user,)
-        context = {'invoices':invoices, 'form':form}
-        return render(request, template_name=self.template_name, context=context)
-    
-    def post(self, request, *args, **kwargs):
-        data = request.POST.copy()
-        data['academic_year'] = AcademicYear.objects.get(school=request.user.school, status=True)
-        data['invoice_number'] = generate_invoice_number()
-        form = InvoiceForm(request.user, data)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "La facture a été enregistré avec succès !")
-            return redirect("accountant_dashboard:invoices")
         
-        messages.error(request, "ERREUR : Impossible d'ajouter la facture !")
-        return redirect("accountant_dashboard:invoices")
+        context = {'invoices':invoices}
+        return render(request, template_name=self.template_name, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(Invoice, pk=pk)
@@ -127,6 +119,44 @@ class InvoiceDetailView(View):
         context = {'invoice':invoice}
         return render(request, template_name=self.template_name, context=context)
 
+class AddInvoiceView(View):
+    template_name = "accountant_dashboard/facture_comp/ajout_facture.html"
+    
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if not request.user.is_accountant:
+            return redirect('backend:logout')
+        try:
+            active_year = AcademicYear.objects.get(status=True, school=request.user.school)
+        except AcademicYear.DoesNotExist:
+            return redirect('accountant_dashboard:no_year')
+        
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
+        invoices = Invoice.objects.filter(academic_year=academic_year)
+        form = InvoiceForm(request.user)
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True, is_registered=True).values_list('student', flat=True).distinct()
+        students = Student.objects.filter(id__in=student_ids)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        context = {'invoices':invoices, 'form':form, 'students':students, 'classrooms':classrooms, 'items':Item.objects.filter(school=request.user.school)}
+        return render(request, template_name=self.template_name, context=context)
+    
+    def post(self, request, *args, **kwargs):
+        data = request.POST.copy()
+        data['academic_year'] = AcademicYear.objects.get(school=request.user.school, status=True)
+        data['invoice_number'] = generate_invoice_number()
+        form = InvoiceForm(request.user, data)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "La facture a été enregistré avec succès !")
+            return redirect("accountant_dashboard:invoices")
+        
+        messages.error(request, "ERREUR : Impossible d'ajouter la facture !")
+        return redirect("accountant_dashboard:invoices")
 
 class EditInvoiceView(View):
     template_name = "accountant_dashboard/facture_comp/edit_facture.html"
@@ -147,7 +177,10 @@ class EditInvoiceView(View):
     def get(self, request,pk, *args, **kwargs):
         invoice = get_object_or_404(Invoice, pk=pk)
         form = InvoiceForm(request.user, instance=invoice)
-        context = {'invoice':invoice, 'form':form}
+        student_ids = StudentClassroom.objects.filter(academic_year__school=request.user.school, academic_year__status=True, is_registered=True).values_list('student', flat=True).distinct()
+        students = Student.objects.filter(id__in=student_ids)
+        classrooms = ClassRoom.objects.filter(level__school=request.user.school)
+        context = {'invoice':invoice, 'form':form, 'students':students, 'classrooms':classrooms, 'items':Item.objects.filter(school=request.user.school)}
         return render(request, template_name=self.template_name, context=context)
     
     def post(self, request, pk, *args, **kwargs):
@@ -164,7 +197,6 @@ class EditInvoiceView(View):
         messages.error(request, "ERREUR : Impossible de modifier la facture !")
         context = {'invoice':invoice, 'form':form}
         return render(request, template_name=self.template_name, context=context)
-
 
 #=============================== PARTIE CONCERNANT LES REMBOURSEMENTS ==========================
 class EditRepaymentView(View):
@@ -187,7 +219,9 @@ class EditRepaymentView(View):
     def get(self, request, pk, *args, **kwargs):
         repayment = get_object_or_404(Repayment, pk=pk)
         form = RepaymentForm(request.user, instance=repayment)
-        context = {'form':form, 'repayment':repayment}
+        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
+        invoices= Invoice.objects.filter(academic_year=academic_year)
+        context = {'form':form, 'repayment':repayment, 'invoices':invoices}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):
@@ -225,7 +259,9 @@ class AddRepaymentView(View):
     
     def get(self, request, *args, **kwargs):
         form = RepaymentForm(request.user)
-        context = {'form':form}
+        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
+        invoices= Invoice.objects.filter(academic_year=academic_year)
+        context = {'form':form, 'invoices':invoices}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -331,7 +367,7 @@ class AddDepenseView(View):
     
     def get(self, request, *args, **kwargs):
         form = SpendForm(request.user)
-        context = {'form':form}
+        context = {'form':form, 'items':Item.objects.filter(school=request.user.school)}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, *args, **kwargs):
@@ -367,7 +403,7 @@ class EditDepenseView(View):
     def get(self, request, pk, *args, **kwargs):
         spend = Spend.objects.get(pk=pk)
         form = SpendForm(request.user, instance=spend)
-        context = {'form':form}
+        context = {'form':form,'items':Item.objects.filter(school=request.user.school), 'spend':spend}
         return render(request, template_name=self.template, context=context)
     
     def post(self, request, pk, *args, **kwargs):

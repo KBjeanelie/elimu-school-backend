@@ -36,6 +36,8 @@ class LoginView(View):
         for academic_year in years:
             if academic_year.status:
                 request.session['academic_year'] = academic_year.label
+                request_student = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=False).count()
+                request.session['request_student'] = request_student
                 break
 
         if user.is_manager or user.is_admin_school:

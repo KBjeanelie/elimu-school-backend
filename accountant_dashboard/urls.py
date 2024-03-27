@@ -1,7 +1,7 @@
 from django.urls import path
 from accountant_dashboard.views.administration_view import AddItemView, EditItemView, EditProfileView, ItemView, ProfileAppView
 from accountant_dashboard.views.communication_view import EventsView, InformationsView
-from accountant_dashboard.views.facture_comptable_view import AddDepenseView, AddRepaymentView, BalanceMonitoring, DepenseView, EditDepenseView, EditInvoiceView, EditRepaymentView, FinancialCommitmentView, InvoiceDetailView, InvoiceView, RepaymentView
+from accountant_dashboard.views.facture_comptable_view import AddDepenseView, AddInvoiceView, AddRepaymentView, BalanceMonitoring, DepenseView, EditDepenseView, EditInvoiceView, EditRepaymentView, FinancialCommitmentView, InvoiceDetailView, InvoiceView, RepaymentView
 from accountant_dashboard.views.home_view import AccountantIndexView, NotAcademicYearFound, PreRegistrationDetailView, PreRegistrationView
 
 
@@ -26,6 +26,7 @@ urlpatterns = [
     
     path(route='factures-&-comptable/factures/', view=InvoiceView.as_view(), name='invoices'),
     path(route='factures-&-comptable/factures/<int:pk>/detail/', view=InvoiceDetailView.as_view(), name='invoice'),
+    path(route='factures-&-comptable/factures/ajouter/', view=AddInvoiceView.as_view(), name='invoice_add'),
     path(route='factures-&-comptable/factures/<int:pk>/editer/', view=EditInvoiceView.as_view(), name='invoice_edit'),
     path(route='factures-&-comptable/factures/<int:pk>/delete/', view=InvoiceView.as_view(), name='delete_invoice'),
     
