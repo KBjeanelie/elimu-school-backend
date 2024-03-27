@@ -55,12 +55,26 @@
                 </ul>
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item d-none d-lg-block">
-                        <div id="datepicker-popup" class="input-group date datepicker navbar-date-picker">
-                        <span class="input-group-addon input-group-prepend border-right">
-                            <span class="icon-calendar input-group-text calendar-icon"></span>
+                        <span class="text-dark h5">
+                            Établissement : 
+                        </span> 
+                        <span class="badge badge-pill badge-warning">
+                            {{request.user.school.name}}
                         </span>
-                        <input type="text" class="form-control">
-                        </div>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <span class="text-dark h5">
+                            Année academique : 
+                        </span> 
+                        <span class="badge badge-pill badge-primary">
+                            {% if request.session.academic_year %}
+                                {% with academic_year=request.session.academic_year %}
+                                    {{request.session.academic_year}}
+                                {% endwith %}
+                            {% else %}
+                                Indisponible
+                            {%endif%}
+                        </span>
                     </li>
                     <li class="nav-item">
                         <form class="search-form" action="#">

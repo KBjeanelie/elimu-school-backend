@@ -27,70 +27,70 @@
 <div class="card">
     <div class="card-body">
       <h4 class="card-title">Trombinoscope</h4>
-      <div class="row">
-        <div class="col-md-12">
-          <ul class="nav nav-pills nav-pills-custom" id="pills-tab-custom" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" id="pills-home-tab-custom" data-bs-toggle="pill"
-                href="#pills-health" role="tab" aria-controls="pills-home" aria-selected="true">
-                Trombinoscope parents
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" id="pills-profile-tab-custom" data-bs-toggle="pill" href="#pills-career"
-                role="tab" aria-controls="pills-profile" aria-selected="false">
-                Trombinoscope élèves
-              </a>
-            </li>
-          </ul>
-          <div class="tab-content tab-content-custom-pill" id="pills-tabContent-custom">
-            <div class="tab-pane fade show active" id="pills-health" role="tabpanel" aria-labelledby="pills-home-tab-custom">
-                <div class='row'>
-                    {% for parent in parents %}
-                        <div class='col-md-3'>
-                            <div class="text-center align-items-center">
-                                <a href=''>
-                                    <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
-                                </a>
-                                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
-                                    <h4 class="mb-0 mt-3">
-                                        <a href='' class='text-info'>
-                                            {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
-                                        </a>
-                                    </h4>
-                                    <p class="text-muted mb-1">{{parent.email_one}} </p>
-                                    <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="tab-pane fade" id="pills-career" role="tabpanel" aria-labelledby="pills-profile-tab-custom">
-                <div class='row'>
-                    {% for parent in parents %}
-                        <div class='col-md-3'>
-                            <div class="text-center align-items-center">
-                                <a href=''>
-                                    <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
-                                </a>
-                                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
-                                    <h4 class="mb-0 mt-3">
-                                        <a href='' class='text-info'>
-                                            {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
-                                        </a>
-                                    </h4>
-                                    <p class="text-muted mb-1">{{parent.email_one}} </p>
-                                    <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="nav nav-pills nav-pills-custom" id="pills-tab-custom" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-home-tab-custom" data-bs-toggle="pill"
+                  href="#pills-health" role="tab" aria-controls="pills-home" aria-selected="true">
+                  Trombinoscope parents
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab-custom" data-bs-toggle="pill" href="#pills-career"
+                  role="tab" aria-controls="pills-profile" aria-selected="false">
+                  Trombinoscope élèves
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content tab-content-custom-pill" id="pills-tabContent-custom">
+              <div class="tab-pane fade show active" id="pills-health" role="tabpanel" aria-labelledby="pills-home-tab-custom">
+                  <div class='row'>
+                      {% for parent in parents %}
+                          <div class='col-md-3'>
+                              <div class="text-center align-items-center">
+                                  <a href=''>
+                                      <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
+                                  </a>
+                                  <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
+                                      <h4 class="mb-0 mt-3">
+                                          <a href='' class='text-info'>
+                                              {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
+                                          </a>
+                                      </h4>
+                                      <p class="text-muted mb-1">{{parent.email_one}} </p>
+                                      <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      {% endfor %}
+                  </div>
+              </div>
+              <div class="tab-pane fade" id="pills-career" role="tabpanel" aria-labelledby="pills-profile-tab-custom">
+                  <div class='row'>
+                      {% for parent in parents %}
+                          <div class='col-md-3'>
+                              <div class="text-center align-items-center">
+                                  <a href=''>
+                                      <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
+                                  </a>
+                                  <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
+                                      <h4 class="mb-0 mt-3">
+                                          <a href='' class='text-info'>
+                                              {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
+                                          </a>
+                                      </h4>
+                                      <p class="text-muted mb-1">{{parent.email_one}} </p>
+                                      <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
+                                  </div>
+                              </div>
+                          </div>
+                      {% endfor %}
+                  </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
     </div>
 </div>
 {% endblock content %}

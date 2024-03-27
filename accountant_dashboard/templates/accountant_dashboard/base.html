@@ -69,7 +69,13 @@
                             Année academique : 
                         </span> 
                         <span class="badge badge-pill badge-primary">
-                            {{request.session.academic_year}}
+                            {% if request.session.academic_year %}
+                                {% with academic_year=request.session.academic_year %}
+                                    {{request.session.academic_year}}
+                                {% endwith %}
+                            {% else %}
+                                Indisponible
+                            {%endif%}
                         </span>
                     </li>
                     <li class="nav-item">
