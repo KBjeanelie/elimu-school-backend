@@ -7,7 +7,7 @@ from manager_dashboard.views.comptes_view import AddDirectionAccount, AddParentA
 from manager_dashboard.views.contenu_pedagogique_view import AddeBook, EditEbook, eBookView
 from manager_dashboard.views.gestion_evaluation_view import AddAssessmentView, AssessmentView, AverageTableView, BulletinDetailView, EditAssessmentView, NoteTableView
 from manager_dashboard.views.gestion_temps_view import AddScheduleView, ScheduleView
-from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddParentView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditParentView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ParentDetailView, ParentView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
+from manager_dashboard.views.gestion_universite_view import AcademicYearView, AddAcademicYearView, AddClassRoomView, AddLevelView, AddParentView, AddProgramView, AddSanctionView, AddStudentView, AddSubjectView, AddTeacherView, ArchiveStudent, ClassRoomView, EditAcademicYearView, EditClassRoomView, EditLevelView, EditParentView, EditProgramView, EditSanctionView, EditStudentView, EditSubjectView, EditTeacherView, GroupSubjectView, LevelsView, ParentDetailView, ParentView, ProgramView, SanctionAppreciationView, SeriesView, StudentDetailView, StudentsView, SubjectView, TeacherDetailView, TeacherView, TrombinoscopeView
 from manager_dashboard.views.home_view import LoginView, LogoutView, ManagerIndexView, NotAcademicYearFound
 from manager_dashboard.views.statistique_view import AddNextLevelView, CloseAcademicYear, NextLevelView, ResultatAcademique, ReportCardView, AddReportCardView, EditReportCardView
 
@@ -65,6 +65,7 @@ urlpatterns = [
     path(route='gestion_ecole/students/ajouter/', view=AddStudentView.as_view(), name='add_student'),
     path(route='gestion_ecole/students/', view=StudentsView.as_view(), name='students'),
     path(route='gestion_ecole/students/<int:pk>/delete-document/', view=StudentDetailView.as_view(), name='student_delete_document'),
+    path(route='gestion_ecole/students/<int:pk>/archive/', view=ArchiveStudent.as_view(), name='archive_student'),
     
     path(route='gestion_ecole/teachers/', view=TeacherView.as_view(), name='teachers'),
     path(route='gestion_ecole/teachers/ajouter/', view=AddTeacherView.as_view(), name='add_teacher'),

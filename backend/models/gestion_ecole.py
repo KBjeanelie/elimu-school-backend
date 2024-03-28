@@ -310,6 +310,7 @@ class StudentClassroom(models.Model):
     is_registered =  models.BooleanField(default=False)
     is_valid =  models.BooleanField(default=False)
     is_next = models.BooleanField(default=False)
+    is_archive = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

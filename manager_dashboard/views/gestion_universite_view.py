@@ -492,23 +492,7 @@ class SubjectView(View):
     
     def get(self, request, *args, **kwargs):
         subjects = Subject.objects.filter(subject_group__school=request.user.school) or Subject.objects.filter(subject_group__isnull=True)
-        items_per_page = 10
-        
-        paginator = Paginator(subjects, items_per_page)
-        
-        page = request.GET.get('page')
-        
-        try:
-            # Obtenez les éléments de la page demandée
-            data_page = paginator.page(page)
-        except PageNotAnInteger:
-            # Si la page n'est pas un entier, affichez la première page
-            data_page = paginator.page(1)
-        except EmptyPage:
-            # Si la page est en dehors de la plage, affichez la dernière page
-            data_page = paginator.page(paginator.num_pages)
-            
-        context = {'subjects':data_page}
+        context = {'subjects':subjects}
         return render(request, template_name=self.template, context=context)
     
     def delete(self, request, pk, *args, **kwargs):
@@ -1082,8 +1066,8 @@ class StudentDetailView(View):
         amount_payed = invoices.aggregate(total_montant=Sum('amount'))['total_montant'] or 0
 
         # Récupérer tous les engagements financiers
-        engagements = FinancialCommitment.objects.get(student=student_career.student, academic_year=academic_year)
-        total_engagements = engagements.school_fees
+        #engagements = FinancialCommitment.objects.get(student=student_career.student, academic_year=academic_year)
+        total_engagements = 0 #engagements.school_fees
         # Calcul du montant impayé
         not_payed = total_engagements - amount_payed
         context = {
@@ -1132,7 +1116,30 @@ class StudentDetailView(View):
         document.delete()
         return JsonResponse({'message': 'Document supprimé avec succès'})
 
-
+class ArchiveStudent(View):
+    def dispatch(self,request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('backend:login')
+        
+        if request.user.is_manager or request.user.is_admin_school:
+            return super().dispatch(request, *args, **kwargs)
+        
+        return redirect('backend:logout')
+    
+    def get(self, request, pk, *args, **kwargs):
+        student = Student.objects.get(pk=pk)
+        academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
+        student_classroom = StudentClassroom.objects.get(
+            academic_year=academic_year,
+            is_registered=True,
+            student=student,
+            is_archive=False
+        )
+        student_classroom.is_registered = False
+        student_classroom.is_archive = True
+        student_classroom.save()
+        messages.success(request, "Élèves archivé avec succès !")
+        return redirect('manager_dashboard:students')
 
 #=============================== PARTIE CONCERNANT LES VUES DES PARENT ==========================
 class EditParentView(View):

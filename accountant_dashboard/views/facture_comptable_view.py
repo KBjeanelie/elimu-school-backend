@@ -49,7 +49,7 @@ class FinancialCommitmentView(View):
     
     def get(self, request, *args, **kwargs):
         academic_year = AcademicYear.objects.get(school=request.user.school, status=True)
-        engagements = FinancialCommitment.objects.filter(academic_year=academic_year)
+        engagements = FinancialCommitment.objects.filter(academic_year=academic_year, student__isnull=False)
         context = {'engagements':engagements}
         return render(request, template_name=self.template_name, context=context)
     

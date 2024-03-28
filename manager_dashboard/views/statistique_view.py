@@ -42,7 +42,7 @@ class ResultatAcademique(View):
     
     def get_context_data(self, request, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=self.request.user.school)
-        total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
+        total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False, is_archive=False).count()
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
         subjects = Subject.objects.filter(level__school=request.user.school)
         results = get_all_results(academic_year=academic_year)
@@ -82,7 +82,7 @@ class ResultatAcademique(View):
         try:
             academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
             classroom = ClassRoom.objects.get(pk=classroom_id)
-            student_classroom = StudentClassroom.objects.filter(classroom=classroom, academic_year=academic_year, is_next=False)
+            student_classroom = StudentClassroom.objects.filter(classroom=classroom, academic_year=academic_year, is_next=False, is_archive=False)
             for student in student_classroom:
                 if student.classroom.types == 'Primaire':
                     results.append(calcul_resultat_primaire(
@@ -109,8 +109,6 @@ class ResultatAcademique(View):
             return render(request, template_name=self.template_name, context=context)
         except (ClassRoom.DoesNotExist, AcademicYear.DoesNotExist) as e:
             return HttpResponse(f"Erreur: {e}")
-    
-
 
 class EditReportCardView(View):
     template = 'manager_dashboard/statistique/editer_bulletin.html'
