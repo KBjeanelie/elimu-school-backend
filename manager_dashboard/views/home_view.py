@@ -4,9 +4,10 @@ from django.views import View
 from django.db.models import Sum
 from backend.models.communication import Information
 from backend.models.facturation import FinancialCommitment
-from backend.models.gestion_ecole import AcademicYear, Parent, StudentClassroom, Teacher
+from backend.models.gestion_ecole import AcademicYear, Etablishment, Parent, StudentClassroom, Teacher
 from django.contrib import messages
 from backend.forms.user_account_forms import LoginForm
+from backend.models.user_account import User
 
 class LogoutView(View):
 
@@ -21,16 +22,29 @@ class LoginView(View):
     
     def post(self, request, *args, **kwargs):
         sign_form = LoginForm(request.POST)
+        code = request.POST['code']
+        try:
+            school = Etablishment.objects.get(code=code)
+        except Etablishment.DoesNotExist:
+            messages.error(request, "ERREUR: Aucun établissement ne corresponds à ce code")
+            return redirect(to='manager_dashboard:login')
+        
         username = sign_form['username'].value()
+        try:
+            User.objects.get(school=school, username=username)
+        except User.DoesNotExist:
+            messages.error(request, "ERREUR: Aucun utilisateur ne corresponds à cet établissement")
+            return redirect(to='manager_dashboard:login')
+        
         password = sign_form['password'].value()
         user = authenticate(request, username=username, password=password)
 
         if user is None:
-            messages.error(request, "ERREUR: Utilisateur ou mot de passe incorrect :(")
+            messages.error(request, "ERREUR: Mot de passe incorrect :(")
             return redirect(to='manager_dashboard:login')
         
         login(request, user)
-        
+    
         years = AcademicYear.objects.filter(school=user.school)
         
         for academic_year in years:

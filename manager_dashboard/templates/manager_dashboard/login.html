@@ -46,6 +46,17 @@
               <form class="pt-3" method='post'>
                 {% csrf_token %}
                 <div class="form-group">
+                  <label for="code">Code Établissement</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="ti-lock text-primary"></i>
+                      </span>
+                    </div>
+                    <input type="text" name='code' class="form-control form-control-lg border-left-0" id="code" placeholder="Code Établissement" required>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label for="exampleInputEmail">Nom d'utilisateur</label>
                   <div class="input-group">
                     <div class="input-group-prepend bg-transparent">
