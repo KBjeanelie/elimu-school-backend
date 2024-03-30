@@ -2,7 +2,6 @@ from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from django.db.models import Sum
-from backend.models.communication import Information
 from backend.models.facturation import FinancialCommitment
 from backend.models.gestion_ecole import AcademicYear, Etablishment, Parent, StudentClassroom, Teacher
 from django.contrib import messages
