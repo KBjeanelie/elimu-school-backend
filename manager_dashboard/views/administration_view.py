@@ -14,12 +14,12 @@ class TypeEvaluationView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         type_evaluations = TypeOfEvaluation.objects.filter(school=request.user.school)
@@ -43,12 +43,12 @@ class TypeEvaluationDeleteView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(TypeOfEvaluation, pk=pk)
@@ -60,12 +60,12 @@ class TypeDocumentView(View):
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         form = DocumentTypeForm()  # Formulaire pour la création
@@ -89,12 +89,12 @@ class TypeDocumentDeleteView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(DocumentType, pk=pk)
@@ -116,12 +116,12 @@ class TypeSanctionView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         typeSanctions = SanctionAppreciationType.objects.filter(school=request.user.school).order_by('-created_at')
@@ -146,12 +146,12 @@ class TypeSanctionDeleteView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def delete(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(SanctionAppreciationType, pk=pk)
@@ -175,12 +175,12 @@ class SettingAppView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         context = {'form':EtablishmentForm(instance=request.user.school)}
@@ -201,12 +201,12 @@ class ProfileAppView(View):
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     
     def get(self, request, *args, **kwargs):
@@ -224,12 +224,12 @@ class EditProfileView(View):
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     
     def get(self, request, *args, **kwargs):

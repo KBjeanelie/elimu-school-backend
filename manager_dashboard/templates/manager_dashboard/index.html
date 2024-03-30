@@ -1,155 +1,115 @@
 {% extends './base.html' %}
 {% load static %}
 {% block content %}
-
-    <!-- =============== MAIN PAGE =============================-->
-    <div class="main_content_iner overly_inner ">
-        <div class="container-fluid p-0 ">
-            <!-- ================= Entête ====================-->
+<div class="col-md-12 grid-margin stretch-card">
+    <div class="card mt-3">
+        <div class="card-body">
             <div class="row">
-                <div class="col-12">
-                    <div class="page_title_box d-flex flex-wrap align-items-center justify-content-between">
-                        <div class="page_title_left d-flex align-items-center">
-                            <h3 class="f_s_25 f_w_700 dark_text mr_30">Tableau de bord</h3>
-                            <ol class="breadcrumb page_bradcam mb-0">
-                                <li class="breadcrumb-item"><a href='{% url "manager_dashboard:index" %}'>Accueil</a></li>
-                            </ol>
+                <div class="col-md-3">
+                    <div class="card bg-success text-center p-3">
+                        <div class="icon-wrapper rounded-circle">
+                            <i class="ti-user h1" style="color: white;"></i>
                         </div>
-                        <div class="page_title_right">
-                            <div class="page_date_button d-flex align-items-center">
-                                <img src="img/icon/calender_icon.svg" alt>
-                                {% now "l, j F Y" %}
-                            </div>
+                        <div><h3 style="color: white;" class="text-white mt-3" > {{count_teacher}} </h3></div>
+                        <div>
+                            <a href='{% url "manager_dashboard:teachers" %}' class="text-white" >Enseignants</a>
                         </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-warning text-center p-3">
+                        <div class="icon-wrapper rounded-circle">
+                            <i class="fa fa-users h1" style="color: white;"></i>
+                        </div>
+                        <div><h3 style="color: white;" class="text-white mt-3" > {{count_parent}} </h3></div>
+                        <div class="text-white">
+                            <a href='{% url "manager_dashboard:parents" %}' class="text-white" >Parent d'Élèves</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-danger text-center p-3">
+                        <div class="icon-wrapper rounded-circle">
+                            <i class="fa fa-graduation-cap h1" style="color: white;"></i>
+                        </div>
+                        <div><h3 style="color: white;" class="text-white mt-3" > {{total_student}} </h3></div>
+                        <div class="text-white">
+                            <a href='{% url "manager_dashboard:students" %}' class="text-white" >Élèves inscrits</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-primary text-center p-3">
+                        <div class="icon-wrapper rounded-circle">
+                            <i class="fa fa-money h1" style="color: white;"></i>
+                        </div>
+                        <div><h3 style="color: white;" class="text-white mt-3" > {{total_engagements}}F CFA </h3></div>
+                        <div class="text-white">Recètte de cette année</div>
                     </div>
                 </div>
             </div>
-
-            <div class="row ">
-                <div class="col-xl-12 ">
-                    <div class="white_card card_height_100 mb_30 user_crm_wrapper">
-                        <div class="row">
-                            
-                            <div class="col-lg-3">
-                                <div class="single_crm">
-                                    <div class="crm_head d-flex align-items-center justify-content-between">
-                                        <div class="thumb">
-                                            <img src="img/crm/businessman.svg" alt>
-                                        </div>
-                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                    </div>
-                                    <div class="crm_body">
-                                        <h4> {{count_teacher}} </h4>
-                                        <p><a href='{% url "manager_dashboard:teachers" %}' >Enseignants</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3">
-                                <div class="single_crm ">
-                                    <div class="crm_head crm_bg_1 d-flex align-items-center justify-content-between">
-                                        <div class="thumb">
-                                            <img src="img/crm/businessman.svg" alt>
-                                        </div>
-                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                    </div>
-                                    <div class="crm_body">
-                                        <h4> {{total_student}} </h4>
-                                        <p><a href='{% url "manager_dashboard:students" %}' >Élèves</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3">
-                                <div class="single_crm">
-                                    <div class="crm_head d-flex align-items-center justify-content-between">
-                                        <div class="thumb">
-                                            <img src="img/crm/businessman.svg" alt>
-                                        </div>
-                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                    </div>
-                                    <div class="crm_body">
-                                        <h4>{{count_parent}}</h4>
-                                        <p><a href='{% url "manager_dashboard:parents" %}' >Parents d'élèves</a></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-3">
-                                <div class="single_crm">
-                                    <div class="crm_head crm_bg_2 d-flex align-items-center justify-content-between">
-                                        <div class="thumb">
-                                            <img src="img/crm/infographic.svg" alt>
-                                        </div>
-                                        <i class="fas fa-ellipsis-h f_s_11 white_text"></i>
-                                    </div>
-                                    <div class="crm_body">
-                                        <h4>{{total_engagements}}F CFA</h4>
-                                        <p>Recètte académique</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="crm_reports_bnner">
-                            <div class="row justify-content-end ">
-                                <div class="col-lg-6">
-                                    <h4>ELIMU Universite</h4>
-                                    <p>Administrer votre établissement universitaire en toute simplicité et sécurité</p>
-                                    <a href="#">savoir plus <i class="fas fa-arrow-right"></i> </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-xl-6">
-                    <div class="white_card card_height_100 mb_30">
-                        <div class="white_card_header">
-                            <div class="box_header m-0">
-                                <div class="main-title">
-                                    <h3 class="m-0">Dernière information</h3>
-                                </div>
-                                <div class="header_more_tool">
-                                    {% if information %}
-                                        <div class="dropdown">
-                                            <span class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                                                <i class="ti-more-alt"></i>
-                                            </span>
-                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href='{% url "manager_dashboard:info" information.id %}'> <i class="ti-eye"></i> Vois tous</a>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="white_card_body">
-                            <div class="Activity_timeline">
-                                <ul>
-                                    <li>
-                                        <div class="activity_bell"></div>
-                                        <div class="timeLine_inner d-flex align-items-center">
-                                            <div class="activity_wrap">
-                                                {% if information %}
-                                                    <h6> Depuis {{information.created_at}} </h6>
-                                                    <p>{{information.title}}</p>
-                                                {% else %}
-                                                    <h6>Aucune</h6>
-                                                    <p>Aucune information recement publier</p>
-                                                {% endif %}
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
+</div>
 
+<div class="card">
+    <div class="card-body">
+      <div class="d-sm-flex justify-content-between align-items-start">
+        <div>
+            <h4 class="card-title card-title-dash">Élèves récemment inscrit</h4>
+        </div>
+        <div>
+            <a href='{% url "manager_dashboard:add_student" %}' class="btn btn-primary text-white mb-0 me-0">
+                <i class=" mdi mdi-account-plus "></i> Demande d'inscription</a>
+        </div>
+      </div>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table id="order-listing" class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Photo</th>
+                        <th scope="col">Matricule</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">tel</th>
+                        <th scope="col">Classe</th>
+                        <th scope="col">Accès en ligne</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody id="elementList">
+                    {% if student_careers|length >= 1 %}
+                        {% for student_career in student_careers %}
+                            <tr>
+                                <td>
+                                    {% if student_career.student.file_exists %}
+                                        <img src="{{ student_career.student.picture.url }}" alt height="52">
+                                    {% else %}
+                                        <img src="{% static 'img/staf/student.png' %}" alt height="52">
+                                    {% endif %}
+                                </td>
+                                <td>{{student_career.student.registration_number|upper}}</td>
+                                <td>{{student_career.student.lastname}}</td>
+                                <td>{{student_career.student.firstname}}</td>
+                                <td>{{student_career.student.tel}}</td>
+                                <td>{{student_career.classroom.title}}</td>
+                                <td><span class="badge badge-pill badge-success">Oui</span></td>
+                                <td>
+                                    <a href='{% url "manager_dashboard:student_detail" student_career.student.id %}' class="p-2">
+                                        <i class="fa fa-eye h4 text-primary"></i></a>
+                                    <a href='{% url "manager_dashboard:edit_student" student_career.student.id %}' class="p-2">
+                                        <i class="fa fa-edit h4 text-dark"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {%endif%}
+                </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

@@ -14,12 +14,12 @@ class EditDirectionAccountView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
@@ -46,12 +46,12 @@ class AddDirectionAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template)
@@ -118,12 +118,12 @@ class ListAllDirectionAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         managers_and_accountants = User.objects.filter(is_manager=True, school=request.user.school) | User.objects.filter(is_accountant=True, school=request.user.school)
@@ -147,12 +147,12 @@ class EditTeacherAccountView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
@@ -180,12 +180,12 @@ class AddTeacherAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template, context=self.context_object)
@@ -207,12 +207,12 @@ class ListAllTeacherAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
         
     def get(self, request, *args, **kwargs):
         teachers_account = User.objects.filter(is_teacher=True, school=request.user.school)
@@ -231,12 +231,12 @@ class EditStudentAccountView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
@@ -264,12 +264,12 @@ class AddStudentAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         form = UserStudentForm(request.user)
@@ -294,12 +294,12 @@ class ListAllStudentAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         students_account = User.objects.filter(is_student=True, school=request.user.school)
@@ -321,12 +321,12 @@ class EditParentAccountView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         user = get_object_or_404(User, pk=pk)
@@ -354,12 +354,12 @@ class AddParentAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         form = UserParentForm(request.user)
@@ -394,12 +394,12 @@ class ListAllParentAccount(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
         
     def get(self, request, *args, **kwargs):
         parents_account = User.objects.filter(is_parent=True, school=request.user.school)

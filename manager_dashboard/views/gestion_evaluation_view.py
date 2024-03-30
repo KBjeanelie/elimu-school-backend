@@ -75,10 +75,12 @@ def calcul_resultat_college(period, classroom, student, academic_year):
         moyennes_matieres = []
         for evaluation in evaluations:
             moyenne_matiere = round((evaluation.note + evaluation.note_exam) / 2, 2)
-            print(moyenne_matiere)
             moyennes_matieres.append(moyenne_matiere)
             
-        average = round(sum(moyennes_matieres) / len(moyennes_matieres), 2)
+        if moyennes_matieres:
+            average = round(sum(moyennes_matieres) / len(moyennes_matieres), 2)
+        else:
+            average = 0
         
         student_career = StudentClassroom.objects.get(classroom=classroom, student=student, academic_year=academic_year, is_next=False)
         
@@ -122,7 +124,7 @@ class EditAssessmentView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -132,7 +134,7 @@ class EditAssessmentView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         evaluation = get_object_or_404(Assessment, pk=pk)
@@ -171,7 +173,7 @@ class AddAssessmentView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -181,7 +183,7 @@ class AddAssessmentView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         form = AssessmentForm(request.user)
@@ -216,7 +218,7 @@ class AssessmentView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -226,7 +228,7 @@ class AssessmentView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -264,7 +266,7 @@ class NoteTableView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -274,7 +276,7 @@ class NoteTableView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
@@ -343,7 +345,7 @@ class AverageTableView(View):
 
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -353,7 +355,7 @@ class AverageTableView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
@@ -370,7 +372,7 @@ class BulletinDetailView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -380,7 +382,7 @@ class BulletinDetailView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get_context_data(self, request, pk, *args, **kwargs):
         academic_year = AcademicYear.objects.get(status=True, school=request.user.school)

@@ -49,12 +49,12 @@
                       {% for parent in parents %}
                           <div class='col-md-3'>
                               <div class="text-center align-items-center">
-                                  <a href=''>
+                                  <a href='{% url "manager_dashboard:parent_detail" parent.id %}'>
                                       <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
                                   </a>
                                   <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
                                       <h4 class="mb-0 mt-3">
-                                          <a href='' class='text-info'>
+                                          <a href='{% url "manager_dashboard:parent_detail" parent.id %}' class='text-info'>
                                               {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
                                           </a>
                                       </h4>
@@ -68,20 +68,20 @@
               </div>
               <div class="tab-pane fade" id="pills-career" role="tabpanel" aria-labelledby="pills-profile-tab-custom">
                   <div class='row'>
-                      {% for parent in parents %}
+                      {% for student in students %}
                           <div class='col-md-3'>
                               <div class="text-center align-items-center">
-                                  <a href=''>
-                                      <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
+                                  <a href='{% url "manager_dashboard:student_detail" student.student.id %}'>
+                                    <img src="{{student.student.picture.url}}" class="img-lg rounded" alt="{{student.student.picture.name}}" />
                                   </a>
                                   <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
                                       <h4 class="mb-0 mt-3">
-                                          <a href='' class='text-info'>
-                                              {{parent.lastname_one|upper}} {{parent.firstname_one|upper}}
+                                          <a href='{% url "manager_dashboard:student_detail" student.student.id %}' class='text-info'>
+                                              {{student.student.fullname}}
                                           </a>
                                       </h4>
-                                      <p class="text-muted mb-1">{{parent.email_one}} </p>
-                                      <p class="mb-0 text-success fw-bold">{{parent.tel_one}}</p>
+                                      <p class="text-muted mb-1">{{student.student.bithday}} </p>
+                                      <p class="mb-0 text-success fw-bold">{{student.student.tel}}</p>
                                   </div>
                               </div>
                           </div>

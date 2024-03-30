@@ -24,7 +24,7 @@
 
 <div class="container-fluid w-100">
     <button type="button" class="btn btn-danger float-end mt-4 ms-2" data-bs-toggle="modal" data-bs-target="#closeYearModal">Clôturer l'année en cours</button>
-    <a href='{% url "manager_dashboard:bulletins" %}' class="btn btn-primary float-end mt-4 ms-2">Rélévés de notes</a>
+    <!--<a href='{% url "manager_dashboard:bulletins" %}' class="btn btn-primary float-end mt-4 ms-2">Rélévés de notes</a>-->
 </div>
 
 <div class="col-md-12 grid-margin stretch-card">
@@ -127,6 +127,7 @@
                                 <th scope="col">Moyennes</th>
                                 <th scope="col">Classe</th>
                                 <th scope="col">Appréciation</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody id="elementList">
@@ -152,11 +153,10 @@
                                             {% endif %}
                                         {% endif %}
                                     </h6></td>
-                                    <!--<td>
-                                        <div class="action_btns d-flex">
-                                            <a href='{% url "manager_dashboard:bulletin_detail" result.id_student %}' class="action_btn mr_10"> <i class="fas fa-eye"></i> </a>
-                                        </div>
-                                    </td>-->
+                                    <td>
+                                        <!--<a href="{% url 'manager_dashboard:bulletin_detail' result.id_student %}" class="p-2">
+                                            <i class="fa fa-eye h4 text-primary"></i></a>-->
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>

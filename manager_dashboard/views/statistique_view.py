@@ -27,7 +27,7 @@ class ResultatAcademique(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -37,7 +37,7 @@ class ResultatAcademique(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
         
     
     def get_context_data(self, request, **kwargs):
@@ -115,7 +115,7 @@ class EditReportCardView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -125,7 +125,7 @@ class EditReportCardView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         evaluation = get_object_or_404(ReportCard, pk=pk)
@@ -158,7 +158,7 @@ class AddReportCardView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -168,7 +168,7 @@ class AddReportCardView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         form = ReportCardForm(request.user)
@@ -194,7 +194,7 @@ class ReportCardView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -204,7 +204,7 @@ class ReportCardView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -228,7 +228,7 @@ class NextLevelView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -238,7 +238,7 @@ class NextLevelView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get_context_data(self, request, **kwargs):
         classrooms = ClassRoom.objects.filter(level__school=self.request.user.school)
@@ -298,7 +298,7 @@ class AddNextLevelView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -308,7 +308,7 @@ class AddNextLevelView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request,pk, *args, **kwargs):
         semesters = Series.objects.filter(level__school=self.request.user.school)

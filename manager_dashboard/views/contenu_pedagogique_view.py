@@ -11,7 +11,7 @@ class AddeBook(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
@@ -45,7 +45,7 @@ class EditEbook(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
@@ -91,7 +91,7 @@ class eBookView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)

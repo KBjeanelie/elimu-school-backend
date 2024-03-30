@@ -42,7 +42,10 @@
                     </button>
                 </div>
                 <div>
-                    <a class="navbar-brand brand-logo" href='{% url "manager_dashboard:index" %}'><img src="{% static 'manager_dashboard/images/logo.svg' %}" alt="logo" /></a>
+                    <a class="navbar-brand brand-logo" href='{% url "manager_dashboard:index" %}'>
+                        <!--<img src="{% static 'manager_dashboard/images/logo.svg' %}" alt="logo" />-->
+                        <span class='h2 text-primary' style="font-weight: bold;">ELI</span><span style="font-weight: bold;" class='h2 text-warning'>MU</span>
+                    </a>
                     
                     <a class="navbar-brand brand-logo-mini" href='{% url "manager_dashboard:index" %}'><img src="{% static 'manager_dashboard/images/logo-mini.svg' %}" alt="logo" /></a>
                 </div>
@@ -84,14 +87,14 @@
                     </li>
                     <li class="nav-item dropdown d-none d-lg-block user-dropdown">
                         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img class="img-xs rounded-circle" src="{% static 'manager_dashboard/images/faces/face8.jpg' %}" alt="Profile image"> </a>
+                        <img class="img-xs rounded-circle" src="{% static 'img/staf/teacher.png' %}" alt="Profile image"> </a>
                         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                         <div class="dropdown-header text-center">
-                            <img class="img-md rounded-circle" src="{% static 'manager_dashboard/images/faces/face8.jpg' %}" alt="Profile image">
+                            <img class="img-md rounded-circle" src="{% static 'img/staf/teacher.png' %}" height='30' alt="Profile image">
                             <p class="mb-1 mt-3 fw-semibold"> {{user.username}} </p>
-                            <p class="fw-light text-muted mb-0">allenmoreno@gmail.com</p>
+                            <p class="fw-light text-muted mb-0">{{user.management_profil.email}}</p>
                         </div>
-                        <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Mon Profil</a>
+                        <a href='{% url "manager_dashboard:user_profile" %}' class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Mon Profil</a>
                         <a href='{% url "manager_dashboard:logout" %}' class="dropdown-item"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Déconnexion</a>
                         </div>
                     </li>
@@ -130,7 +133,7 @@
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
                 <li class="nav-item">
-                    <a class="nav-link" href=''>
+                    <a class="nav-link" href='{% url "manager_dashboard:index" %}'>
                         <i class="mdi mdi-grid-large menu-icon"></i>
                         <span class="menu-title">Tableau de board</span>
                     </a>

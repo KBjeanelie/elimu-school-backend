@@ -70,6 +70,8 @@ class ManagerIndexView(View):
     def get(self, request, *args, **kwargs):
         academic_year = AcademicYear.objects.filter(status=True, school=self.request.user.school).first()
         total_student = StudentClassroom.objects.filter(academic_year=academic_year, is_next=False).count()
+        students = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=True, is_valid=False).order_by('-created_at')[:10]
+
         # Récupérer tous les engagements financiers
         if academic_year is None:
             total_engagements = 0
@@ -80,13 +82,12 @@ class ManagerIndexView(View):
         count_parent = Parent.objects.filter(school=request.user.school).count()
         
         count_teacher = Teacher.objects.filter(school=request.user.school).count()
-        information = Information.objects.filter(school=request.user.school).last()
         context = {
             'total_student':total_student,
             'total_engagements':total_engagements,
             'count_parent':count_parent,
             'count_teacher':count_teacher,
-            'information':information
+            'student_careers':students
         }
         
         return render(request, template_name=self.template_name, context=context)

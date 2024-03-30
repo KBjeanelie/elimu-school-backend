@@ -9,12 +9,12 @@ class EditInformationView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         info = get_object_or_404(Information, pk=pk)
@@ -50,12 +50,12 @@ class AddInformationView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template, context=self.context)
@@ -79,12 +79,12 @@ class InformationView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         context = {'informations': Information.objects.filter(school=request.user.school).order_by('-created_at')}
@@ -103,12 +103,12 @@ class InformationDetail(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         info = get_object_or_404(Information, pk=pk)
@@ -124,12 +124,12 @@ class AddEventView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         return render(request, template_name=self.template, context=self.context)
@@ -152,12 +152,12 @@ class EditEventView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
@@ -201,12 +201,12 @@ class EventView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         context = {'events': Event.objects.filter(school=request.user.school).order_by('-created_at')}
@@ -224,12 +224,12 @@ class EventDetail(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, pk, *args, **kwargs):
         event = get_object_or_404(Event, pk=pk)
@@ -242,12 +242,12 @@ class EventDetail(View):
     
 #     def dispatch(self,request, *args, **kwargs):
 #         if not request.user.is_authenticated:
-#             return redirect('backend:login')
+#             return redirect('manager_dashboard:login')
         
 #         if request.user.is_manager or request.user.is_admin_school:
 #             return super().dispatch(request, *args, **kwargs)
         
-#         return redirect('backend:logout')
+#         return redirect('manager_dashboard:logout')
     
 #     def get(self, request, *args, **kwargs):
 #         groups = Group.objects.filter(school=request.user.school)

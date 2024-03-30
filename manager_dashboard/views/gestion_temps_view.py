@@ -10,7 +10,7 @@ class AddScheduleView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -20,7 +20,7 @@ class AddScheduleView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         form = ScheduleForm(request.user)
@@ -47,7 +47,7 @@ class ScheduleView(View):
     
     def dispatch(self,request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect('backend:login')
+            return redirect('manager_dashboard:login')
         
         try:
             active_year = AcademicYear.objects.get(status=True, school=request.user.school)
@@ -57,7 +57,7 @@ class ScheduleView(View):
         if request.user.is_manager or request.user.is_admin_school:
             return super().dispatch(request, *args, **kwargs)
         
-        return redirect('backend:logout')
+        return redirect('manager_dashboard:logout')
     
     def get(self, request, *args, **kwargs):
         classrooms = ClassRoom.objects.filter(level__school=request.user.school)
