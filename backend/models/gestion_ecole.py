@@ -5,7 +5,28 @@ from elimu_school.constant import *
 import uuid
 import hashlib
 
+class UUID4Field(models.CharField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('max_length', 12)
+        kwargs.setdefault('unique', True)
+        kwargs.setdefault('null', True)
+        kwargs.setdefault('editable', False)
+        super().__init__(*args, **kwargs)
+
+    def generate_short_uuid(self):
+        full_uuid = uuid.uuid4().hex
+        short_uuid = hashlib.sha1(full_uuid.encode('utf-8')).hexdigest()[:10]
+        return short_uuid
+
+    def pre_save(self, model_instance, add):
+        value = getattr(model_instance, self.attname, None)
+        if not value:
+            value = self.generate_short_uuid()
+            setattr(model_instance, self.attname, value)
+        return value
+
 class Etablishment(models.Model):
+    code = UUID4Field()
     name = models.CharField(max_length=120)
     tel = models.CharField(max_length=20)
     address = models.CharField(max_length=100)
@@ -85,14 +106,14 @@ class Parent(models.Model):
 # Represent an objet of Student and his profil info
 class ShortUUID4Field(models.CharField):
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('max_length', 10)
+        kwargs.setdefault('max_length', 14)
         kwargs.setdefault('unique', True)
         kwargs.setdefault('editable', False)
         super().__init__(*args, **kwargs)
 
     def generate_short_uuid(self):
         full_uuid = uuid.uuid4().hex
-        short_uuid = hashlib.sha1(full_uuid.encode('utf-8')).hexdigest()[:15]
+        short_uuid = hashlib.sha1(full_uuid.encode('utf-8')).hexdigest()[:12]
         return short_uuid
 
     def pre_save(self, model_instance, add):
@@ -252,7 +273,6 @@ class ManagementProfil(models.Model):
         # Supprimer l'objet
         super(ManagementProfil, self).delete(*args, **kwargs)
 #===END
-
 
 # Class representing Academic Year
 class AcademicYear(models.Model):
