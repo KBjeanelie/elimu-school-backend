@@ -525,7 +525,7 @@ class LevelForm(forms.ModelForm):
                     'class': 'form-control',
                     'name': 'label',
                     'maxLength':'50',
-                    'placeholder': 'ex: 1er année',
+                    'placeholder': 'ex: CP1',
                     'required': True
                 }
             ),
@@ -572,7 +572,7 @@ class ClassRoomForm(forms.ModelForm):
                     'class': 'form-control',
                     'name': 'title',
                     'maxLength':'50',
-                    'placeholder': 'Licence Informatique 1',
+                    'placeholder': 'CP1 A',
                     'required': True
                 }
             ),

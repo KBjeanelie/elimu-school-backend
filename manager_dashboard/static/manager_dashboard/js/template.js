@@ -26,9 +26,9 @@
           // Si l'URL du lien est un sous-chemin de l'URL actuelle
           if (currentPath.startsWith(urlName)) {
               element.addClass('active');
-              element.parents('.nav-item').addClass('active');
+              //element.parents('.nav-item').addClass('active');
               // Si le lien est dans un sous-menu, activer le sous-menu parent
-              element.closest('.collapse').addClass('show');
+              //element.closest('.collapse').addClass('show');
           }
       }
   }

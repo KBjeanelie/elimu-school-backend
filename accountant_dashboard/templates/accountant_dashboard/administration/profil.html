@@ -50,11 +50,11 @@
                                         {% endif %}
                                         <div class="custom-border mb-3"></div>
                                         <h3 class="pro-title"> {{user.management_profil.firstname}} {{user.management_profil.lastname}}</h3><br>
-                                        <h6 class="text-muted font_s_13 mt-2 mb-1">Sexe : {{user.management_profil.sex}} </h6>
+                                        <h6 class="text-muted font_s_13 mt-2 mb-1">Sexe : {{user.management_profil.sex|capfirst}} </h6>
                                         <h6 class="text-muted font_s_13 mt-2 mb-1">Email : {{user.management_profil.email}} </h6>
                                         <h6 class="text-muted font_s_13 mt-2 mb-1">Téléphone : {{user.management_profil.tel}} </h6>
                                         <h6 class="text-muted font_s_13 mt-2 mb-1">Adrèsse : {{user.management_profil.address}} </h6>
-                                        <h6 class="text-muted font_s_13 mt-2 mb-1">Ville : {{user.management_profil.city}} </h6>
+                                        <h6 class="text-muted font_s_13 mt-2 mb-1">Ville : {{user.management_profil.city|capfirst}} </h6>
                                         <div class="quantity mt-3">
                                             <a href='{% url "accountant_dashboard:edit_profil" %}' class="btn btn-dark"><i class="fa fa-edit me-2"></i>Modifier</a>
                                         </div>

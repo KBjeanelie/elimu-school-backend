@@ -36,6 +36,7 @@ class PreRegistrationView(View):
         try:
             academic_year = AcademicYear.objects.get(status=True, school=request.user.school)
             students = StudentClassroom.objects.filter(academic_year=academic_year, is_registered=False, is_archive=False).order_by('-created_at')
+            request.session['request_student'] = students.count()
             context = {'student_careers':students, 'year':academic_year}
             return render(request, template_name=self.template, context=context)
         except AcademicYear.DoesNotExist:
