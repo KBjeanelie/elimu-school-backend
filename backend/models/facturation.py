@@ -123,11 +123,11 @@ class Invoice(models.Model):
     
     amount = models.FloatField(default=0)
     
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null=True)
     
-    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
+    classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, null=True)
     
-    item = models.ForeignKey(Item, on_delete=models.SET_NULL, blank=True, null=True)
+    item = models.ForeignKey(Item, on_delete=models.SET_NULL, null=True)
     
     schooling_of = models.CharField(max_length=10, choices=months)
     
@@ -137,7 +137,7 @@ class Invoice(models.Model):
     
     choices = [('Entièrement payé', 'Entièrement payé'), ('Non payé', 'Non payé'), ('Avance', 'Avance')]
     
-    invoice_status = models.CharField(max_length=20, choices=choices, blank=True)
+    invoice_status = models.CharField(max_length=20, choices=choices)
     
     is_repayment = models.BooleanField(default=False)
     
@@ -160,7 +160,7 @@ class Repayment(models.Model):
     
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE, null=True)
     
-    invoice = models.ForeignKey(Invoice, on_delete=models.SET_NULL, blank=True, null=True)
+    invoice = models.ForeignKey(Invoice, on_delete=models.SET_NULL, null=True)
     
     repayment_date = models.DateField(auto_now=True)
     
@@ -175,7 +175,7 @@ class Repayment(models.Model):
 
 class FinancialCommitment(models.Model):
     
-    student = models.ForeignKey(Student, on_delete=models.SET_NULL, blank=True, null=True)
+    student = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True)
     
     school_fees = models.IntegerField()
     

@@ -139,7 +139,7 @@ class Student(models.Model):
     
     sex = models.CharField(max_length=10, choices=sexes, blank=True)
     
-    email = models.CharField(max_length=120, unique=True, blank=True, null=True)
+    email = models.CharField(max_length=120, blank=True, null=True)
     
     bithday = models.DateField(null=True, blank=True)
     
@@ -201,7 +201,7 @@ class Teacher(models.Model):
     
     nationality = models.CharField(max_length=20, blank=True)
     
-    email = models.CharField(max_length=120, unique=True, blank=True)
+    email = models.CharField(max_length=120, blank=True)
     
     school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     
@@ -302,7 +302,7 @@ class Level(models.Model):
     cycles = models.CharField(choices=cycles, max_length=30)
     serie = models.ForeignKey(Series, on_delete=models.CASCADE, blank=True, null=True)
     principal_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, blank=True, null=True)
-    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE, null=True)
+    school = models.ForeignKey(Etablishment, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):

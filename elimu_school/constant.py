@@ -147,7 +147,7 @@ periode_of_exam = [
 
 do_classes = [
     ('Le matin', 'Le matin'),
-    ('Après midi', 'Après midi'),
+    ('Midi', 'Midi'),
     ('Plein temps', 'Plein temps'),
 ]
 

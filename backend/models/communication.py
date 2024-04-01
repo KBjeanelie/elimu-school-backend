@@ -1,11 +1,8 @@
 import os
 from django.db import models
-from backend.models.gestion_ecole import ClassRoom, Etablishment
+from backend.models.gestion_ecole import Etablishment
 from elimu_school import settings
 from ckeditor.fields import RichTextField
-
-from backend.models.user_account import Student
-from elimu_school.constant import hours_of_the_day
 
 # Create your models here.
 class Information(models.Model):

@@ -1,9 +1,9 @@
 import os
 from django.db import models
-from backend.models.gestion_ecole import AcademicYear, ClassRoom, Etablishment, Series, Subject
+from backend.models.gestion_ecole import AcademicYear, ClassRoom, Etablishment, Subject
 from backend.models.user_account import Student
 from elimu_school import settings
-from elimu_school.constant import periode_of_exam, types_evaluations, types_of_classroom
+from elimu_school.constant import periode_of_exam,  types_of_classroom
 
 
 class TypeOfEvaluation(models.Model):
@@ -22,7 +22,7 @@ class Assessment(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE, null=True)
     classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE, null=True)
-    period = models.CharField(choices=periode_of_exam, max_length=20, null=True)
+    period = models.CharField(choices=periode_of_exam, max_length=20)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
