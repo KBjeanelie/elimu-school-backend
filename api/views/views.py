@@ -1,7 +1,5 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from api.serializers.model_serializer import AssessmentSerializer, EventSerializer, FinancialCommitmentSerializer, InformationSerializer, InvoiceSerializer, ScheduleSerializer, eBookSerializer
 from backend.models.communication import Information, Event
 from backend.models.contenue_pedagogique import eBook

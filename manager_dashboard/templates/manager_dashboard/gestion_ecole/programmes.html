@@ -30,11 +30,13 @@
           <h4 class="card-title card-title-dash">Programmes</h4>
         </div>
         <div>
-          <a
-            href='{% url "manager_dashboard:add_program" %}'
-            class="btn btn-primary text-white mb-0 me-0"
-            ><i class=" mdi mdi-plus-box "></i> Ajouter un programme</a
-          >
+          {% if not user.is_admin_school %}
+            <a
+              href='{% url "manager_dashboard:add_program" %}'
+              class="btn btn-primary text-white mb-0 me-0"
+              ><i class=" mdi mdi-plus-box "></i> Ajouter un programme</a
+            >
+          {% endif %}
         </div>
       </div>
       <div class="row mt-3">

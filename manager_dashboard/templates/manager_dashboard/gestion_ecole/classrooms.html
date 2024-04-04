@@ -30,11 +30,14 @@
           <h4 class="card-title card-title-dash">Salle de classe</h4>
         </div>
         <div>
-          <a
-            href='{% url "manager_dashboard:add_classroom" %}'
-            class="btn btn-primary text-white mb-0 me-0"
-            ><i class=" mdi mdi-plus-box "></i> Ajouter une salle de classe</a
-          >
+          {% if not user.is_admin_school %}
+            <a
+              href='{% url "manager_dashboard:add_classroom" %}'
+              class="btn btn-primary text-white mb-0 me-0"
+              ><i class=" mdi mdi-plus-box "></i> Ajouter une salle de classe</a
+            >
+          {% endif %}
+          
         </div>
       </div>
       <div class="row mt-3">
@@ -58,10 +61,12 @@
                         <td>{{ classroom.types }} </td>
                         <td>{{ classroom.do_class }} </td>
                         <td>
+                          {% if not user.is_admin_school %}
                             <a href="{% url 'manager_dashboard:edit_classroom' classroom.id %}" class="p-2">
                                 <i class="fa fa-edit h4 text-dark"></i></a>
                             <a href="#" onclick="delete_function({{classroom.id}})">
                                 <i class="fa fa-trash-o h4 text-danger"></i></a>
+                          {% endif %}
                         </td>
                     </tr>
                     {% endfor %}

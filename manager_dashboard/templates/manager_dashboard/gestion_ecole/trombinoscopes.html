@@ -42,6 +42,12 @@
                   Trombinoscope élèves
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-ens-tab-custom" data-bs-toggle="pill" href="#ens-career"
+                  role="tab" aria-controls="pills-ens" aria-selected="false">
+                  Trombinoscope enseignants
+                </a>
+              </li>
             </ul>
             <div class="tab-content tab-content-custom-pill" id="pills-tabContent-custom">
               <div class="tab-pane fade show active" id="pills-health" role="tabpanel" aria-labelledby="pills-home-tab-custom">
@@ -50,7 +56,11 @@
                           <div class='col-md-3'>
                               <div class="text-center align-items-center">
                                   <a href='{% url "manager_dashboard:parent_detail" parent.id %}'>
+                                    {% if parent.file_exist_one %}
                                       <img src="{{parent.picture_one.url}}" class="img-lg rounded" alt="{{parent.picture_one.name}}" />
+                                    {% else %}
+                                      <img src="{% static 'img/staf/teacher.png' %}" class="img-lg rounded" alt="{{parent.picture_one.name}}">
+                                    {% endif %}
                                   </a>
                                   <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
                                       <h4 class="mb-0 mt-3">
@@ -88,6 +98,28 @@
                       {% endfor %}
                   </div>
               </div>
+              <div class="tab-pane fade" id="ens-career" role="tabpanel" aria-labelledby="pills-ens-tab-custom">
+                <div class='row'>
+                    {% for teacher in teachers %}
+                        <div class='col-md-3'>
+                            <div class="text-center align-items-center">
+                                <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}'>
+                                  <img src="{{teacher.picture.url}}" class="img-lg rounded" alt="{{teacher.picture.name}}" />
+                                </a>
+                                <div class="ms-sm-3 ms-md-0 ms-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
+                                    <h4 class="mb-0 mt-3">
+                                        <a href='{% url "manager_dashboard:teacher_detail" teacher.id %}' class='text-info'>
+                                            {{teacher.fullname}}
+                                        </a>
+                                    </h4>
+                                    <p class="text-muted mb-1">{{teacher.email}} </p>
+                                    <p class="mb-0 text-success fw-bold">{{teacher.tel}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
             </div>
           </div>
         </div>

@@ -22,7 +22,6 @@ from backend.forms.gestion_ecole_forms import (
     TeacherForm
 )
 from backend.models.gestion_ecole import *
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from manager_dashboard.views.gestion_evaluation_view import calcul_resultat_primaire
 
@@ -607,7 +606,7 @@ class EditSanctionView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -671,7 +670,7 @@ class AddSanctionView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -746,7 +745,7 @@ class EditTeacherView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -794,7 +793,7 @@ class AddTeacherView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -896,7 +895,7 @@ class EditStudentView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -1147,7 +1146,7 @@ class EditParentView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -1187,7 +1186,7 @@ class AddParentView(View):
         if not request.user.is_authenticated:
             return redirect('manager_dashboard:login')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')

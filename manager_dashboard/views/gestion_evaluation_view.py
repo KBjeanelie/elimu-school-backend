@@ -131,7 +131,7 @@ class EditAssessmentView(View):
         except AcademicYear.DoesNotExist:
             return redirect('manager_dashboard:no_year')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')
@@ -180,7 +180,7 @@ class AddAssessmentView(View):
         except AcademicYear.DoesNotExist:
             return redirect('manager_dashboard:no_year')
         
-        if request.user.is_manager or request.user.is_admin_school:
+        if request.user.is_manager:
             return super().dispatch(request, *args, **kwargs)
         
         return redirect('manager_dashboard:logout')

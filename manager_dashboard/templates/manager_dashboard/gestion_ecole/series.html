@@ -55,6 +55,7 @@
                 </table>
             </div>
             </div>
+            {% if not user.is_admin_school %}
             <div class="col-6">
                 <h4 class="card-title">Formulaire d'ajout</h4>
                 <form class="cmxform" id="signupForm" method="post">
@@ -68,6 +69,7 @@
                     </fieldset>
                 </form>
             </div>
+            {% endif %}
         </div>
   </div>
 

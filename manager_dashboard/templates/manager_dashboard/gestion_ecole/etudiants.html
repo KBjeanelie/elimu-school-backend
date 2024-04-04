@@ -73,8 +73,10 @@
                                 <td>
                                     <a href='{% url "manager_dashboard:student_detail" student_career.student.id %}' class="p-2">
                                         <i class="fa fa-eye h4 text-primary"></i></a>
+                                    {% if not user.is_admin_school %}
                                     <a href='{% url "manager_dashboard:edit_student" student_career.student.id %}' class="p-2">
                                         <i class="fa fa-edit h4 text-dark"></i></a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -27,8 +27,10 @@
             <h4 class="card-title card-title-dash">Années Académiques</h4>
             </div>
             <div>
-            <a href='{% url "manager_dashboard:add_year" %}' class="btn btn-primary text-white mb-0 me-0"><i
-                class="mdi mdi-calendar-plus "></i> Ajouter une année académique</a>
+            {% if not user.is_admin_school %}
+                <a href='{% url "manager_dashboard:add_year" %}' class="btn btn-primary text-white mb-0 me-0"><i
+                    class="mdi mdi-calendar-plus "></i> Ajouter une année académique</a>
+             {% endif %}
             </div>
         </div>
         <div class="row mt-3">

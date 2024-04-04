@@ -30,11 +30,13 @@
           <h4 class="card-title card-title-dash">Sanctions & Appreciations</h4>
         </div>
         <div>
-          <a
-            href='{% url "manager_dashboard:add_sanction" %}'
-            class="btn btn-primary text-white mb-0 me-0"
-            ><i class=" mdi mdi-plus-box "></i> Ajouter une sanction & appréciation</a
-          >
+          {% if not user.is_admin_school %}
+            <a
+              href='{% url "manager_dashboard:add_sanction" %}'
+              class="btn btn-primary text-white mb-0 me-0"
+              ><i class=" mdi mdi-plus-box "></i> Ajouter une sanction & appréciation</a
+            >
+          {% endif %}
         </div>
       </div>
       <div class="row mt-3">
@@ -60,10 +62,12 @@
                             <td>{{ sanction.type.title }}</td>
                             <td>{{ sanction.comment }}</td>
                             <td>
+                              {% if not user.is_admin_school %}
                                 <a href="{% url 'manager_dashboard:edit_sanction' sanction.id %}" class="p-2">
                                     <i class="fa fa-edit h4 text-dark"></i></a>
                                 <a href="#" onclick="delete_function({{sanction.id}})">
                                     <i class="fa fa-trash-o h4 text-danger"></i></a>
+                              {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
