@@ -1,13 +1,34 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import generics
-from api.serializers.model_serializer import AssessmentSerializer, EventSerializer, FinancialCommitmentSerializer, InformationSerializer, InvoiceSerializer, ScheduleSerializer, eBookSerializer
+from api.serializers.model_serializer import AssessmentSerializer, EventSerializer, FinancialCommitmentSerializer, InformationSerializer, InvoiceSerializer, ScheduleSerializer, StudentSerializer, SubjectSerializer, eBookSerializer
 from backend.models.communication import Information, Event
 from backend.models.contenue_pedagogique import eBook
 from backend.models.evaluations import Assessment
 from rest_framework.permissions import IsAuthenticated
 from backend.models.facturation import FinancialCommitment, Invoice
 from itertools import chain
-from backend.models.gestion_ecole import AcademicYear, Schedule, StudentClassroom
+from backend.models.gestion_ecole import AcademicYear, Schedule, Student, StudentClassroom, Subject
+
+class SubjectList(generics.ListAPIView):
+    serializer_class = SubjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        student_id = self.kwargs.get('student_id')
+        academic_year = AcademicYear.objects.get(school=user.school, status=True)
+        student_classroom = StudentClassroom.objects.get(
+            academic_year=academic_year,
+            student__id=student_id,
+            is_registered=True,
+            is_archive=False)
+
+        # Récupérer le niveau de la classe de l'étudiant
+        student_level = student_classroom.classroom.level
+
+        # Filtrer les matières en fonction du niveau de la classe de l'étudiant
+        return Subject.objects.filter(level=student_level)
+
 
 
 class AssessmentList(generics.ListAPIView):
@@ -15,10 +36,10 @@ class AssessmentList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        student = user.student
-        academic_year = AcademicYear.objects.get(school=user.school, status=True)
-        return Assessment.objects.filter(student=student, academic_year=academic_year)
+        student_id = self.kwargs.get('student_id')  # Récupérer l'ID de l'étudiant passé en paramètre
+        academic_year = AcademicYear.objects.get(school=self.request.user.school, status=True)
+        return Assessment.objects.filter(student__id=student_id, academic_year=academic_year)
+
 
 class eBookList(generics.ListAPIView):
     serializer_class = eBookSerializer
@@ -26,7 +47,19 @@ class eBookList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return eBook.objects.filter(school=user.school)
+        student_id = self.kwargs.get('student_id')
+        academic_year = AcademicYear.objects.get(school=user.school, status=True)
+        student_classroom = StudentClassroom.objects.get(
+            academic_year=academic_year,
+            student__id=student_id,
+            is_registered=True,
+            is_archive=False)
+
+        # Récupérer le niveau de la classe de l'étudiant
+        student_level = student_classroom.classroom.level
+
+        # Filtrer les livres électroniques en fonction du niveau de la classe de l'étudiant
+        return eBook.objects.filter(school=user.school, level=student_level)
     
 
 class InformationList(generics.ListAPIView):
@@ -46,26 +79,31 @@ class EventList(generics.ListAPIView):
         user = self.request.user
         return Event.objects.filter(school=user.school)
 
+class StudentOfUser(generics.ListAPIView):
+    serializer_class = StudentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Student.objects.filter(parent=user.parent)
 
 class InvoiceList(generics.ListAPIView):
     serializer_class = InvoiceSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        student = user.student
-        academic_year = AcademicYear.objects.get(school=user.school, status=True)
-        return Invoice.objects.filter(student=student, academic_year=academic_year)
+        student_id = self.kwargs.get('student_id')  # Récupérer l'ID de l'étudiant passé en paramètre
+        academic_year = AcademicYear.objects.get(school=self.request.user.school, status=True)
+        return Invoice.objects.filter(student__id=student_id, academic_year=academic_year)
 
 class FinancialCommitmentList(generics.ListAPIView):
     serializer_class = FinancialCommitmentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
-        student = user.student
-        academic_year = AcademicYear.objects.get(school=user.school, status=True)
-        return FinancialCommitment.objects.filter(student=student, academic_year=academic_year)
+        student_id = self.kwargs.get('student_id')  # Récupérer l'ID de l'étudiant passé en paramètre
+        academic_year = AcademicYear.objects.get(school=self.request.user.school, status=True)
+        return FinancialCommitment.objects.filter(student__id=student_id, academic_year=academic_year)
 
 
 class SchedulesList(generics.ListAPIView):
@@ -73,18 +111,18 @@ class SchedulesList(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        student_id = self.kwargs.get('student_id')
         user = self.request.user
-        student = user.student
         academic_year = AcademicYear.objects.get(school=user.school, status=True)
-        student_career = get_object_or_404(StudentClassroom, student=student, academic_year=academic_year, is_valid=False)
+        student_career = get_object_or_404(StudentClassroom, student__id=student_id, academic_year=academic_year, is_valid=False)
         
         # Filtrer les horaires pour chaque jour de la semaine
-        monday_schedule = Schedule.objects.filter(career=student_career.career, day='lundi')
-        tuesday_schedule = Schedule.objects.filter(career=student_career.career, day='mardi')
-        wednesday_schedule = Schedule.objects.filter(career=student_career.career, day='mercredi')
-        thursday_schedule = Schedule.objects.filter(career=student_career.career, day='jeudi')
-        friday_schedule = Schedule.objects.filter(career=student_career.career, day='vendredi')
-        saturday_schedule = Schedule.objects.filter(career=student_career.career, day='samedi')
+        monday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='lundi')
+        tuesday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='mardi')
+        wednesday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='mercredi')
+        thursday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='jeudi')
+        friday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='vendredi')
+        saturday_schedule = Schedule.objects.filter(classroom=student_career.classroom, day='samedi')
         
         # Combiner les résultats de toutes les requêtes
         schedules = chain(monday_schedule, tuesday_schedule, wednesday_schedule, thursday_schedule, friday_schedule, saturday_schedule)

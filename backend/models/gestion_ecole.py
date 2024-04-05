@@ -327,10 +327,10 @@ class StudentClassroom(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     classroom = models.ForeignKey(ClassRoom, on_delete=models.CASCADE)
     academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
-    is_registered =  models.BooleanField(default=False)
-    is_valid =  models.BooleanField(default=False)
-    is_next = models.BooleanField(default=False)
-    is_archive = models.BooleanField(default=False)
+    is_registered =  models.BooleanField(default=False) #est inscrit
+    is_valid =  models.BooleanField(default=False) #à valider la classe
+    is_next = models.BooleanField(default=False) #est monter en niveau superieur
+    is_archive = models.BooleanField(default=False) #ne fait plus parti de l'école
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
