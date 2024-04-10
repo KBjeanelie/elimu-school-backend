@@ -1,0 +1,12 @@
+Identifiant de connexion
+
+----------- Pour une école -------------
+
+username : admin.colombe.celestin
+password : 4t'2jc&EKqQ'vUC
+
+username : gestionnaire
+password : azerty
+
+username : comptable
+password : azerty
